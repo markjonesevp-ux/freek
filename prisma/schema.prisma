@@ -1,0 +1,67 @@
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider = "sqlite"
+  url      = env("DATABASE_URL")
+}
+
+// A configured place to look for leads: a job board API, an RSS feed,
+// a list of company websites to check, etc.
+model Source {
+  id        String     @id @default(cuid())
+  name      String
+  provider  String // "remoteok" | "weworkremotely" | "hn-hiring" | "company-website"
+  config    String? // JSON blob, shape depends on provider (seed URLs, keywords, ...)
+  enabled   Boolean    @default(true)
+  createdAt DateTime   @default(now())
+  updatedAt DateTime   @updatedAt
+  crawlRuns CrawlRun[]
+}
+
+// One execution of a source's crawler.
+model CrawlRun {
+  id          String    @id @default(cuid())
+  sourceId    String
+  source      Source    @relation(fields: [sourceId], references: [id], onDelete: Cascade)
+  status      String    @default("running") // "running" | "success" | "error"
+  startedAt   DateTime  @default(now())
+  finishedAt  DateTime?
+  itemsFound  Int       @default(0)
+  leadsFound  Int       @default(0)
+  error       String?
+  signals     Signal[]
+}
+
+// A company that looks like it might need CRM cleansing / data enrichment.
+model Lead {
+  id            String   @id @default(cuid())
+  companyName   String
+  domain        String?  @unique
+  sourceUrl     String?
+  industry      String?
+  employeeRange String?
+  crmDetected   String? // e.g. "Salesforce", "HubSpot" if a tech-stack signal found one
+  score         Int      @default(0)
+  status        String   @default("new") // "new" | "contacted" | "qualified" | "rejected"
+  notes         String?
+  createdAt     DateTime @default(now())
+  updatedAt     DateTime @updatedAt
+  signals       Signal[]
+}
+
+// Individual piece of evidence that fed into a lead's score
+// (a matching job posting, a detected CRM, an industry/size match, ...).
+model Signal {
+  id         String    @id @default(cuid())
+  leadId     String
+  lead       Lead      @relation(fields: [leadId], references: [id], onDelete: Cascade)
+  crawlRunId String?
+  crawlRun   CrawlRun? @relation(fields: [crawlRunId], references: [id], onDelete: SetNull)
+  type       String // "hiring-signal" | "tech-stack" | "firmographic" | "keyword-match"
+  label      String
+  detail     String?
+  weight     Int       @default(1)
+  createdAt  DateTime  @default(now())
+}
