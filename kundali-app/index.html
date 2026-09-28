@@ -4902,6 +4902,294 @@ details.vsd>summary{display:flex;gap:10px;align-items:baseline;flex-wrap:wrap;pa
 details.vsd>summary::after{content:'▾';margin-left:auto;color:var(--mut)}details.vsd[open]>summary::after{content:'▴'}
 .vsp{font-weight:600}.vsb{padding:0 12px 10px;max-width:80ch}.vsb p{margin:6px 0;line-height:1.6}.vsh{margin:18px 0 8px;font:600 18px var(--serif)}`;document.head.appendChild(st);})();
 
+// ===== Gochar phal: planet transiting house N from the natal Moon. VS_GC[planet][house-1] =====
+const VS_GC=[
+[ // Sun (≈1 month in each sign)
+['Sun over the natal Moon: fatigue, heat, irritability and ego clashes; health and eyes need care. Avoid confrontation with seniors.','जन्म चंद्र पर सूर्य: थकान, गर्मी, चिड़चिड़ापन और अहं के टकराव; स्वास्थ्य और आँखों का ध्यान रखें। वरिष्ठों से टकराव से बचें।'],
+['Sun in the 2nd from Moon: expenses, family disagreements and harsh speech; money may slip away. Guard eyes and diet.','चंद्र से दूसरे सूर्य: खर्च, पारिवारिक मतभेद और कठोर वाणी; धन हाथ से निकल सकता है। आँखों और आहार का ध्यान रखें।'],
+['Sun in the 3rd from Moon: very good — courage, success over rivals, gains through effort, good health and recognition.','चंद्र से तीसरे सूर्य: बहुत शुभ — साहस, प्रतिद्वंद्वियों पर विजय, प्रयास से लाभ, अच्छा स्वास्थ्य और पहचान।'],
+['Sun in the 4th from Moon: domestic unrest, worry about mother or property, travel troubles and lack of peace.','चंद्र से चौथे सूर्य: घरेलू अशांति, माता या संपत्ति की चिंता, यात्रा में परेशानी और मन की अशांति।'],
+['Sun in the 5th from Moon: mental stress, worry about children, confusion in decisions; avoid speculation.','चंद्र से पाँचवें सूर्य: मानसिक तनाव, संतान की चिंता, निर्णयों में भ्रम; सट्टे से बचें।'],
+['Sun in the 6th from Moon: excellent — enemies subdued, diseases cured, success in work, competition and legal matters.','चंद्र से छठे सूर्य: उत्तम — शत्रु परास्त, रोग से मुक्ति, कार्य, प्रतियोगिता और कानूनी मामलों में सफलता।'],
+['Sun in the 7th from Moon: tiring travel, friction with spouse or partners, minor health issues; move carefully.','चंद्र से सातवें सूर्य: थकाने वाली यात्रा, जीवनसाथी या साझेदारों से घर्षण, छोटी स्वास्थ्य समस्याएँ; सावधानी से चलें।'],
+['Sun in the 8th from Moon: health dips, anxieties, unexpected obstacles and conflicts with authority; rest and caution.','चंद्र से आठवें सूर्य: स्वास्थ्य में गिरावट, चिंताएँ, अप्रत्याशित बाधाएँ और अधिकारियों से टकराव; विश्राम और सावधानी।'],
+['Sun in the 9th from Moon: obstacles to luck, differences with father or teachers, low energy; keep faith and patience.','चंद्र से नौवें सूर्य: भाग्य में रुकावट, पिता या गुरुजनों से मतभेद, कम ऊर्जा; आस्था और धैर्य रखें।'],
+['Sun in the 10th from Moon: very good — success at work, recognition, promotion and support from government or seniors.','चंद्र से दसवें सूर्य: बहुत शुभ — कार्य में सफलता, पहचान, पदोन्नति और सरकार या वरिष्ठों का सहयोग।'],
+['Sun in the 11th from Moon: excellent — gains, fulfilment of wishes, good health, honour and helpful contacts.','चंद्र से ग्यारहवें सूर्य: उत्तम — लाभ, इच्छापूर्ति, अच्छा स्वास्थ्य, सम्मान और सहायक संपर्क।'],
+['Sun in the 12th from Moon: expenses, travel, low energy and sleep issues; avoid disputes and rest well.','चंद्र से बारहवें सूर्य: खर्च, यात्रा, कम ऊर्जा और नींद की समस्या; विवादों से बचें और अच्छा विश्राम करें।']],
+[ // Moon (≈2.25 days in each sign) — daily mood
+['Moon over the natal Moon: a good, pleasant day — comfort, good food, peace of mind.','जन्म चंद्र पर चंद्र: शुभ, सुखद दिन — आराम, अच्छा भोजन, मन की शांति।'],
+['Moon in the 2nd: expenses or minor obstacles; keep speech gentle.','दूसरे भाव में चंद्र: खर्च या छोटी बाधाएँ; वाणी कोमल रखें।'],
+['Moon in the 3rd: success, courage and gains; good for initiatives.','तीसरे भाव में चंद्र: सफलता, साहस और लाभ; पहल के लिए शुभ।'],
+['Moon in the 4th: mental unease and restlessness; avoid big decisions.','चौथे भाव में चंद्र: मानसिक असहजता और बेचैनी; बड़े निर्णयों से बचें।'],
+['Moon in the 5th: worry, confusion or delays; keep calm.','पाँचवें भाव में चंद्र: चिंता, भ्रम या विलंब; शांत रहें।'],
+['Moon in the 6th: good health, success over opponents and gains.','छठे भाव में चंद्र: अच्छा स्वास्थ्य, विरोधियों पर सफलता और लाभ।'],
+['Moon in the 7th: pleasant company, good food and comforts.','सातवें भाव में चंद्र: सुखद संगति, अच्छा भोजन और सुख-सुविधा।'],
+['Moon in the 8th (Chandrashtama): an anxious, accident-prone day; avoid new ventures, travel and arguments.','आठवें भाव में चंद्र (चंद्राष्टम): चिंताजनक, दुर्घटना-प्रवण दिन; नए कार्य, यात्रा और बहस से बचें।'],
+['Moon in the 9th: minor obstacles or low luck; keep faith.','नौवें भाव में चंद्र: छोटी बाधाएँ या कम भाग्य; आस्था रखें।'],
+['Moon in the 10th: work goes well, recognition and success.','दसवें भाव में चंद्र: कार्य अच्छा चलता है, पहचान और सफलता।'],
+['Moon in the 11th: gains, happiness and meeting friends.','ग्यारहवें भाव में चंद्र: लाभ, प्रसन्नता और मित्रों से मिलन।'],
+['Moon in the 12th: expenses, tiredness or loss; rest and avoid lending.','बारहवें भाव में चंद्र: खर्च, थकान या हानि; विश्राम करें और उधार देने से बचें।']],
+[ // Mars (≈45 days)
+['Mars over the natal Moon: anger, fever, injuries and conflicts; drive carefully and avoid quarrels.','जन्म चंद्र पर मंगल: क्रोध, ज्वर, चोट और टकराव; सावधानी से ड्राइव करें और झगड़ों से बचें।'],
+['Mars in the 2nd from Moon: harsh words, family disputes and expenses; risk from fire or theft.','चंद्र से दूसरे मंगल: कठोर शब्द, पारिवारिक विवाद और खर्च; अग्नि या चोरी से जोखिम।'],
+['Mars in the 3rd from Moon: very good — courage, victory, gains through effort and property.','चंद्र से तीसरे मंगल: बहुत शुभ — साहस, विजय, प्रयास और संपत्ति से लाभ।'],
+['Mars in the 4th from Moon: domestic quarrels, property or vehicle trouble, stomach or blood issues.','चंद्र से चौथे मंगल: घरेलू झगड़े, संपत्ति या वाहन की परेशानी, पेट या रक्त संबंधी समस्या।'],
+['Mars in the 5th from Moon: anger, worries about children, bad decisions; avoid speculation.','चंद्र से पाँचवें मंगल: क्रोध, संतान की चिंता, गलत निर्णय; सट्टे से बचें।'],
+['Mars in the 6th from Moon: excellent — enemies defeated, success in competition, gains and good health.','चंद्र से छठे मंगल: उत्तम — शत्रु परास्त, प्रतियोगिता में सफलता, लाभ और अच्छा स्वास्थ्य।'],
+['Mars in the 7th from Moon: conflict with spouse or partners, travel hardship, minor health problems.','चंद्र से सातवें मंगल: जीवनसाथी या साझेदारों से टकराव, यात्रा में कष्ट, छोटी स्वास्थ्य समस्याएँ।'],
+['Mars in the 8th from Moon: risk of accidents, surgery, blood problems and sudden losses; be very careful.','चंद्र से आठवें मंगल: दुर्घटना, शल्यक्रिया, रक्त समस्या और अचानक हानि का जोखिम; बहुत सावधान रहें।'],
+['Mars in the 9th from Moon: obstacles to luck, disputes with elders, weakness; avoid risky travel.','चंद्र से नौवें मंगल: भाग्य में बाधा, बड़ों से विवाद, कमज़ोरी; जोखिमपूर्ण यात्रा से बचें।'],
+['Mars in the 10th from Moon: mixed — hard work brings results, but friction at work is possible.','चंद्र से दसवें मंगल: मिश्रित — परिश्रम से परिणाम, पर कार्यस्थल पर घर्षण संभव।'],
+['Mars in the 11th from Moon: excellent — gains, property, success and fulfilment of desires.','चंद्र से ग्यारहवें मंगल: उत्तम — लाभ, संपत्ति, सफलता और इच्छापूर्ति।'],
+['Mars in the 12th from Moon: expenses, disputes, eye or sleep trouble and hidden enemies.','चंद्र से बारहवें मंगल: खर्च, विवाद, आँख या नींद की परेशानी और छिपे शत्रु।']],
+[ // Mercury (≈1 month)
+['Mercury over the natal Moon: loss through careless talk or documents; mental restlessness.','जन्म चंद्र पर बुध: असावधान बात या दस्तावेज़ों से हानि; मानसिक बेचैनी।'],
+['Mercury in the 2nd from Moon: good — gains through speech, trade and learning.','चंद्र से दूसरे बुध: शुभ — वाणी, व्यापार और शिक्षा से लाभ।'],
+['Mercury in the 3rd from Moon: fear of enemies or quarrels with siblings; think before signing.','चंद्र से तीसरे बुध: शत्रुओं का भय या भाई-बहनों से झगड़ा; हस्ताक्षर से पहले सोचें।'],
+['Mercury in the 4th from Moon: good — family happiness, gains, good news and learning.','चंद्र से चौथे बुध: शुभ — पारिवारिक सुख, लाभ, शुभ समाचार और सीखना।'],
+['Mercury in the 5th from Moon: disputes with children or spouse, confusion; avoid speculation.','चंद्र से पाँचवें बुध: संतान या जीवनसाथी से विवाद, भ्रम; सट्टे से बचें।'],
+['Mercury in the 6th from Moon: good — success, fame, victory over rivals.','चंद्र से छठे बुध: शुभ — सफलता, यश, प्रतिद्वंद्वियों पर विजय।'],
+['Mercury in the 7th from Moon: disputes with partners, minor setbacks in deals.','चंद्र से सातवें बुध: साझेदारों से विवाद, सौदों में छोटी रुकावटें।'],
+['Mercury in the 8th from Moon: good — gains, success, children\'s happiness and clever solutions.','चंद्र से आठवें बुध: शुभ — लाभ, सफलता, संतान सुख और चतुर समाधान।'],
+['Mercury in the 9th from Moon: obstacles, mental worries and delays in work.','चंद्र से नौवें बुध: बाधाएँ, मानसिक चिंता और कार्य में विलंब।'],
+['Mercury in the 10th from Moon: good — success in work, business gains, good reputation.','चंद्र से दसवें बुध: शुभ — कार्य में सफलता, व्यापार लाभ, अच्छी प्रतिष्ठा।'],
+['Mercury in the 11th from Moon: good — gains, happiness, good news from friends.','चंद्र से ग्यारहवें बुध: शुभ — लाभ, प्रसन्नता, मित्रों से शुभ समाचार।'],
+['Mercury in the 12th from Moon: expenses, fear of loss or insult; be careful with words.','चंद्र से बारहवें बुध: खर्च, हानि या अपमान का भय; शब्दों में सावधानी।']],
+[ // Jupiter (≈1 year)
+['Jupiter over the natal Moon: a mixed year — change of place, expenses and restlessness, though morals stay strong; avoid over-commitment.','जन्म चंद्र पर गुरु: मिश्रित वर्ष — स्थान परिवर्तन, खर्च और बेचैनी, यद्यपि नैतिकता दृढ़ रहती है; अधिक वचनबद्धता से बचें।'],
+['Jupiter in the 2nd from Moon: very good — wealth grows, family happiness, marriage or births, sweet speech.','चंद्र से दूसरे गुरु: बहुत शुभ — धन वृद्धि, पारिवारिक सुख, विवाह या संतान जन्म, मधुर वाणी।'],
+['Jupiter in the 3rd from Moon: obstacles in efforts, change of job or place, loss of position; stay patient.','चंद्र से तीसरे गुरु: प्रयासों में बाधा, नौकरी या स्थान परिवर्तन, पद की हानि; धैर्य रखें।'],
+['Jupiter in the 4th from Moon: domestic worries, trouble from relatives, loss of comfort; care for mother.','चंद्र से चौथे गुरु: घरेलू चिंता, रिश्तेदारों से परेशानी, सुख में कमी; माता का ध्यान रखें।'],
+['Jupiter in the 5th from Moon: excellent — children, education, promotion, wisdom, good decisions and devotion.','चंद्र से पाँचवें गुरु: उत्तम — संतान, शिक्षा, पदोन्नति, ज्ञान, अच्छे निर्णय और भक्ति।'],
+['Jupiter in the 6th from Moon: troubles from enemies or illness, debts; watch health and liver.','चंद्र से छठे गुरु: शत्रु या रोग से परेशानी, ऋण; स्वास्थ्य और यकृत का ध्यान रखें।'],
+['Jupiter in the 7th from Moon: excellent — marriage, good partnerships, travel, comforts and respect.','चंद्र से सातवें गुरु: उत्तम — विवाह, अच्छी साझेदारी, यात्रा, सुख-सुविधा और सम्मान।'],
+['Jupiter in the 8th from Moon: hardships, health concerns, losses and delays; spiritual practice helps.','चंद्र से आठवें गुरु: कठिनाइयाँ, स्वास्थ्य चिंता, हानि और विलंब; आध्यात्मिक साधना सहायक।'],
+['Jupiter in the 9th from Moon: excellent — fortune rises, religious activities, children, promotion, blessings of elders.','चंद्र से नौवें गुरु: उत्तम — भाग्योदय, धार्मिक कार्य, संतान, पदोन्नति, बड़ों का आशीर्वाद।'],
+['Jupiter in the 10th from Moon: changes or pressure at work, possible loss of position; act ethically.','चंद्र से दसवें गुरु: कार्य में परिवर्तन या दबाव, पद हानि संभव; नैतिकता से कार्य करें।'],
+['Jupiter in the 11th from Moon: excellent — big gains, recovery, promotion and fulfilment of wishes.','चंद्र से ग्यारहवें गुरु: उत्तम — बड़ा लाभ, स्वास्थ्य सुधार, पदोन्नति और इच्छापूर्ति।'],
+['Jupiter in the 12th from Moon: expenses, travel, some sorrow; good for charity and pilgrimage.','चंद्र से बारहवें गुरु: खर्च, यात्रा, कुछ दुःख; दान और तीर्थ के लिए शुभ।']],
+[ // Venus (≈1 month)
+['Venus over the natal Moon: comforts, romance, fine clothes and enjoyment.','जन्म चंद्र पर शुक्र: सुख-सुविधा, प्रेम, सुंदर वस्त्र और आनंद।'],
+['Venus in the 2nd from Moon: gains, family happiness, jewellery and good food.','चंद्र से दूसरे शुक्र: लाभ, पारिवारिक सुख, आभूषण और अच्छा भोजन।'],
+['Venus in the 3rd from Moon: good — honour, wealth and help from friends.','चंद्र से तीसरे शुक्र: शुभ — सम्मान, धन और मित्रों की सहायता।'],
+['Venus in the 4th from Moon: good — home comforts, vehicles and happiness.','चंद्र से चौथे शुक्र: शुभ — घरेलू सुख, वाहन और प्रसन्नता।'],
+['Venus in the 5th from Moon: good — romance, children\'s happiness, creativity and gains.','चंद्र से पाँचवें शुक्र: शुभ — प्रेम, संतान सुख, रचनात्मकता और लाभ।'],
+['Venus in the 6th from Moon: troubles from women or opponents, minor illness, disappointments.','चंद्र से छठे शुक्र: स्त्रियों या विरोधियों से परेशानी, छोटे रोग, निराशा।'],
+['Venus in the 7th from Moon: misunderstanding with spouse, health issues from excess.','चंद्र से सातवें शुक्र: जीवनसाथी से गलतफ़हमी, अति से स्वास्थ्य समस्या।'],
+['Venus in the 8th from Moon: good — gains, comforts and unexpected help.','चंद्र से आठवें शुक्र: शुभ — लाभ, सुख-सुविधा और अप्रत्याशित सहायता।'],
+['Venus in the 9th from Moon: good — fortune, religious pleasures and comforts.','चंद्र से नौवें शुक्र: शुभ — भाग्य, धार्मिक आनंद और सुख-सुविधा।'],
+['Venus in the 10th from Moon: disputes or disgrace at work; stay discreet.','चंद्र से दसवें शुक्र: कार्यस्थल पर विवाद या अपमान; विवेक रखें।'],
+['Venus in the 11th from Moon: good — gains, friendships, luxuries.','चंद्र से ग्यारहवें शुक्र: शुभ — लाभ, मित्रता, विलासिता।'],
+['Venus in the 12th from Moon: good — gains and pleasures, though spending on comforts rises.','चंद्र से बारहवें शुक्र: शुभ — लाभ और आनंद, यद्यपि सुख-सुविधा पर खर्च बढ़ता है।']],
+[ // Saturn (≈2.5 years)
+['Saturn over the natal Moon (peak of Sade Sati): heavy responsibility, fatigue, mental pressure, delays and health concerns; discipline and service help.','जन्म चंद्र पर शनि (साढ़ेसाती का शिखर): भारी ज़िम्मेदारी, थकान, मानसिक दबाव, विलंब और स्वास्थ्य चिंता; अनुशासन और सेवा सहायक।'],
+['Saturn in the 2nd from Moon (last phase of Sade Sati): financial strain, family pressures and harsh speech; save and speak carefully.','चंद्र से दूसरे शनि (साढ़ेसाती का अंतिम चरण): आर्थिक दबाव, पारिवारिक दबाव और कठोर वाणी; बचत करें और सोच-समझकर बोलें।'],
+['Saturn in the 3rd from Moon: excellent — success through persistence, gains, recovery, defeat of rivals.','चंद्र से तीसरे शनि: उत्तम — लगन से सफलता, लाभ, स्वास्थ्य सुधार, प्रतिद्वंद्वियों की हार।'],
+['Saturn in the 4th from Moon (Kantaka/Dhaiya): domestic stress, property issues, mother\'s health and inner unrest.','चंद्र से चौथे शनि (कंटक/ढैया): घरेलू तनाव, संपत्ति समस्याएँ, माता का स्वास्थ्य और आंतरिक अशांति।'],
+['Saturn in the 5th from Moon: worries about children, mental strain, poor decisions; avoid speculation.','चंद्र से पाँचवें शनि: संतान की चिंता, मानसिक तनाव, गलत निर्णय; सट्टे से बचें।'],
+['Saturn in the 6th from Moon: excellent — victory over enemies, cure of illness, stable job and gains.','चंद्र से छठे शनि: उत्तम — शत्रुओं पर विजय, रोग से मुक्ति, स्थिर नौकरी और लाभ।'],
+['Saturn in the 7th from Moon: strain in marriage or partnerships, tiring travel; patience needed.','चंद्र से सातवें शनि: विवाह या साझेदारी में तनाव, थकाने वाली यात्रा; धैर्य आवश्यक।'],
+['Saturn in the 8th from Moon (Ashtama Shani/Dhaiya): obstacles, chronic health issues, losses and delays; careful living.','चंद्र से आठवें शनि (अष्टम शनि/ढैया): बाधाएँ, पुराने रोग, हानि और विलंब; सावधान जीवन।'],
+['Saturn in the 9th from Moon: obstacles to luck, strain with father or teachers; stay dutiful.','चंद्र से नौवें शनि: भाग्य में बाधा, पिता या गुरुजनों से तनाव; कर्तव्यनिष्ठ रहें।'],
+['Saturn in the 10th from Moon: heavy workload, changes or pressure at work; honesty brings stability.','चंद्र से दसवें शनि: भारी कार्यभार, कार्य में परिवर्तन या दबाव; ईमानदारी स्थिरता देती है।'],
+['Saturn in the 11th from Moon: excellent — steady gains, promotion, property and fulfilled goals.','चंद्र से ग्यारहवें शनि: उत्तम — स्थिर लाभ, पदोन्नति, संपत्ति और पूरे लक्ष्य।'],
+['Saturn in the 12th from Moon (start of Sade Sati): expenses, sleep issues, travel or relocation, isolation; plan finances.','चंद्र से बारहवें शनि (साढ़ेसाती की शुरुआत): खर्च, नींद की समस्या, यात्रा या स्थान परिवर्तन, एकांत; वित्त की योजना बनाएँ।']],
+[ // Rahu (≈18 months)
+['Rahu over the natal Moon: confusion, anxiety, restlessness and unusual desires; avoid shortcuts and intoxicants.','जन्म चंद्र पर राहु: भ्रम, चिंता, बेचैनी और असामान्य इच्छाएँ; शॉर्टकट और नशे से बचें।'],
+['Rahu in the 2nd from Moon: money fluctuations, family misunderstandings, careless speech.','चंद्र से दूसरे राहु: धन में उतार-चढ़ाव, पारिवारिक गलतफ़हमी, असावधान वाणी।'],
+['Rahu in the 3rd from Moon: very good — courage, bold success, gains through media or technology.','चंद्र से तीसरे राहु: बहुत शुभ — साहस, साहसी सफलता, मीडिया या तकनीक से लाभ।'],
+['Rahu in the 4th from Moon: restlessness at home, property confusion, mother\'s health.','चंद्र से चौथे राहु: घर में बेचैनी, संपत्ति में भ्रम, माता का स्वास्थ्य।'],
+['Rahu in the 5th from Moon: confused thinking, worries about children, risky speculation.','चंद्र से पाँचवें राहु: भ्रमित सोच, संतान की चिंता, जोखिमपूर्ण सट्टा।'],
+['Rahu in the 6th from Moon: very good — victory over rivals, success in competition and service.','चंद्र से छठे राहु: बहुत शुभ — प्रतिद्वंद्वियों पर विजय, प्रतियोगिता और सेवा में सफलता।'],
+['Rahu in the 7th from Moon: unexpected events in relationships; beware of deception in partnerships.','चंद्र से सातवें राहु: संबंधों में अप्रत्याशित घटनाएँ; साझेदारी में धोखे से सावधान।'],
+['Rahu in the 8th from Moon: sudden troubles, hidden fears, health scares; be careful.','चंद्र से आठवें राहु: अचानक परेशानियाँ, छिपे भय, स्वास्थ्य संबंधी डर; सावधान रहें।'],
+['Rahu in the 9th from Moon: doubts about faith, trouble with father or teachers, foreign links.','चंद्र से नौवें राहु: आस्था में संदेह, पिता या गुरुजनों से परेशानी, विदेशी संपर्क।'],
+['Rahu in the 10th from Moon: sudden career changes or rise; avoid office politics.','चंद्र से दसवें राहु: करियर में अचानक परिवर्तन या उन्नति; कार्यालयी राजनीति से बचें।'],
+['Rahu in the 11th from Moon: very good — large gains, new networks and fulfilled ambitions.','चंद्र से ग्यारहवें राहु: बहुत शुभ — बड़ा लाभ, नए संपर्क और पूरी महत्वाकांक्षाएँ।'],
+['Rahu in the 12th from Moon: expenses, sleep disturbance, foreign travel, hidden enemies.','चंद्र से बारहवें राहु: खर्च, नींद में बाधा, विदेश यात्रा, छिपे शत्रु।']],
+[ // Ketu (≈18 months)
+['Ketu over the natal Moon: detachment, confusion, minor health issues; meditation helps.','जन्म चंद्र पर केतु: वैराग्य, भ्रम, छोटी स्वास्थ्य समस्याएँ; ध्यान सहायक।'],
+['Ketu in the 2nd from Moon: irregular money, blunt speech, family distance.','चंद्र से दूसरे केतु: अनियमित धन, रूखी वाणी, परिवार से दूरी।'],
+['Ketu in the 3rd from Moon: good — courage, independent success, spiritual strength.','चंद्र से तीसरे केतु: शुभ — साहस, स्वतंत्र सफलता, आध्यात्मिक शक्ति।'],
+['Ketu in the 4th from Moon: domestic detachment, unease at home.','चंद्र से चौथे केतु: घरेलू वैराग्य, घर में असहजता।'],
+['Ketu in the 5th from Moon: concerns about children or studies; good for mantra.','चंद्र से पाँचवें केतु: संतान या पढ़ाई की चिंता; मंत्र साधना के लिए शुभ।'],
+['Ketu in the 6th from Moon: good — enemies weaken, recovery from illness.','चंद्र से छठे केतु: शुभ — शत्रु कमज़ोर, रोग से मुक्ति।'],
+['Ketu in the 7th from Moon: distance or misunderstanding with partner.','चंद्र से सातवें केतु: साथी से दूरी या गलतफ़हमी।'],
+['Ketu in the 8th from Moon: sudden events, minor accidents; spiritual insight.','चंद्र से आठवें केतु: अचानक घटनाएँ, छोटी दुर्घटनाएँ; आध्यात्मिक अंतर्दृष्टि।'],
+['Ketu in the 9th from Moon: spiritual journeys, questioning of beliefs.','चंद्र से नौवें केतु: आध्यात्मिक यात्राएँ, मान्यताओं पर प्रश्न।'],
+['Ketu in the 10th from Moon: career uncertainty or detachment from status.','चंद्र से दसवें केतु: करियर में अनिश्चितता या पद से वैराग्य।'],
+['Ketu in the 11th from Moon: good — unexpected gains, fulfilment of wishes.','चंद्र से ग्यारहवें केतु: शुभ — अप्रत्याशित लाभ, इच्छापूर्ति।'],
+['Ketu in the 12th from Moon: spiritual retreat, expenses, pilgrimage.','चंद्र से बारहवें केतु: आध्यात्मिक एकांत, खर्च, तीर्थ।']]
+];
+
+// ===== Tajaka: Sahams (sensitive points) and Tajaka yogas for the annual chart =====
+// Saham = A − B + C (day). At night A and B swap when rev=1. If C does not fall between B and A (counting forward from B), add 30°.
+// Point codes: Su Mo Ma Me Ju Ve Sa As; Pu = Punya saham; LL = lagna lord; Cn/Ln = cusp / lord of house n (equal houses from varsha lagna)
+const VS_SAHAM=[
+ {k:'punya',a:'Mo',b:'Su',c:'As',rev:1,n:['Punya (merit & fortune)','पुण्य सहम (पुण्य व भाग्य)'],m:['general good fortune, merit and success of the year','वर्ष का सामान्य सौभाग्य, पुण्य और सफलता']},
+ {k:'vidya',a:'Su',b:'Mo',c:'As',rev:1,n:['Vidya (education)','विद्या सहम (शिक्षा)'],m:['studies, exams and learning','पढ़ाई, परीक्षा और विद्या']},
+ {k:'yashas',a:'Ju',b:'Pu',c:'As',rev:1,n:['Yashas (fame)','यशस् सहम (यश)'],m:['fame, reputation and recognition','यश, प्रतिष्ठा और पहचान']},
+ {k:'mitra',a:'Ju',b:'Pu',c:'Ve',rev:1,n:['Mitra (friends)','मित्र सहम'],m:['friendships and support from friends','मित्रता और मित्रों का सहयोग']},
+ {k:'mahatmya',a:'Pu',b:'Ma',c:'As',rev:1,n:['Mahatmya (greatness)','माहात्म्य सहम'],m:['status, dignity and influence','पद, गरिमा और प्रभाव']},
+ {k:'asha',a:'Sa',b:'Ve',c:'As',rev:1,n:['Asha (hopes)','आशा सहम'],m:['fulfilment of hopes and wishes','आशाओं और इच्छाओं की पूर्ति']},
+ {k:'samartha',a:'Ma',b:'LL',c:'As',rev:1,n:['Samartha (capability)','सामर्थ्य सहम'],m:['ability to act, energy and enterprise','कार्य-क्षमता, ऊर्जा और उद्यम']},
+ {k:'bhratri',a:'Ju',b:'Sa',c:'As',rev:0,n:['Bhratri (siblings)','भ्रातृ सहम'],m:['siblings and their welfare','भाई-बहन और उनका कल्याण']},
+ {k:'pitri',a:'Sa',b:'Su',c:'As',rev:1,n:['Pitri (father)','पितृ सहम'],m:['father, authority and government matters','पिता, अधिकार और सरकारी विषय']},
+ {k:'matri',a:'Mo',b:'Ve',c:'As',rev:1,n:['Matri (mother)','मातृ सहम'],m:['mother and her wellbeing','माता और उनका स्वास्थ्य']},
+ {k:'putra',a:'Ju',b:'Mo',c:'As',rev:1,n:['Putra (children)','पुत्र सहम (संतान)'],m:['children, childbirth and their progress','संतान, संतान जन्म और उनकी प्रगति']},
+ {k:'vivaha',a:'Ve',b:'Sa',c:'As',rev:1,n:['Vivaha (marriage)','विवाह सहम'],m:['marriage, engagement and married life','विवाह, सगाई और वैवाहिक जीवन']},
+ {k:'karma',a:'Ma',b:'Me',c:'As',rev:1,n:['Karma (work)','कर्म सहम'],m:['work, job and professional actions','कार्य, नौकरी और व्यावसायिक गतिविधियाँ']},
+ {k:'artha',a:'C2',b:'L2',c:'As',rev:1,n:['Artha (wealth)','अर्थ सहम (धन)'],m:['money, savings and financial gains','धन, बचत और आर्थिक लाभ']},
+ {k:'labha',a:'C11',b:'L11',c:'As',rev:1,n:['Labha (gains)','लाभ सहम'],m:['income and gains of the year','वर्ष की आय और लाभ']},
+ {k:'paradesha',a:'C9',b:'L9',c:'As',rev:1,n:['Paradesha (foreign travel)','परदेश सहम'],m:['foreign travel and residence abroad','विदेश यात्रा और विदेश निवास']},
+ {k:'roga',a:'As',b:'Mo',c:'As',rev:1,bad:1,n:['Roga (illness)','रोग सहम'],m:['health problems — here a strong lord means fewer troubles','स्वास्थ्य समस्याएँ — यहाँ बलवान स्वामी का अर्थ कम कष्ट है']}
+];
+const VS_TJ_T={
+ ikka:['Ikkavala yoga: all seven planets occupy angular or succedent houses (1,2,4,5,7,8,10,11). The year brings prosperity, support and growth.','इक्कवाल योग: सातों ग्रह केंद्र या पणफर भावों (1,2,4,5,7,8,10,11) में हैं। वर्ष समृद्धि, सहयोग और वृद्धि लाता है।'],
+ indu:['Induvara yoga: all seven planets occupy cadent houses (3,6,9,12). The year needs extra effort; results come slowly.','इंदुवार योग: सातों ग्रह आपोक्लिम भावों (3,6,9,12) में हैं। वर्ष में अधिक प्रयास चाहिए; फल धीरे आते हैं।'],
+ ith:['Ithasala (applying): the faster planet is behind the slower one within orb and moving towards it — the matters of both planets come together and get fulfilled.','इत्थशाल (निकट आता): तेज़ ग्रह धीमे ग्रह से पीछे, दीप्तांश के भीतर है और उसकी ओर बढ़ रहा है — दोनों ग्रहों के विषय मिलकर पूरे होते हैं।'],
+ ish:['Ishrafa (separating): the faster planet has already passed the slower one — the opportunity has passed or fades; results are weak.','ईसराफ (दूर जाता): तेज़ ग्रह धीमे ग्रह से आगे निकल चुका है — अवसर बीत गया या क्षीण हो रहा है; फल कमज़ोर।'],
+ radda:['Radda: one planet of the ithasala is retrograde, combust or debilitated — the promise may break or be delayed.','रद्द: इत्थशाल का एक ग्रह वक्री, अस्त या नीच है — वचन टूट सकता है या विलंबित हो सकता है।'],
+ kamb:['Kamboola: the Moon is also in ithasala with one of the planets — the result is strengthened and comes faster.','कंबूल: चंद्र भी इनमें से एक ग्रह से इत्थशाल में है — फल को बल मिलता है और जल्दी आता है।'],
+ manau:['Manau: Mars or Saturn casts an inimical (1/4/7/10) aspect on this pair — obstruction or interference from others.','मणऊ: मंगल या शनि इस जोड़ी पर शत्रु दृष्टि (1/4/7/10) डालता है — दूसरों से बाधा या हस्तक्षेप।'],
+ nakta:['Nakta: the two planets are not in aspect, but a faster planet links them — the matter is achieved through a helper or middleman.','नक्त: दोनों ग्रहों में दृष्टि नहीं, पर एक तेज़ ग्रह उन्हें जोड़ता है — कार्य किसी सहायक या मध्यस्थ से पूरा होता है।'],
+ yamaya:['Yamaya: the two planets are not in aspect, but a slower planet links them — the matter is achieved through a senior or influential person.','यमया: दोनों ग्रहों में दृष्टि नहीं, पर एक धीमा ग्रह उन्हें जोड़ता है — कार्य किसी वरिष्ठ या प्रभावशाली व्यक्ति से पूरा होता है।']
+};
+// matters judged by ithasala between the varsha lagna lord and the lord of the matter's house
+const VS_TJ_MATTERS=[[2,['wealth & savings','धन व बचत']],[4,['property, home & vehicle','संपत्ति, घर व वाहन']],[5,['children & education','संतान व शिक्षा']],[7,['marriage & partnership','विवाह व साझेदारी']],[9,['fortune & travel','भाग्य व यात्रा']],[10,['career & status','करियर व पद']],[11,['income & wishes','आय व इच्छापूर्ति']]];
+
+// ===== Karakatva kosh: what each house, planet and sign signifies (searchable) =====
+const VS_KK_H=[
+['body, self, appearance, health, vitality, personality, head, fame, beginning of life, birthplace, overall success','शरीर, स्वयं, रूप, स्वास्थ्य, जीवनशक्ति, व्यक्तित्व, सिर, यश, जीवन का आरंभ, जन्मस्थान, समग्र सफलता'],
+['wealth, savings, bank balance, family, speech, food, face, right eye, teeth, tongue, early education, values, jewellery, second marriage','धन, बचत, बैंक बैलेंस, परिवार, वाणी, भोजन, चेहरा, दाहिनी आँख, दाँत, जीभ, प्रारंभिक शिक्षा, मूल्य, आभूषण, दूसरा विवाह'],
+['courage, younger siblings, neighbours, short travel, communication, writing, media, hands, shoulders, ears, hobbies, skills, agreements, self-effort','साहस, छोटे भाई-बहन, पड़ोसी, छोटी यात्रा, संवाद, लेखन, मीडिया, हाथ, कंधे, कान, शौक, कौशल, समझौते, स्व-प्रयास'],
+['mother, home, house, land, property, vehicles, happiness, peace of mind, school education, chest, heart, farming, homeland','माता, घर, मकान, भूमि, संपत्ति, वाहन, सुख, मन की शांति, विद्यालयी शिक्षा, छाती, हृदय, कृषि, जन्मभूमि'],
+['children, pregnancy, intelligence, higher studies, creativity, romance, love affairs, speculation, shares, mantra, devotion, past merit, stomach','संतान, गर्भ, बुद्धि, उच्च शिक्षा, रचनात्मकता, प्रेम, प्रेम संबंध, सट्टा, शेयर, मंत्र, भक्ति, पूर्व पुण्य, पेट'],
+['enemies, competition, disease, debts, loans, litigation, service, job, employees, daily work, pets, maternal uncle, digestion, competitive exams','शत्रु, प्रतियोगिता, रोग, ऋण, कर्ज़, मुकदमा, सेवा, नौकरी, कर्मचारी, दैनिक कार्य, पालतू पशु, मामा, पाचन, प्रतियोगी परीक्षा'],
+['marriage, spouse, partnerships, business, contracts, public dealing, open enemies, foreign travel, lower abdomen, sexual life','विवाह, जीवनसाथी, साझेदारी, व्यापार, अनुबंध, जनसंपर्क, प्रत्यक्ष शत्रु, विदेश यात्रा, पेट का निचला भाग, दांपत्य सुख'],
+['longevity, sudden events, accidents, surgery, inheritance, insurance, hidden matters, occult, research, in-laws, chronic illness, obstacles, unearned wealth','आयु, अचानक घटनाएँ, दुर्घटना, शल्यक्रिया, विरासत, बीमा, गुप्त विषय, गूढ़ विद्या, शोध, ससुराल, पुराने रोग, बाधाएँ, बिना कमाया धन'],
+['fortune, luck, father, guru, religion, dharma, higher education, long journeys, pilgrimage, law, philosophy, grandchildren, publishing','भाग्य, सौभाग्य, पिता, गुरु, धर्म, उच्च शिक्षा, लंबी यात्रा, तीर्थ, कानून, दर्शन, पोते-पोतियाँ, प्रकाशन'],
+['career, profession, job status, promotion, government, authority, reputation, karma, business, father-in-law, knees','करियर, व्यवसाय, नौकरी में पद, पदोन्नति, सरकार, अधिकार, प्रतिष्ठा, कर्म, व्यापार, ससुर, घुटने'],
+['income, gains, profit, fulfilment of desires, friends, elder siblings, networks, social groups, rewards, recovery from illness, left ear','आय, लाभ, मुनाफ़ा, इच्छापूर्ति, मित्र, बड़े भाई-बहन, संपर्क, सामाजिक समूह, पुरस्कार, रोग से मुक्ति, बायाँ कान'],
+['expenses, losses, foreign lands, settlement abroad, hospitals, jails, sleep, bed pleasures, spirituality, moksha, charity, hidden enemies, left eye, feet','खर्च, हानि, विदेश, विदेश में बसना, अस्पताल, कारागार, नींद, शयन सुख, आध्यात्मिकता, मोक्ष, दान, छिपे शत्रु, बाईं आँख, पैर']
+];
+const VS_KK_P=[
+['soul, father, king, government, authority, ego, self-confidence, fame, health, heart, bones, eyes, right eye, doctors, politics, gold, copper, wheat, east','आत्मा, पिता, राजा, सरकार, अधिकार, अहं, आत्मविश्वास, यश, स्वास्थ्य, हृदय, हड्डियाँ, आँखें, दाहिनी आँख, चिकित्सक, राजनीति, सोना, तांबा, गेहूँ, पूर्व दिशा'],
+['mind, mother, emotions, public, popularity, travel, water, milk, rice, silver, pearls, fluids, blood, left eye, sleep, nursing, hospitality, north-west','मन, माता, भावनाएँ, जनता, लोकप्रियता, यात्रा, जल, दूध, चावल, चाँदी, मोती, तरल, रक्त, बाईं आँख, नींद, नर्सिंग, आतिथ्य, उत्तर-पश्चिम'],
+['energy, courage, brothers, land, property, police, army, surgery, engineering, machines, fire, accidents, blood, anger, sports, red lentils, south','ऊर्जा, साहस, भाई, भूमि, संपत्ति, पुलिस, सेना, शल्य-चिकित्सा, इंजीनियरिंग, मशीनें, अग्नि, दुर्घटना, रक्त, क्रोध, खेल, मसूर, दक्षिण दिशा'],
+['intellect, speech, communication, trade, business, accounts, writing, media, IT, education, skin, nerves, maternal uncle, friends, green gram, north','बुद्धि, वाणी, संवाद, व्यापार, व्यवसाय, लेखा, लेखन, मीडिया, आईटी, शिक्षा, त्वचा, तंत्रिकाएँ, मामा, मित्र, मूंग, उत्तर दिशा'],
+['wisdom, guru, children, wealth, religion, dharma, husband (in a woman\'s chart), law, banking, teaching, liver, fat, fortune, chickpea, north-east','ज्ञान, गुरु, संतान, धन, धर्म, पति (स्त्री की कुंडली में), कानून, बैंकिंग, अध्यापन, यकृत, चर्बी, भाग्य, चना, उत्तर-पूर्व'],
+['love, marriage, wife (in a man\'s chart), beauty, arts, music, luxury, vehicles, comforts, fashion, jewellery, cosmetics, kidneys, reproductive system, south-east','प्रेम, विवाह, पत्नी (पुरुष की कुंडली में), सौंदर्य, कला, संगीत, विलासिता, वाहन, सुख-सुविधा, फ़ैशन, आभूषण, प्रसाधन, गुर्दे, प्रजनन तंत्र, दक्षिण-पूर्व'],
+['work, service, labour, discipline, delays, longevity, old age, servants, iron, oil, mining, agriculture, justice, chronic disease, joints, legs, west','कार्य, सेवा, श्रम, अनुशासन, विलंब, आयु, वृद्धावस्था, सेवक, लोहा, तेल, खनन, कृषि, न्याय, पुराने रोग, जोड़, पैर, पश्चिम दिशा'],
+['ambition, foreign lands, technology, sudden events, illusion, politics, poison, addictions, paternal grandfather, electronics, aviation, hidden things, south-west','महत्वाकांक्षा, विदेश, तकनीक, अचानक घटनाएँ, माया, राजनीति, विष, व्यसन, दादा, इलेक्ट्रॉनिक्स, विमानन, छिपी बातें, दक्षिण-पश्चिम'],
+['detachment, moksha, spirituality, occult, research, maternal grandfather, sudden loss, surgery, wounds, computer coding, mantra, flags, isolation','वैराग्य, मोक्ष, आध्यात्मिकता, गूढ़ विद्या, शोध, नाना, अचानक हानि, शल्यक्रिया, घाव, कंप्यूटर कोडिंग, मंत्र, ध्वज, एकांत']
+];
+const VS_KK_S=[
+['fire · movable · male · Mars; head, face; leadership, speed, courage, army, sports, pioneering, open grounds','अग्नि · चर · पुरुष · मंगल; सिर, चेहरा; नेतृत्व, गति, साहस, सेना, खेल, अग्रणी, खुले मैदान'],
+['earth · fixed · female · Venus; face, throat, neck; wealth, food, farming, banks, beauty, music, patience','पृथ्वी · स्थिर · स्त्री · शुक्र; चेहरा, गला, गर्दन; धन, भोजन, कृषि, बैंक, सौंदर्य, संगीत, धैर्य'],
+['air · dual · male · Mercury; shoulders, arms, lungs; communication, trade, writing, media, twins, travel','वायु · द्विस्वभाव · पुरुष · बुध; कंधे, भुजाएँ, फेफड़े; संवाद, व्यापार, लेखन, मीडिया, जुड़वाँ, यात्रा'],
+['water · movable · female · Moon; chest, breasts, stomach; home, mother, emotions, water bodies, food, nursing','जल · चर · स्त्री · चंद्र; छाती, स्तन, पेट; घर, माता, भावनाएँ, जलाशय, भोजन, नर्सिंग'],
+['fire · fixed · male · Sun; heart, spine, upper back; authority, government, royalty, forests, pride, entertainment','अग्नि · स्थिर · पुरुष · सूर्य; हृदय, रीढ़, पीठ; अधिकार, सरकार, राजसी, वन, अभिमान, मनोरंजन'],
+['earth · dual · female · Mercury; intestines, digestion; service, health care, accounts, analysis, cleanliness','पृथ्वी · द्विस्वभाव · स्त्री · बुध; आँतें, पाचन; सेवा, स्वास्थ्य सेवा, लेखा, विश्लेषण, स्वच्छता'],
+['air · movable · male · Venus; kidneys, lower back; balance, law, trade, partnerships, arts, diplomacy','वायु · चर · पुरुष · शुक्र; गुर्दे, कमर; संतुलन, कानून, व्यापार, साझेदारी, कला, कूटनीति'],
+['water · fixed · female · Mars; genitals, excretory organs; secrets, research, occult, insurance, surgery, mines','जल · स्थिर · स्त्री · मंगल; गुप्तांग, उत्सर्जन अंग; रहस्य, शोध, गूढ़ विद्या, बीमा, शल्य-चिकित्सा, खानें'],
+['fire · dual · male · Jupiter; hips, thighs; religion, teaching, law, long travel, horses, philosophy','अग्नि · द्विस्वभाव · पुरुष · गुरु; कूल्हे, जाँघें; धर्म, अध्यापन, कानून, लंबी यात्रा, घोड़े, दर्शन'],
+['earth · movable · female · Saturn; knees, bones; career, administration, discipline, business, old buildings','पृथ्वी · चर · स्त्री · शनि; घुटने, हड्डियाँ; करियर, प्रशासन, अनुशासन, व्यापार, पुराने भवन'],
+['air · fixed · male · Saturn; calves, ankles, circulation; groups, science, technology, social service, networks','वायु · स्थिर · पुरुष · शनि; पिंडलियाँ, टखने, रक्त संचार; समूह, विज्ञान, तकनीक, समाज सेवा, संपर्क'],
+['water · dual · female · Jupiter; feet; spirituality, charity, hospitals, oceans, imagination, foreign lands','जल · द्विस्वभाव · स्त्री · गुरु; पैर; आध्यात्मिकता, दान, अस्पताल, समुद्र, कल्पना, विदेश']
+];
+
+// ===== v16.3: Gochar phal (detailed transit readings), Tajaka yogas & Sahams in Varshphal, Karakatva kosh =====
+Object.assign(I18N.en,{vsGochar:'Transits',vsKosh:'Significations',gcTitle:'Transit readings (gochar phal)',gcFromMoon:'from Moon',gcFromLagna:'from Lagna',gcGood:'favourable',gcBad:'unfavourable',
+ gcVedha:'Vedha (obstruction) by',gcVedhaTxt:'the good result is blocked or reduced while this lasts',gcLagnaTxt:'From the Lagna it works on',gcKp:'KP',gcStar:'star lord',gcSub:'sub lord',gcSig:'signifies houses',gcNote:'Classical gochar is read from the natal Moon; the Lagna house shows where in life it is felt. Slow planets (Saturn, Jupiter, Rahu, Ketu) matter most; the Moon changes every 2–3 days.',
+ gcDate:'Transits on',tjTitle:'Tajaka yogas',tjMatters:'Matters of the year (Lagna lord ↔ house lord)',tjPairs:'All ithasala / ishrafa links',tjSelf:'the year\'s Lagna lord itself owns this house — results depend on its own strength',
+ tjProm:'promised — likely to be fulfilled this year',tjFade:'separating — chance passes or stays weak',tjNone:'no Tajaka link — no special promise this year',tjVia:'via',shTitle:'Sahams (sensitive points)',shNote:'Each saham shows one matter of the year. It is judged by the house it falls in and the strength and placement of its lord in the annual chart.',
+ shGood:'favourable',shMix:'mixed',shWeak:'weak',shHouse:'house',shLord:'lord',tjNote:'Tajaka links use deeptamsha orbs: Sun 15°, Moon 12°, Mars 8°, Mercury 7°, Jupiter 9°, Venus 7°, Saturn 9°.',
+ kkTitle:'Karakatva kosh — what each house, planet and sign signifies',kkSearch:'Search (e.g. job, marriage, property, नौकरी)…',kkHouses:'Houses (bhava)',kkPlanets:'Planets (graha)',kkSigns:'Signs (rashi)',kkNone:'Nothing matches'});
+Object.assign(I18N.hi,{vsGochar:'गोचर',vsKosh:'कारकत्व',gcTitle:'गोचर फल',gcFromMoon:'चंद्र से',gcFromLagna:'लग्न से',gcGood:'शुभ',gcBad:'अशुभ',
+ gcVedha:'वेध',gcVedhaTxt:'इस दौरान शुभ फल रुकता या कम होता है',gcLagnaTxt:'लग्न से यह इन विषयों पर कार्य करता है',gcKp:'केपी',gcStar:'नक्षत्र स्वामी',gcSub:'उप स्वामी',gcSig:'भावों का कारक',gcNote:'शास्त्रीय गोचर जन्म चंद्र से देखा जाता है; लग्न से भाव बताता है कि जीवन के किस क्षेत्र में प्रभाव होगा। धीमे ग्रह (शनि, गुरु, राहु, केतु) सबसे महत्वपूर्ण हैं; चंद्र हर 2–3 दिन में बदलता है।',
+ gcDate:'गोचर तिथि',tjTitle:'ताजिक योग',tjMatters:'वर्ष के विषय (लग्नेश ↔ भावेश)',tjPairs:'सभी इत्थशाल / ईसराफ संबंध',tjSelf:'वर्ष लग्नेश स्वयं इस भाव का स्वामी है — फल उसके अपने बल पर निर्भर',
+ tjProm:'वचन है — इस वर्ष पूरा होने की संभावना',tjFade:'दूर जाता — अवसर बीतता या कमज़ोर रहता है',tjNone:'कोई ताजिक संबंध नहीं — इस वर्ष विशेष वचन नहीं',tjVia:'के माध्यम से',shTitle:'सहम',shNote:'हर सहम वर्ष का एक विषय दिखाता है। इसे उस भाव से देखा जाता है जिसमें वह पड़ता है, और वर्ष कुंडली में उसके स्वामी के बल व स्थिति से।',
+ shGood:'शुभ',shMix:'मिश्रित',shWeak:'कमज़ोर',shHouse:'भाव',shLord:'स्वामी',tjNote:'ताजिक संबंध दीप्तांश से: सूर्य 15°, चंद्र 12°, मंगल 8°, बुध 7°, गुरु 9°, शुक्र 7°, शनि 9°।',
+ kkTitle:'कारकत्व कोश — हर भाव, ग्रह और राशि किसका कारक है',kkSearch:'खोजें (जैसे नौकरी, विवाह, संपत्ति, job)…',kkHouses:'भाव',kkPlanets:'ग्रह',kkSigns:'राशि',kkNone:'कुछ नहीं मिला'});
+// ---------- Gochar phal ----------
+function vsGocharHTML(ch,jd){const tr=transitAt(ch,jd);const ts=transitStrength(ch,tr);let kp=[];try{kp=kpTransitNow(ch,jd);}catch(e){}
+ const order=[6,4,7,8,2,0,5,3,1];
+ const items=order.map((i,ix)=>{const t=tr[i],s=ts[i]||{},k=kp[i];const good=t.good;
+  let body=`<p>${vsT(VS_GC[i][t.fm-1])}</p><p><b>${T('gcLagnaTxt')} (${hiV()?`${t.fl}वाँ भाव`:`house ${t.fl}`}):</b> ${L(HOUSE_T)[t.fl-1]}.</p>`;
+  if(s.vedha&&s.vedha.length)body+=`<p class="note">⚠ ${T('gcVedha')} ${s.vedha.map(pn).join(', ')} — ${T('gcVedhaTxt')}.</p>`;
+  if(t.retro&&i>1&&i<7)body+=`<p class="note">${pn(i)} ℞ — ${T('vsRetro')}.</p>`;
+  if(k)body+=`<p class="note"><b>${T('gcKp')}:</b> ${T('gcStar')} ${pn(k.nl)} (${T('gcSig')} ${k.starHouses.join(', ')||'—'}), ${T('gcSub')} ${pn(k.sl)} (${T('gcSig')} ${k.subHouses.join(', ')||'—'})</p>`;
+  return vsDet(`<span class="vsp">${pn(i)}</span><span class="note">${sn(t.sign)} · ${t.fm} ${T('gcFromMoon')} · ${t.fl} ${T('gcFromLagna')}${t.retro&&i>1&&i<7?' ℞':''}</span><span class="vsr ${good?'g':'b'}">${good?T('gcGood'):T('gcBad')}</span>`,body,ix<2);}).join('');
+ return `<section class="blk"><h3>${T('gcTitle')}</h3><p class="note">${T('gcNote')}</p>${items}</section>`;}
+const _renderTransitV=renderTransit;renderTransit=function(ch){const base=_renderTransitV(ch);let add='';try{add=vsGocharHTML(ch,S.trJD||julianNow());}catch(e){}
+ const k=base.indexOf(`<h3>${T('gochar')}</h3>`);const i=k>0?base.lastIndexOf('<section',k):-1;return i>0?base.slice(0,i)+add+base.slice(i):base+add;};
+// ---------- Tajaka yogas & Sahams ----------
+const TJ_ORB=[15,12,8,7,9,7,9],TJ_FAST=[1,3,5,0,2,4,6];
+const tjRank=i=>TJ_FAST.indexOf(i);
+function tjComb(vc,p){if(p.i===0)return false;const d=Math.abs(((p.lon-vc.planets[0].lon+540)%360)-180);return d<(COMB_ORB[p.i]||0);}
+function tjAsp(a,b){return tajakaAspect(a.sign,b.sign)!=='semi';}
+function tjRel(vc,a,b){const A=vc.planets[a],B=vc.planets[b];if(!tjAsp(A,B))return null;const f=tjRank(a)<tjRank(b)?A:B,s=f===A?B:A;
+ const orb=(TJ_ORB[f.i]+TJ_ORB[s.i])/2,diff=s.deg-f.deg;if(diff>=0&&diff<=orb)return {t:'ith',f:f.i,s:s.i,diff};if(diff<0&&-diff<=orb)return {t:'ish',f:f.i,s:s.i,diff};return null;}
+function tjFlags(vc,r){const out=[];const P=vc.planets;
+ if([r.f,r.s].some(i=>(P[i].retro&&i>1)||tjComb(vc,P[i])||P[i].dign==='debil'))out.push('radda');
+ if(r.f!==1&&r.s!==1){const m1=tjRel(vc,1,r.f),m2=tjRel(vc,1,r.s);if((m1&&m1.t==='ith')||(m2&&m2.t==='ith'))out.push('kamb');}
+ [2,6].filter(x=>x!==r.f&&x!==r.s).forEach(x=>{const a=tajakaAspect(P[x].sign,P[r.f].sign);if(['conj','opp','square'].includes(a)&&Math.abs(P[x].deg-P[r.f].deg)<=TJ_ORB[x])out.push('manau');});
+ return [...new Set(out)];}
+function tjTransfer(vc,a,b){for(let x=0;x<7;x++){if(x===a||x===b)continue;const r1=tjRel(vc,x,a),r2=tjRel(vc,x,b);if(r1&&r2&&r1.t==='ith'&&r2.t==='ith'){
+ if(tjRank(x)<tjRank(a)&&tjRank(x)<tjRank(b))return {t:'nakta',x};if(tjRank(x)>tjRank(a)&&tjRank(x)>tjRank(b))return {t:'yamaya',x};}}return null;}
+function shPoint(vc,code,day){const P=vc.planets,map={Su:0,Mo:1,Ma:2,Me:3,Ju:4,Ve:5,Sa:6};if(map[code]!==undefined)return P[map[code]].lon;if(code==='As')return vc.asc;
+ if(code==='LL'){const l=SIGN_LORD[vc.lagna];return P[l===2?4:l].lon;}
+ let m=code.match(/^C(\d+)$/);if(m)return norm(vc.asc+30*(+m[1]-1));m=code.match(/^L(\d+)$/);if(m)return P[SIGN_LORD[(vc.lagna+ +m[1]-1)%12]].lon;return 0;}
+function shCalc(A,B,C){let r=norm(A-B+C);if(norm(C-B)>norm(A-B))r=norm(r+30);return r;}
+function sahams(vc,day){const pu=(()=>{const a=shPoint(vc,day?'Mo':'Su'),b=shPoint(vc,day?'Su':'Mo');return shCalc(a,b,vc.asc);})();
+ return VS_SAHAM.map(s=>{const pt=c=>c==='Pu'?pu:shPoint(vc,c,day);const sw=s.rev&&!day;const A=pt(sw?s.b:s.a),B=pt(sw?s.a:s.b),C=pt(s.c);const lon=shCalc(A,B,C);
+  const sg=signOf(lon),h=((sg-vc.lagna+12)%12)+1,lo=SIGN_LORD[sg],lp=vc.planets[lo];let sc=0;
+  if([1,4,5,7,9,10,11].includes(lp.house))sc++;if([6,8,12].includes(lp.house))sc--;if(['exalted','own','mt','friend'].includes(lp.dign))sc++;if(['debil','enemy'].includes(lp.dign))sc--;if(tjComb(vc,lp))sc--;if([6,8,12].includes(h))sc-=0.5;
+  return {...s,lon,sign:sg,house:h,lord:lo,lh:lp.house,rate:sc>=1.5?'good':sc<=-0.5?'weak':'mix'};});}
+function vsTajakaHTML(ch){const v=varshphal(ch,S.vyear);const vc=v.vc;const vs=varshesha(ch,v);const P=vc.planets.slice(0,7);let h='';
+ const kend=[1,2,4,5,7,8,10,11];const yl=[];if(P.every(p=>kend.includes(p.house)))yl.push(vsT(VS_TJ_T.ikka));else if(P.every(p=>[3,6,9,12].includes(p.house)))yl.push(vsT(VS_TJ_T.indu));
+ const LL=SIGN_LORD[vc.lagna];const flagTxt=f=>f.map(x=>`<br><span class="note">• ${vsT(VS_TJ_T[x])}</span>`).join('');
+ const rows=VS_TJ_MATTERS.map(([n,nm])=>{const K=SIGN_LORD[(vc.lagna+n-1)%12];let res,cls='';
+  if(K===LL)res=T('tjSelf');else{const r=tjRel(vc,LL,K);if(r&&r.t==='ith'){const f=tjFlags(vc,r);cls=f.includes('radda')||f.includes('manau')?'':'pos';res=`<b>Ithasala</b> — ${T('tjProm')}${flagTxt(f)}`;}
+   else if(r&&r.t==='ish'){res=`<b>Ishrafa</b> — ${T('tjFade')}`;cls='neg';}else{const x=tjTransfer(vc,LL,K);if(x){res=`<b>${x.t==='nakta'?'Nakta':'Yamaya'}</b> ${T('tjVia')} ${pn(x.x)} — ${T('tjProm')}${flagTxt([x.t])}`;cls='pos';}else res=T('tjNone');}}
+  return `<li class="${cls}"><b>${cls==='pos'?'✓':cls==='neg'?'✗':'•'}</b> <span class="vsp">${vsT(nm)}</span> <span class="note">(${pn(LL)} ↔ ${pn(K)}, ${hiV()?`${n}वाँ भाव`:`house ${n}`})</span><br>${res}</li>`;}).join('');
+ const pairs=[];for(let a=0;a<7;a++)for(let b=a+1;b<7;b++){const r=tjRel(vc,a,b);if(r)pairs.push(`<li class="${r.t==='ith'?'pos':'neg'}"><b>${r.t==='ith'?'→':'←'}</b> ${pn(r.f)} – ${pn(r.s)}: ${r.t==='ith'?'Ithasala':'Ishrafa'} <span class="note">(${Math.abs(r.diff).toFixed(1)}°)</span>${r.t==='ith'?tjFlags(vc,r).map(x=>` <span class="note">[${x==='radda'?'Radda':x==='kamb'?'Kamboola':'Manau'}]</span>`).join(''):''}</li>`);}
+ h+=`<section class="blk"><h3>${T('tjTitle')} ${S.vyear}</h3>${yl.map(t=>`<p><b>★</b> ${t}</p>`).join('')}<h4>${T('tjMatters')}</h4><ul class="fx vsfx">${rows}</ul>`
+  +vsDet(`<span class="vsp">${T('tjPairs')}</span><span class="note">${pairs.length}</span>`,`<ul class="fx vsfx">${pairs.join('')||'<li>—</li>'}</ul><p class="note">${vsT(VS_TJ_T.ith)}</p><p class="note">${vsT(VS_TJ_T.ish)}</p>`,false)
+  +`<p class="note">${T('tjNote')}</p></section>`;
+ const sh=sahams(vc,vs.day);const rt={good:T('shGood'),mix:T('shMix'),weak:T('shWeak')};
+ h+=`<section class="blk"><h3>${T('shTitle')}</h3><p class="note">${T('shNote')}</p><ul class="fx vsfx">${sh.map(s=>{const cls=s.bad?(s.rate==='good'?'pos':s.rate==='weak'?'neg':''):(s.rate==='good'?'pos':s.rate==='weak'?'neg':'');
+  return `<li class="${cls}"><b>${cls==='pos'?'✓':cls==='neg'?'✗':'•'}</b> <span class="vsp">${vsT(s.n)}</span> <span class="note">${sn(s.sign)} ${fdeg(s.lon)} · ${T('shHouse')} ${s.house} · ${T('shLord')} ${pn(s.lord)} → ${s.lh}</span><br>${vsT(s.m)}: <b>${rt[s.rate]}</b></li>`;}).join('')}</ul></section>`;
+ return h;}
+const _renderVarshT=renderVarsh;renderVarsh=function(ch){const base=_renderVarshT(ch);let add='';try{add=vsTajakaHTML(ch);}catch(e){add='';}
+ const k=base.indexOf(`<h3>${T('mudda')}</h3>`);const i=k>0?base.lastIndexOf('<section',k):-1;return i>0?base.slice(0,i)+add+base.slice(i):base+add;};
+// ---------- Karakatva kosh ----------
+function vsKoshHTML(){const row=(label,txt,en)=>`<div class="kkrow" data-s="${esc((en||'').toLowerCase())}"><b>${label}</b><div>${txt}</div></div>`;
+ const H=VS_KK_H.map((t,i)=>row(`${hiV()?`${i+1}वाँ भाव`:`House ${i+1}`}`,vsT(t),t[0]+' '+t[1])).join('');
+ const P=VS_KK_P.map((t,i)=>row(pn(i),vsT(t),t[0]+' '+t[1]+' '+PN.en[i]+' '+PN.hi[i])).join('');
+ const Sg=VS_KK_S.map((t,i)=>row(sn(i),vsT(t),t[0]+' '+t[1]+' '+SN.en[i]+' '+SN.hi[i])).join('');
+ return `<section class="blk"><h3>${T('kkTitle')}</h3><input id="kkq" type="search" placeholder="${T('kkSearch')}" autocomplete="off"><p class="note" id="kknone" hidden>${T('kkNone')}</p>
+ <h4 class="kkg">${T('kkHouses')}</h4>${H}<h4 class="kkg">${T('kkPlanets')}</h4>${P}<h4 class="kkg">${T('kkSigns')}</h4>${Sg}</section>`;}
+document.addEventListener('input',e=>{if(e.target.id!=='kkq')return;const q=e.target.value.trim().toLowerCase();let n=0;
+ document.querySelectorAll('.kkrow').forEach(r=>{const hit=!q||r.dataset.s.includes(q)||r.textContent.toLowerCase().includes(q);r.hidden=!hit;if(hit)n++;});
+ document.querySelectorAll('.kkg').forEach(g=>{let s=g.nextElementSibling,any=false;while(s&&s.classList.contains('kkrow')){if(!s.hidden)any=true;s=s.nextElementSibling;}g.hidden=!any;});
+ const nn=document.getElementById('kknone');if(nn)nn.hidden=n>0;});
+// ---------- new chips in Detailed readings ----------
+VS_SECS.push(['gochar','vsGochar'],['kosh','vsKosh']);
+const _renderVistarG=renderVistar;renderVistar=function(ch){const cur=S.vsec||'lagna';if(cur!=='gochar'&&cur!=='kosh')return _renderVistarG(ch);
+ const chips=`<div class="vschips" role="tablist">${VS_SECS.map(([k,l])=>`<button data-vsec="${k}" aria-pressed="${cur===k}">${T(l)}</button>`).join('')}</div>`;
+ const body=cur==='gochar'?`<p class="note">${T('gcDate')}: ${fdate(julianNow())}</p>`+vsGocharHTML(ch,julianNow()):vsKoshHTML();
+ return `<div class="pagehead"><h2>${T('t_vistar')}</h2></div>${chips}${body}<p class="note">${T('vsNote')}</p>`;};
+NEWT.vistar=renderVistar;
+(function(){const st=document.createElement('style');st.textContent=`
+.vsr{margin-left:auto;font-size:12px;padding:2px 8px;border-radius:999px}.vsr.g{background:var(--goodbg);color:var(--good)}.vsr.b{background:var(--badbg);color:var(--kum)}
+.vsfx li{margin-bottom:6px}.vsfx li b:first-child{display:inline-block;width:16px}.vsfx li .vsp{font-weight:600}
+#kkq{width:100%;padding:10px 12px;border:1px solid var(--line);border-radius:10px;background:var(--paper);color:var(--txt);font:inherit;margin:4px 0 10px}
+.kkg{margin:14px 0 6px;font:600 15px var(--serif)}.kkrow{display:grid;grid-template-columns:110px 1fr;gap:10px;padding:8px 0;border-top:1px solid var(--line);font-size:14px}.kkrow[hidden],.kkg[hidden]{display:none}
+@media (max-width:420px){.kkrow{grid-template-columns:1fr;gap:2px}}`;document.head.appendChild(st);})();
+
 </script>
 <nav id="bnav" aria-label="Main"></nav>
 </body></html>
