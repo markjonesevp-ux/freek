@@ -5190,6 +5190,111 @@ NEWT.vistar=renderVistar;
 .kkg{margin:14px 0 6px;font:600 15px var(--serif)}.kkrow{display:grid;grid-template-columns:110px 1fr;gap:10px;padding:8px 0;border-top:1px solid var(--line);font-size:14px}.kkrow[hidden],.kkg[hidden]{display:none}
 @media (max-width:420px){.kkrow{grid-template-columns:1fr;gap:2px}}`;document.head.appendChild(st);})();
 
+// ===== Dasha period readings: planet periods (Ashtottari) and sign periods (Kalachakra, Sudasa) =====
+const VS_DPL=[
+['Sun period: authority, recognition, government matters and the father come to the fore. Good for leadership and status if the Sun is strong; otherwise ego clashes and health (heart, eyes) need care.','सूर्य दशा: अधिकार, पहचान, सरकारी विषय और पिता प्रमुख रहते हैं। सूर्य बलवान हो तो नेतृत्व और पद के लिए शुभ; अन्यथा अहं के टकराव और स्वास्थ्य (हृदय, आँख) का ध्यान रखें।'],
+['Moon period: mind, mother, home, public dealings and travel are active. Emotional growth, comforts and popularity when the Moon is strong; mood swings and worry when weak.','चंद्र दशा: मन, माता, घर, जनसंपर्क और यात्रा सक्रिय रहते हैं। चंद्र बलवान हो तो भावनात्मक विकास, सुख और लोकप्रियता; कमज़ोर हो तो मनोदशा में उतार-चढ़ाव और चिंता।'],
+['Mars period: energy, courage, property, siblings and competition. Good for land, technical work and victory over rivals; watch anger, accidents and disputes.','मंगल दशा: ऊर्जा, साहस, संपत्ति, भाई-बहन और प्रतिस्पर्धा। भूमि, तकनीकी कार्य और प्रतिद्वंद्वियों पर विजय के लिए शुभ; क्रोध, दुर्घटना और विवाद से सावधान।'],
+['Mercury period: education, communication, trade, writing and intellect flourish. Good for business and studies; avoid nervous stress and careless contracts.','बुध दशा: शिक्षा, संवाद, व्यापार, लेखन और बुद्धि फलते हैं। व्यापार और पढ़ाई के लिए शुभ; तंत्रिका तनाव और असावधान अनुबंधों से बचें।'],
+['Jupiter period: wisdom, children, wealth, religion and good guidance. Usually one of the most fortunate periods — marriage, births, promotion and spiritual growth.','गुरु दशा: ज्ञान, संतान, धन, धर्म और अच्छा मार्गदर्शन। प्रायः सबसे भाग्यशाली दशाओं में से एक — विवाह, संतान जन्म, पदोन्नति और आध्यात्मिक उन्नति।'],
+['Venus period: love, marriage, comforts, vehicles, arts and luxury. Happy relationships and material gains when Venus is strong; overspending or indulgence when weak.','शुक्र दशा: प्रेम, विवाह, सुख-सुविधा, वाहन, कला और विलासिता। शुक्र बलवान हो तो सुखी संबंध और भौतिक लाभ; कमज़ोर हो तो अधिक खर्च या भोग।'],
+['Saturn period: hard work, responsibility, discipline and slow but lasting results. Career built through persistence; delays, fatigue and chronic health issues need patience.','शनि दशा: परिश्रम, ज़िम्मेदारी, अनुशासन और धीमे पर स्थायी फल। लगन से करियर का निर्माण; विलंब, थकान और पुराने रोगों में धैर्य चाहिए।'],
+['Rahu period: ambition, foreign links, technology and sudden changes. Big rises are possible through unconventional paths; confusion, deception and health scares must be guarded against.','राहु दशा: महत्वाकांक्षा, विदेशी संपर्क, तकनीक और अचानक बदलाव। अपरंपरागत मार्गों से बड़ी उन्नति संभव; भ्रम, धोखे और स्वास्थ्य संबंधी डर से सावधान।'],
+['Ketu period: detachment, spirituality, research and sudden endings that clear the way for new growth.','केतु दशा: वैराग्य, आध्यात्मिकता, शोध और ऐसे अचानक अंत जो नए विकास का मार्ग खोलते हैं।']
+];
+const VS_DSG=[
+['Aries period: enterprise, new starts, courage and competition; also quarrels, haste or minor injuries.','मेष दशा: उद्यम, नई शुरुआत, साहस और प्रतिस्पर्धा; साथ ही झगड़े, जल्दबाज़ी या छोटी चोटें।'],
+['Taurus period: wealth building, family, food, comforts and stability.','वृषभ दशा: धन निर्माण, परिवार, भोजन, सुख-सुविधा और स्थिरता।'],
+['Gemini period: learning, communication, trade, travel and many activities at once.','मिथुन दशा: सीखना, संवाद, व्यापार, यात्रा और एक साथ अनेक गतिविधियाँ।'],
+['Cancer period: home, mother, emotions, property and the public.','कर्क दशा: घर, माता, भावनाएँ, संपत्ति और जनता।'],
+['Leo period: authority, recognition, leadership and dealings with government.','सिंह दशा: अधिकार, पहचान, नेतृत्व और सरकार से व्यवहार।'],
+['Virgo period: work, service, health routines, detail and skill-building; also minor illness or disputes.','कन्या दशा: कार्य, सेवा, स्वास्थ्य दिनचर्या, बारीकी और कौशल विकास; साथ ही छोटे रोग या विवाद।'],
+['Libra period: partnerships, marriage, trade, balance and arts.','तुला दशा: साझेदारी, विवाह, व्यापार, संतुलन और कला।'],
+['Scorpio period: transformation, research, hidden matters and sudden events; care with health.','वृश्चिक दशा: रूपांतरण, शोध, गुप्त विषय और अचानक घटनाएँ; स्वास्थ्य में सावधानी।'],
+['Sagittarius period: fortune, religion, teachers, higher studies and long travel.','धनु दशा: भाग्य, धर्म, गुरुजन, उच्च शिक्षा और लंबी यात्रा।'],
+['Capricorn period: career, responsibility, discipline and steady effort.','मकर दशा: करियर, ज़िम्मेदारी, अनुशासन और स्थिर प्रयास।'],
+['Aquarius period: networks, gains through groups, technology and social causes.','कुंभ दशा: संपर्क, समूहों से लाभ, तकनीक और सामाजिक कार्य।'],
+['Pisces period: spirituality, charity, religious activity, travel abroad and imagination.','मीन दशा: आध्यात्मिकता, दान, धार्मिक गतिविधि, विदेश यात्रा और कल्पना।']
+];
+
+// ===== v16.4: Ashtottari, Kalachakra and Sudasa dashas; KP dasha-lord transit check =====
+Object.assign(I18N.en,{dsAsht:'Ashtottari',dsKal:'Kalachakra',dsSu:'Sudasa',dsMd:'Dasha',dsFrom:'From',dsTo:'To',dsYrs:'Years',dsNow:'running now',dsAds:'Antardashas of the running dasha',
+ astNote:'Ashtottari (108 years) starts from the Moon\'s position in 8 arcs beginning at Ardra. Antardashas start from the planet after the dasha lord.',astApp:'Applicability',astA1:'Rahu (not in lagna) is in a kendra or trikona from the lagna lord',astA2:'Day birth in Krishna paksha or night birth in Shukla paksha',
+ astYes:'yes',astNo:'no',astUse:'Some traditions use Ashtottari for every chart; others only when one of these conditions holds.',
+ kalNote:'Kalachakra, called the most respectable dasha by Parashara, runs through signs taken from the Moon\'s nakshatra pada. A sign\'s dasha gives the results of that sign, the planets in it and the house it forms.',
+ kalGroup:'Moon\'s nakshatra group',kalSavya:'Savya (zodiacal)',kalApa:'Apasavya (anti-zodiacal)',kalDeha:'Deha (body) sign',kalJeeva:'Jeeva (life) sign',kalParam:'Paramayush of the pada',kalDJ:'Dashas of the Deha and Jeeva signs, and of signs holding malefics, need extra care for health.',
+ suNote:'Sudasa is a sign dasha from Sree Lagna, used for money, power and authority. Signs linked to Hora Lagna bring wealth, to Ghatika Lagna bring power, and upachayas from Arudha Lagna bring rising status.',
+ suSL:'Sree Lagna',suWealth:'wealth (Hora Lagna link)',suPower:'power (Ghatika Lagna link)',suRise:'status rises (upachaya from Arudha Lagna)',suFall:'setback to status (8th/12th from Arudha Lagna)',suNA:'Sudasa needs the sunrise time for the birth place, which could not be computed for this chart.',
+ dsInH:'house',dsHas:'contains',dsKpT:'KP: dasha lords in transit',dsKpAct:'Houses activated now (transit star/sub of the dasha lords also signified by them at birth)',dsKpNone:'no strong activation right now'});
+Object.assign(I18N.hi,{dsAsht:'अष्टोत्तरी',dsKal:'कालचक्र',dsSu:'सुदशा',dsMd:'दशा',dsFrom:'से',dsTo:'तक',dsYrs:'वर्ष',dsNow:'अभी चल रही',dsAds:'चल रही दशा की अंतर्दशाएँ',
+ astNote:'अष्टोत्तरी (108 वर्ष) आर्द्रा से शुरू होने वाले 8 खंडों में चंद्र की स्थिति से आरंभ होती है। अंतर्दशा दशा स्वामी के अगले ग्रह से शुरू होती है।',astApp:'लागू होना',astA1:'राहु (लग्न में नहीं) लग्नेश से केंद्र या त्रिकोण में है',astA2:'कृष्ण पक्ष में दिन का जन्म या शुक्ल पक्ष में रात का जन्म',
+ astYes:'हाँ',astNo:'नहीं',astUse:'कुछ परंपराएँ हर कुंडली में अष्टोत्तरी लगाती हैं; अन्य तभी जब इनमें से कोई शर्त पूरी हो।',
+ kalNote:'कालचक्र, जिसे पराशर ने सबसे सम्माननीय दशा कहा है, चंद्र के नक्षत्र चरण से ली गई राशियों में चलती है। किसी राशि की दशा उस राशि, उसमें स्थित ग्रहों और उससे बने भाव का फल देती है।',
+ kalGroup:'चंद्र नक्षत्र का समूह',kalSavya:'सव्य (क्रमानुसार)',kalApa:'अपसव्य (विपरीत)',kalDeha:'देह राशि',kalJeeva:'जीव राशि',kalParam:'चरण की परमायु',kalDJ:'देह और जीव राशि की दशा, और पाप ग्रहों वाली राशियों की दशा में स्वास्थ्य पर अतिरिक्त ध्यान दें।',
+ suNote:'सुदशा श्री लग्न से चलने वाली राशि दशा है, धन, शक्ति और अधिकार के लिए। होरा लग्न से जुड़ी राशियाँ धन, घटी लग्न से जुड़ी शक्ति, और आरूढ़ लग्न से उपचय राशियाँ बढ़ती प्रतिष्ठा देती हैं।',
+ suSL:'श्री लग्न',suWealth:'धन (होरा लग्न से संबंध)',suPower:'शक्ति (घटी लग्न से संबंध)',suRise:'प्रतिष्ठा में वृद्धि (आरूढ़ लग्न से उपचय)',suFall:'प्रतिष्ठा में बाधा (आरूढ़ लग्न से 8/12)',suNA:'सुदशा के लिए जन्म स्थान का सूर्योदय चाहिए, जो इस कुंडली के लिए नहीं निकल सका।',
+ dsInH:'भाव',dsHas:'में',dsKpT:'केपी: दशा स्वामियों का गोचर',dsKpAct:'अभी सक्रिय भाव (दशा स्वामियों के गोचर नक्षत्र/उप स्वामी जो जन्म के समय भी उन्हीं भावों के कारक हैं)',dsKpNone:'अभी कोई प्रबल सक्रियता नहीं'});
+// ---------- Ashtottari ----------
+const AST_L=[0,1,2,3,6,4,7,5],AST_Y=[6,15,8,17,10,19,12,21],AST_A=[160/3,40,160/3,40,40,40,160/3,40];
+function ashtottari(ch){const rel=norm(ch.planets[1].lon-200/3);let c=0,k=0;while(k<7&&rel>=c+AST_A[k]){c+=AST_A[k];k++;}
+ const frac=(c+AST_A[k]-rel)/AST_A[k],el=AST_Y[k]*(1-frac);let jd=ch.jd-el*YEAR;const md=[];
+ for(let n=0;n<16&&jd<ch.jd+120*YEAR;n++){const ix=(k+n)%8,L=AST_L[ix],y=AST_Y[ix];const m={lord:L,yrs:y,start:jd,end:jd+y*YEAR,ads:[]};let a=m.start;
+  for(let j=1;j<=8;j++){const aix=(ix+j)%8,al=AST_L[aix],ay=y*AST_Y[aix]/108;m.ads.push({lord:al,start:a,end:a+ay*YEAR});a+=ay*YEAR;}md.push(m);jd=m.end;}
+ const ll=ch.planets[SIGN_LORD[ch.lagna]],ra=ch.planets[7];const c1=ra.house!==1&&[1,4,5,7,9,10].includes(((ra.sign-ll.sign+12)%12)+1);
+ const day=!!(ch.sr&&ch.sr.rise&&ch.jd>=ch.sr.rise&&ch.jd<ch.sr.set),krishna=ch.tithi>=15;const c2=(day&&krishna)||(!day&&!krishna);return {md,c1,c2};}
+// ---------- Kalachakra ----------
+const KC_SAV=[0,1,2,3,4,5,6,7,8,9,10,11,7,6,5,3,4,2,1,0,11,10,9,8],KC_APS=[8,9,10,11,0,1,2,4,3,5,6,7,11,10,9,8,7,6,5,4,3,2,1,0],KC_Y=[7,16,9,21,5,9,16,7,10,4,4,10];
+// Savya/apasavya go in alternate trios of nakshatras. Savya trio = S1,S2,S1 (Ashwini,Bharani,Krittika …); apasavya trio = A1,A2,A2 (Rohini,Mrigashira,Ardra …)
+function kalachakra(ch){const m=ch.planets[1].lon,n=Math.floor(m/NAKLEN),inN=m-n*NAKLEN,pl=NAKLEN/4,p=Math.min(3,Math.floor(inN/pl)),frac=(inN-p*pl)/pl;
+ const savya=Math.floor(n/3)%2===0,sub2=savya?n%3===1:n%3!==0,seq=savya?KC_SAV:KC_APS,p0=9*((sub2?4:0)+p);
+ const at=k=>seq[((p0+k)%24+24)%24];const nine=Array.from({length:9},(_,k)=>at(k)),param=nine.reduce((s,x)=>s+KC_Y[x],0);let el=frac*param,j=0;
+ while(j<8&&el>=KC_Y[nine[j]]){el-=KC_Y[nine[j]];j++;}
+ let jd=ch.jd-el*YEAR;const md=[];for(let k=0;k<30&&jd<ch.jd+120*YEAR;k++){const pos=p0+j+k,s=at(j+k),y=KC_Y[s];const m2={sign:s,yrs:y,start:jd,end:jd+y*YEAR,ads:[]};
+  const as=Array.from({length:9},(_,q)=>seq[((pos+q)%24+24)%24]),tot=as.reduce((a,x)=>a+KC_Y[x],0);let a=jd;as.forEach(x=>{const ay=y*KC_Y[x]/tot;m2.ads.push({sign:x,start:a,end:a+ay*YEAR});a+=ay*YEAR;});
+  md.push(m2);jd=m2.end;}
+ const deha=savya?md[0].sign:md[8].sign,jeeva=savya?md[8].sign:md[0].sign;return {md,savya,param,deha,jeeva,nak:n,pada:p+1};}
+// ---------- Sudasa ----------
+function vsAL(ch){const L=signLordJ(ch.lagna,ch),ls=ch.planets[L].sign,d=(ls-ch.lagna+12)%12;let al=(ls+d)%12;if(al===ch.lagna||al===(ch.lagna+6)%12)al=(al+9)%12;return al;}
+function sudasa(ch){const sp=specialLagnas(ch);if(!sp)return null;const s0=signOf(sp.SL),d=s0%2===0?1:-1;
+ const seq=[0,3,6,9,1,4,7,10,2,5,8,11].map(o=>((s0+d*o)%12+12)%12);
+ const len=s=>{const Ld=signLordJ(s,ch),p=ch.planets[Ld];let c=ODDF.includes(s)?((p.sign-s+12)%12)+1:((s-p.sign+12)%12)+1;let y=c-1;if(y===0)y=12;if(p.dign==='exalted')y+=1;if(p.dign==='debil')y-=1;return Math.max(1,y);};
+ const lens=seq.map(len);const bal=(30-(sp.SL%30))/30;let jd=ch.jd-lens[0]*(1-bal)*YEAR;const md=[];
+ for(let cyc=0;cyc<2;cyc++)seq.forEach((s,ix)=>{const y=cyc===0?lens[ix]:12-lens[ix];if(y<=0)return;md.push({sign:s,yrs:y,start:jd,end:jd+y*YEAR,cyc});jd+=y*YEAR;});
+ const HL=signOf(sp.HL),GL=signOf(sp.GL),AL=vsAL(ch);
+ const link=(s,t)=>s===t||s===(t+6)%12||rashiDrishti(s).includes(t)||rasiAspectedBy(ch,signLordJ(s,ch),t)||ch.planets[signLordJ(t,ch)].sign===s;
+ md.forEach(m=>{m.tags=[];if(link(m.sign,HL))m.tags.push('suWealth');if(link(m.sign,GL))m.tags.push('suPower');const h=((m.sign-AL+12)%12)+1;if([3,6,10,11].includes(h))m.tags.push('suRise');if([8,12].includes(h))m.tags.push('suFall');});
+ return {md,SL:sp.SL,HL,GL,AL};}
+// ---------- rendering ----------
+function vsSignNote(ch,s){const h=((s-ch.lagna+12)%12)+1,occ=ch.planets.filter(p=>p.sign===s).map(p=>pn(p.i));
+ return `${vsT(VS_DSG[s])} <span class="note">(${T('dsInH')} ${h}: ${L(HOUSE_T)[h-1]}${occ.length?` · ${occ.join(', ')}`:''})</span>`;}
+function vsDashaList(rows,now,label,note,adLabel){const cur=rows.find(r=>now>=r.start&&now<r.end);
+ const list=rows.map(r=>{const on=r===cur;return vsDet(`<span class="vsp">${label(r)}</span><span class="note">${fdate(r.start)} – ${fdate(r.end)} · ${(+r.yrs.toFixed(2))} ${T('dsYrs')}${on?` · <b>${T('dsNow')}</b>`:''}</span>`,`<p>${note(r)}</p>${r.tagsHTML||''}`
+  +(r.ads&&r.ads.length?`<div class="tw"><table><tbody>${r.ads.map(a=>`<tr${now>=a.start&&now<a.end?' class="cur"':''}><td>${adLabel(a)}</td><td>${fdate(a.start)}</td><td>${fdate(a.end)}</td></tr>`).join('')}</tbody></table></div>`:''),on);}).join('');
+ return list;}
+function renderAshtottari(ch){const r=ashtottari(ch),now=julianNow();const yn=b=>b?`<b class="pos">${T('astYes')}</b>`:T('astNo');
+ return sec(T('dsAsht'),`<p class="note">${T('astNote')}</p><p><b>${T('astApp')}:</b> ${T('astA1')} — ${yn(r.c1)}; ${T('astA2')} — ${yn(r.c2)}.</p><p class="note">${T('astUse')}</p>`)
+  +`<section class="blk">${vsDashaList(r.md.filter(m=>m.end>ch.jd),now,m=>pn(m.lord),m=>vsT(VS_DPL[m.lord])+' '+(hiV()?`जन्म कुंडली में ${pn(m.lord)} ${ch.planets[m.lord].house}वें भाव में है।`:`${pn(m.lord)} is in house ${ch.planets[m.lord].house} of the birth chart.`),a=>pn(a.lord))}</section>`;}
+function renderKalachakra(ch){const r=kalachakra(ch),now=julianNow();
+ return sec(T('dsKal'),`<p class="note">${T('kalNote')}</p><p><b>${T('kalGroup')}:</b> ${NK[S.lang][r.nak]} ${hiV()?'चरण':'pada'} ${r.pada} — ${r.savya?T('kalSavya'):T('kalApa')} · <b>${T('kalParam')}:</b> ${r.param} ${T('dsYrs')}</p><p><b>${T('kalDeha')}:</b> ${sn(r.deha)} · <b>${T('kalJeeva')}:</b> ${sn(r.jeeva)}</p><p class="note">${T('kalDJ')}</p>`)
+  +`<section class="blk">${vsDashaList(r.md.filter(m=>m.end>ch.jd),now,m=>sn(m.sign)+(m.sign===r.deha?` <small>(${T('kalDeha')})</small>`:m.sign===r.jeeva?` <small>(${T('kalJeeva')})</small>`:''),m=>vsSignNote(ch,m.sign),a=>sn(a.sign))}</section>`;}
+function renderSudasa(ch){const r=sudasa(ch),now=julianNow();if(!r)return sec(T('dsSu'),`<p>${T('suNA')}</p>`);
+ r.md.forEach(m=>{m.tagsHTML=m.tags.length?`<ul class="fx vsfx">${m.tags.map(t=>`<li class="${t==='suFall'?'neg':'pos'}"><b>${t==='suFall'?'✗':'✓'}</b> ${T(t)}</li>`).join('')}</ul>`:'';});
+ return sec(T('dsSu'),`<p class="note">${T('suNote')}</p><p><b>${T('suSL')}:</b> ${sn(signOf(r.SL))} ${fdeg(r.SL)} · HL ${sn(r.HL)} · GL ${sn(r.GL)} · AL ${sn(r.AL)}</p>`)
+  +`<section class="blk">${vsDashaList(r.md.filter(m=>m.end>ch.jd),now,m=>sn(m.sign)+(m.tags.includes('suWealth')?' 💰':'')+(m.tags.includes('suPower')?' 👑':''),m=>vsSignNote(ch,m.sign),a=>'')}</section>`;}
+const VS_DSYS={asht:[renderAshtottari,'dsAsht'],kal:[renderKalachakra,'dsKal'],su:[renderSudasa,'dsSu']};
+const _renderDashaV=renderDasha;renderDasha=function(ch){const mine=VS_DSYS[S.dsys];const btns=Object.entries(VS_DSYS).map(([k,v])=>`<button class="${S.dsys===k?'on':''}" data-dsys="${k}">${T(v[1])}</button>`).join('');
+ if(!mine){const h=_renderDashaV(ch);return h.replace(/(<div class="seg">[\s\S]*?)<\/div>/,`$1${btns}</div>`);}
+ const keep=S.dsys;S.dsys='yog';let head='';try{const h=_renderDashaV(ch);const m=h.match(/<div class="seg">[\s\S]*?<\/div>/);head=m?m[0].replace(/class="on"/g,'class=""'):'';}finally{S.dsys=keep;}
+ head=head.replace(/<\/div>$/,`${btns}</div>`);let body='';try{body=mine[0](ch);}catch(e){body=`<p>—</p>`;}return head+body;};
+// ---------- KP: dasha lords in transit (Reader V rule: an event fires when transits of the dasha lords' star/sub lords signify the same houses) ----------
+function vsKpDashaTransit(ch,jd){const da=dashaAt(ch,jd);if(!da)return '';const kp=kpTransitNow(ch,jd);const lords=[['md',da.md.lord],['ad',da.ad.lord],['pd',da.pd.lord]];
+ const act={};const rows=lords.map(([k,l])=>{const t=kp[l],nat=new Set(ch.kpSig[l].all);const both=[...new Set([...t.starHouses,...t.subHouses])].filter(h=>nat.has(h)).sort((a,b)=>a-b);both.forEach(h=>act[h]=(act[h]||0)+1);
+  return `<li><b>•</b> <span class="vsp">${pn(l)}</span> <span class="note">(${T(k)})</span> — ${T('gcStar')} ${pn(t.nl)}, ${T('gcSub')} ${pn(t.sl)}: ${both.length?both.join(', '):'—'}</li>`;}).join('');
+ const hot=Object.entries(act).filter(([h,c])=>c>=2).map(([h])=>+h).sort((a,b)=>a-b);
+ return `<section class="blk"><h3>${T('dsKpT')}</h3><ul class="fx vsfx">${rows}</ul><p><b>${T('dsKpAct')}:</b> ${hot.length?hot.map(h=>`${h} (${L(HOUSE_T)[h-1]})`).join('; '):T('dsKpNone')}</p></section>`;}
+const _vsGocharHTML=vsGocharHTML;vsGocharHTML=function(ch,jd){let k='';try{k=vsKpDashaTransit(ch,jd);}catch(e){}return _vsGocharHTML(ch,jd)+k;};
+(function(){const st=document.createElement('style');st.textContent=`.seg{flex-wrap:wrap;max-width:100%}.seg button{flex:1 1 auto}`;document.head.appendChild(st);})();
+
 </script>
 <nav id="bnav" aria-label="Main"></nav>
 </body></html>
