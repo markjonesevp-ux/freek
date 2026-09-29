@@ -5980,6 +5980,172 @@ const _verifyP=NEWT.verify;NEWT.verify=function(ch){let a='';try{a=pstVerify(ch)
 .pstab{display:inline-flex;gap:4px;margin-left:4px;vertical-align:middle}.pstb{font:inherit;font-size:12px;padding:2px 8px;border-radius:999px;border:1px solid var(--line);background:var(--card);color:var(--txt);cursor:pointer}
 .pstb.on.y{background:var(--good);border-color:var(--good);color:#fff}.pstb.on.n{background:var(--kum);border-color:var(--kum);color:#fff}.pstl li{margin-bottom:6px}.pstyr{font-weight:700}.pstsc{padding:8px 10px;border-radius:8px;background:var(--goodbg)}`;document.head.appendChild(st);})();
 
+// ===== v18: new UI/UX — one mode, five clear sections, dashboard home, section hubs with descriptions, compact tab header =====
+Object.assign(I18N.en,{h_home:'Home',h_sol:'Solutions',h_read:'Reading',h_time:'Timing',h_more:'More',
+ hs_sol:'Problems, health, remedies and direct questions',hs_read:'Everything the kundali says about life',hs_time:'Dasha, transits and the year ahead',hs_more:'Charts, systems, verification and tools',
+ t_s_ask:'Quick answers',t_s_verify:'Easy birth-time check',t_s_gloss:'Word meanings',t_h_home:'Home',t_h_sol:'Solutions',t_h_read:'Reading',t_h_time:'Timing',
+ g18_prob:'Solve a problem',g18_q:'Ask directly',g18_full:'Complete reading',g18_det:'Detailed readings',g18_area:'Life areas',g18_dasha:'Dasha',g18_gochar:'Transits (gochar)',g18_year:'Year',
+ g18_charts:'Kundali charts',g18_sys:'Astrology systems',g18_str:'Planet strength',g18_ver:'Verify the kundali',g18_tools:'Tools (no kundali needed)',g18_app:'App',
+ v18hi:'Namaste',v18lag:'Lagna',v18ras:'Rashi',v18nak:'Nakshatra',v18run:'Running dasha',v18till:'till',v18state:'Your situation now',v18stateN:'Tap any area to see why, how long, and what to do',v18main:'Main services',v18quick:'Quick answers',v18trust:'Kundali accuracy',v18change:'Change',v18all:'All',
+ v18sev:{high:'Needs attention',med:'Mild',low:'Fine'}});
+Object.assign(I18N.hi,{h_home:'होम',h_sol:'समाधान',h_read:'फलादेश',h_time:'समय',h_more:'और',
+ hs_sol:'समस्या, स्वास्थ्य, उपाय और सीधे प्रश्न',hs_read:'जीवन के बारे में कुंडली क्या कहती है',hs_time:'दशा, गोचर और आने वाला वर्ष',hs_more:'चार्ट, पद्धतियाँ, जाँच और उपकरण',
+ t_s_ask:'जल्दी जवाब',t_s_verify:'आसान जन्म समय जाँच',t_s_gloss:'शब्दों के अर्थ',t_h_home:'होम',t_h_sol:'समाधान',t_h_read:'फलादेश',t_h_time:'समय',
+ g18_prob:'परेशानी का हल',g18_q:'सीधे प्रश्न पूछें',g18_full:'संपूर्ण फलादेश',g18_det:'विस्तृत पाठ',g18_area:'जीवन क्षेत्र',g18_dasha:'दशा',g18_gochar:'गोचर',g18_year:'वर्ष',
+ g18_charts:'कुंडली चार्ट',g18_sys:'ज्योतिष पद्धतियाँ',g18_str:'ग्रह बल',g18_ver:'कुंडली की जाँच',g18_tools:'उपकरण (कुंडली ज़रूरी नहीं)',g18_app:'ऐप',
+ v18hi:'नमस्ते',v18lag:'लग्न',v18ras:'राशि',v18nak:'नक्षत्र',v18run:'चल रही दशा',v18till:'तक',v18state:'आपकी वर्तमान स्थिति',v18stateN:'किसी भी क्षेत्र पर टैप करें — क्यों, कब तक और क्या करें',v18main:'मुख्य सेवाएँ',v18quick:'जल्दी जवाब',v18trust:'कुंडली की सटीकता',v18change:'बदलें',v18all:'सभी',
+ v18sev:{high:'ध्यान चाहिए',med:'हल्की',low:'ठीक'}});
+// ---- information architecture ----
+const SEC18=[
+ ['home','🏠',[]],
+ ['sol','🙏',[['g18_prob',['samasya','rog','upay','kat']],['g18_q',['s_ask','ask','questions','converge']]]],
+ ['read','📖',[['g18_full',['final','pandit','fullreport','family','snap']],['g18_det',['vistar','report','yuti','signify','bhava','karma']],['g18_area',['career','dhan','navamsa','pada','caution','pred','basic']]]],
+ ['time','⏳',[['g18_dasha',['dasha','events','precise','decode']],['g18_gochar',['tr','sadesati','daily','monthly','navtara','avtime']],['g18_year',['varsh','snapyr']]]],
+ ['more','☰',[['g18_charts',['charts','vargas','chalit','upg']],['g18_sys',['method','parashari','kp','nadi','navtech','jai','lk']],['g18_str',['afflict','aspects','dig','av','sb']],['g18_ver',['verify','s_verify']]]]];
+const IC18={samasya:'🙏',rog:'🩺',upay:'🪔',kat:'⚖️',s_ask:'⚡',ask:'❓',questions:'🎯',converge:'🧩',final:'📜',pandit:'🕉️',fullreport:'🖨️',family:'👨‍👩‍👧',snap:'📌',
+ vistar:'📚',report:'📝',yuti:'🔗',signify:'🏠',bhava:'🔁',karma:'🌱',career:'💼',dhan:'💰',navamsa:'💍',pada:'✨',caution:'⚠️',pred:'🔭',basic:'📋',
+ dasha:'🕰️',events:'📅',precise:'🎯',decode:'🔍',tr:'🪐',sadesati:'🌑',daily:'☀️',monthly:'🗓️',navtara:'⭐',avtime:'🔢',varsh:'🎂',snapyr:'📆',
+ charts:'🔷',vargas:'🧮',chalit:'🔶',upg:'🌘',method:'🧭',parashari:'📜',kp:'🎯',nadi:'🌿',navtech:'🔐',jai:'🔱',lk:'📕',afflict:'🩹',aspects:'👁️',dig:'🧭',av:'🔢',sb:'💪',verify:'✅',s_verify:'⏱️'};
+const D18={
+ samasya:['Job, home quarrels, peace of mind, loss, expenses, health — why, till when, what to do','नौकरी, कलह, मन की शांति, हानि, खर्चे, स्वास्थ्य — क्यों, कब तक, क्या करें'],
+ rog:['Sensitive body parts, prakriti, check-ups and caution periods','संवेदनशील अंग, प्रकृति, जाँच सूची और सावधानी का समय'],
+ upay:['Chart-based mantra, daan, gem, rudraksha, yantra, vrat; Manglik','कुंडली आधारित मंत्र, दान, रत्न, रुद्राक्ष, यंत्र, व्रत; मांगलिक'],
+ kat:['Align daily actions with your planets (KAT)','अपने कर्मों को ग्रहों के अनुरूप करें (KAT)'],
+ s_ask:['Job, marriage, house, foreign… one-tap answers','नौकरी, विवाह, घर, विदेश… एक टैप में जवाब'],
+ ask:['Ask any question in detail','कोई भी प्रश्न विस्तार से पूछें'],questions:['Yes/no and timing by KP','केपी से हाँ/ना और समय'],converge:['13 factors combined into one verdict','13 कारकों को मिलाकर एक निष्कर्ष'],
+ final:['All methods combined into one reading','सभी पद्धतियाँ मिलाकर एक फलादेश'],pandit:['Reading in a pandit\'s words','पंडित जी की भाषा में फलादेश'],fullreport:['Complete report to print or save as PDF','प्रिंट या PDF के लिए पूरी रिपोर्ट'],
+ family:['Parents, siblings, spouse and children','माता-पिता, भाई-बहन, जीवनसाथी और संतान'],snap:['RKP summary at a glance','आरकेपी सार एक नज़र में'],
+ vistar:['Lagna, rashi, nakshatra, planets, lords, conjunctions, gochar','लग्न, राशि, नक्षत्र, ग्रह, भावेश, युति, गोचर'],report:['Life report area by area','क्षेत्र-वार जीवन रिपोर्ट'],yuti:['Results of planets together','ग्रहों के साथ होने का फल'],
+ signify:['Clear verdict for each house','हर भाव का स्पष्ट फल'],bhava:['Bhavat bhavam — house from house','भावात् भावम् — भाव से भाव'],karma:['Karmic pattern of the chart','कुंडली का कर्म-स्वरूप'],
+ career:['Job or business, suitable fields, livelihood','नौकरी या व्यापार, उपयुक्त क्षेत्र, आजीविका'],dhan:['Income, savings and gains','आय, बचत और लाभ'],navamsa:['Marriage and inner strength (D9)','विवाह और आंतरिक बल (D9)'],
+ pada:['Nakshatra pada of each planet','हर ग्रह का नक्षत्र चरण'],caution:['Accident and health caution by period','अवधि-वार दुर्घटना व स्वास्थ्य सावधानी'],pred:['General predictions','सामान्य फलादेश'],basic:['Planet positions and birth details','ग्रह स्थिति और जन्म विवरण'],
+ dasha:['Vimshottari, Yogini, Ashtottari, Kalachakra, Sudasa','विंशोत्तरी, योगिनी, अष्टोत्तरी, कालचक्र, सुदशा'],events:['When will marriage, job, house happen','विवाह, नौकरी, घर कब होगा'],precise:['Narrowest window for an event','घटना की सबसे सटीक अवधि'],decode:['What the coming period will bring','आने वाला समय क्या लाएगा'],
+ tr:['Current transits and their results','वर्तमान गोचर और उसका फल'],sadesati:['Sade Sati and dhaiya through life','जीवन भर की साढ़ेसाती और ढैया'],daily:['Today\'s gochar','आज का गोचर'],monthly:['Month by month gochar','महीने-वार गोचर'],
+ navtara:['Nine-star cycle for good and bad days','शुभ-अशुभ दिनों का नवतारा चक्र'],avtime:['Timing by ashtakavarga','अष्टकवर्ग से समय'],varsh:['Annual chart, muntha, Tajaka yogas, sahams','वार्षिक कुंडली, मुंथा, ताजिक योग, सहम'],snapyr:['This year at a glance','चालू वर्ष एक नज़र में'],
+ charts:['Lagna, Chandra and other charts','लग्न, चंद्र और अन्य चार्ट'],vargas:['All divisional charts D1–D60','सभी वर्ग कुंडलियाँ D1–D60'],chalit:['Bhav chalit chart','भाव चलित चार्ट'],upg:['Gulika, Mandi and other upagrahas','गुलिक, मांदी और अन्य उपग्रह'],
+ method:['Which method to use when','कौन-सी पद्धति कब'],parashari:['Parashari overview','पाराशरी दृष्टि'],kp:['Cusps, significators, ruling planets','भाव संधि, कारक, रूलिंग ग्रह'],nadi:['Nadi reading','नाड़ी फलादेश'],navtech:['Navamsa techniques','नवांश तकनीक'],
+ jai:['Chara karakas, arudha, chara dasha','चर कारक, आरूढ़, चर दशा'],lk:['Lal Kitab houses and remedies','लाल किताब भाव और उपाय'],
+ afflict:['Which planets are troubled and why','कौन-से ग्रह पीड़ित हैं और क्यों'],aspects:['Planet aspects','ग्रह दृष्टि'],dig:['Directional strength','दिग्बल'],av:['Ashtakavarga points','अष्टकवर्ग अंक'],sb:['Six-fold planet strength','षड्बल'],
+ verify:['Past timeline, match score, birth-time correction','अतीत की समयरेखा, मिलान, जन्म समय सुधार'],s_verify:['Enter 2–3 life events to check the birth time','2–3 घटनाएँ भरकर जन्म समय जाँचें']};
+function sec18Of(t){if(t==='h_home')return 'home';if(/^h_/.test(t))return t.slice(2);const s=SEC18.find(x=>x[2].some(g=>g[1].includes(t)));return s?s[0]:null;}
+function tabs18(sec){const s=SEC18.find(x=>x[0]===sec);return s?s[2].flatMap(g=>g[1]).filter(t=>NEWT[t]||RB[t]||['basic','dasha','tr','varsh','kp','lk','av','sb','upay','pred'].includes(t)):[];}
+function row18(t){const d=D18[t];return `<button class="v18row" data-go="${t}"><i>${IC18[t]||'•'}</i><span><b>${T('t_'+t)}</b>${d?`<small>${vsT(d)}</small>`:''}</span><em>›</em></button>`;}
+function hub18(sec){const s=SEC18.find(x=>x[0]===sec);return `<div class="v18hubh"><h2>${s[1]} ${T('h_'+sec)}</h2><p>${T('hs_'+sec)}</p></div>`+s[2].map(([g,ts])=>`<div class="v18grp">${T(g)}</div><div class="v18list">${ts.filter(t=>tabs18(sec).includes(t)).map(row18).join('')}</div>`).join('');}
+// ---- home dashboard ----
+function home18(ch){const P=ch.planets,now=julianNow(),da=dashaAt(ch,now);let h='';
+ h+=`<section class="v18hero"><div class="v18hi">${T('v18hi')}, <b>${esc(ch.inp.name||'')}</b> 🙏</div><div class="v18facts"><span>${T('v18lag')} <b>${sn(ch.lagna)}</b></span><span>${T('v18ras')} <b>${sn(P[1].sign)}</b></span><span>${T('v18nak')} <b>${L(NK)[P[1].nak]}</b></span></div>`
+  +(da?`<div class="v18da">${T('v18run')}: <b>${pn(da.md.lord)} – ${pn(da.ad.lord)}</b> <span>· ${fdate(da.ad.end)} ${T('v18till')}</span></div>`:'')
+  +`<div class="v18hb"><span>${pad(ch.inp.d)}-${pad(ch.inp.m)}-${ch.inp.y} · ${pad(ch.inp.h)}:${pad(ch.inp.mi)} · ${esc(ch.inp.place||'')}</span><button data-start="1">👤 ${T('v18change')}</button></div></section>`;
+ let today='',phase='';try{today=sToday(ch);}catch(e){}
+ try{if(da){const r=adRating(ch,da.md.lord,da.ad.lord),hi=S.lang==='hi';phase=`<section class="blk scard"><h3>${T('sNow')}</h3><p class="big3">${hi?`${fdate(da.ad.end)} ${T('sUntil')} ${T('sPhase')[r]}`:`${T('sPhase')[r][0].toUpperCase()+T('sPhase')[r].slice(1)} ${T('sUntil')} ${fdate(da.ad.end)}`}.</p></section>`;}}catch(e){}
+ h+=`<div class="two">${today}${phase}</div>`;
+ try{const cache=new Map(),sv=T('v18sev');const cur=SAM_P.map(Pr=>{const a=smActive(ch,Pr,now,cache).a,n=smNatal(ch,Pr).v;return {Pr,s:smSev(a-SM_NW*n)};});
+  h+=`<h3 class="v18h">${T('v18state')}</h3><p class="note v18n">${T('v18stateN')}</p><div class="v18state">${cur.map(({Pr,s})=>`<button class="v18st ${s}" data-samk="${Pr.k}"><i>${Pr.ic}</i><span>${vsT(PST_SH&&PST_SH[Pr.k]?PST_SH[Pr.k]:Pr.n)}</span><small>${sv[s]}</small></button>`).join('')}</div>`;}catch(e){}
+ const main=['samasya','final','rog','upay','dasha','tr','varsh','charts'];
+ h+=`<h3 class="v18h">${T('v18main')}</h3><div class="v18grid">${main.map(t=>`<button data-go="${t}"><i>${IC18[t]}</i><span>${T('t_'+t)}</span></button>`).join('')}</div>`;
+ try{h+=`<h3 class="v18h">${T('v18quick')}</h3><div class="v18quick">${SQ.map(([k,ic])=>`<button data-sq="${k}"><i>${ic}</i>${sql(k)}</button>`).join('')}</div>`;}catch(e){}
+ try{const sud=sudarshan(ch),st=sud.slice().sort((a,b)=>b.t-a.t).slice(0,3).map(x=>L(HOUSE_S)[x.h-1]),wk=sud.slice().sort((a,b)=>a.t-b.t).slice(0,2).map(x=>L(HOUSE_S)[x.h-1]);
+  h+=`<div class="two"><section class="blk scard"><h3>💪 ${T('sStrong')}</h3><p>${st.join(', ')}</p></section><section class="blk scard"><h3>⚠️ ${T('sWeak')}</h3><p>${wk.join(', ')}</p></section></div>`;}catch(e){}
+ try{h+=sRelBox(ch);}catch(e){}
+ return h;}
+NEWT.h_home=home18;NEWT.h_sol=()=>hub18('sol');NEWT.h_read=()=>hub18('read');NEWT.h_time=()=>hub18('time');
+['h_home','h_sol','h_read','h_time'].forEach(t=>{if(!TABS.includes(t))TABS.push(t);});
+moreHub=function(){const tl=(attr,ic,lab,sub)=>`<button class="v18row" ${attr}><i>${ic}</i><span><b>${lab}</b>${sub?`<small>${sub}</small>`:''}</span><em>›</em></button>`;
+ return hub18('more')+`<div class="v18grp">${T('g18_tools')}</div><div class="v18list">${tl('data-mode="match"','💑',T('m_match'),T('d_match'))}${tl('data-mode="panch"','📅',T('m_panch'),T('d_panch'))}${tl('data-mode="hor"','🔮',T('m_hor'),T('d_hor'))}${tl('data-mode="num"','🔢',T('m_num'),T('d_num'))}</div>`
+ +`<div class="v18grp">${T('g18_app')}</div><div class="v18list">${tl('data-go="index"','🔍',T('t_index'),T('idxNote'))}${tl('data-start="1"','👤',T('t_profiles'))}${tl('data-go="s_gloss"','📖',T('t_s_gloss'))}${tl('data-print="1"','🖨️',T('t_print'))}${tl('data-go="settings"','⚙️',T('t_settings'))}</div>`;};
+// ---- one mode only ----
+S.simple=false;try{localStorage.setItem('kd_simple','0');}catch(e){}
+setSimple=function(){S.simple=false;S.tab='h_home';renderAll();window.scrollTo(0,0);};
+const _make18=make;make=function(){_make18();if(S.ch&&S.screen!=='start'){S.tab='h_home';renderAll();window.scrollTo(0,0);}};
+// ---- bottom navigation ----
+renderBnav=function(){const start=S.mode==='kundali'&&(S.screen==='start'||!S.ch)&&!['more','settings','index'].includes(S.tab);
+ const cur=start?'home':S.mode!=='kundali'||['more','settings','index','s_gloss'].includes(S.tab)?'more':(sec18Of(S.tab)||'home');
+ $('bnav').innerHTML=SEC18.map(([k,ic])=>`<button data-hub="${k}" aria-current="${cur===k}"><i>${ic}</i><span>${T('h_'+k)}</span></button>`).join('');};
+document.addEventListener('click',e=>{const b=e.target.closest('button');if(!b)return;
+ if(b.dataset.hub){const k=b.dataset.hub;S.mode='kundali';S.editForm=false;
+  if(k==='more')S.tab='more';else if(!S.ch){S.screen='start';S.tab='h_home';}else{S.screen='app';S.tab='h_'+k;}renderAll();window.scrollTo(0,0);}
+ if(b.dataset.back){S.tab='h_home';renderAll();window.scrollTo(0,0);}
+ if(b.dataset.samk){S.sam=[b.dataset.samk];S.mode='kundali';S.screen='app';S.tab='samasya';renderAll();window.scrollTo(0,0);}});
+// ---- page frame: compact header + sibling strip for each tab ----
+const _renderAll18=renderAll;renderAll=function(){
+ if(S.tab==='s_home')S.tab='h_home';if(S.tab==='s_time')S.tab='dasha';if(S.tab==='s_upay')S.tab='upay';S.simple=false;
+ _renderAll18();
+ const B=document.body;B.classList.add('v18');const inApp=S.mode==='kundali'&&S.ch&&S.screen!=='start';
+ B.classList.toggle('v18start',S.mode==='kundali'&&!inApp&&!['more','settings','index'].includes(S.tab));B.classList.toggle('v18home',inApp&&S.tab==='h_home');
+ const tb=$('tabs');if(tb)tb.hidden=true;
+ if(inApp&&!['more','settings','index'].includes(S.tab)&&!/^h_/.test(S.tab)){const sec=sec18Of(S.tab)||'read',pan=$('panel');
+  const f=pan.firstElementChild;if(f&&f.classList.contains('pagehead')&&[...f.children].every(c=>c.classList.contains('back')||c.tagName==='H2'))f.remove();
+  const sib=tabs18(sec);const strip=sib.length>1?`<nav class="v18strip">${sib.map(t=>`<button data-go="${t}" aria-current="${t===S.tab}">${T('t_'+t)}</button>`).join('')}</nav>`:'';
+  pan.insertAdjacentHTML('afterbegin',`<div class="v18head"><button class="v18back" data-hub="${sec}" aria-label="back">‹</button><div><small>${T('h_'+sec)}</small><h2>${T('t_'+S.tab)}</h2></div></div>${strip}`);
+  const a=pan.querySelector('.v18strip [aria-current="true"]');if(a)a.scrollIntoView({block:'nearest',inline:'center'});}
+ renderBnav();};
+// ---- styles ----
+(function(){const st=document.createElement('style');st.textContent=`
+body.v18{font-size:15.5px}
+body.v18 header.top{padding:calc(10px + env(safe-area-inset-top,0px)) 16px 10px;gap:10px;background:linear-gradient(135deg,#23264F,#34397A)}
+body.v18 header.top .mark{width:30px;height:30px}
+body.v18 header.top h1{font-size:19px;margin:0;line-height:1.2}
+body.v18 header.top p{display:none}
+body.v18.v18start header.top{padding-top:calc(18px + env(safe-area-inset-top,0px));padding-bottom:18px}
+body.v18.v18start header.top p{display:block;margin:2px 0 0;font-size:12.5px;color:#C9CBE6}
+body.v18 #langBtn{padding:6px 12px;font-size:13px;border-radius:999px}
+body.v18 #modes,body.v18 #tabs,body.v18 .msw{display:none!important}
+body.v18 main{max-width:720px;padding:14px 16px 110px}
+body.v18.v18home #profbar{display:none!important}
+body.v18 #profbar{padding:8px 12px;border-radius:12px;margin-bottom:12px}
+body.v18 #profbar .pn{font-size:15px}
+body.v18 .blk{border-radius:16px;box-shadow:0 1px 2px rgba(20,22,60,.05);padding:16px}
+body.v18 .blk h3{font:600 17px var(--serif);margin:0 0 8px}
+/* bottom nav */
+body.v18 #bnav{max-width:720px;padding:6px 6px calc(8px + env(safe-area-inset-bottom,0px))}
+body.v18 #bnav button{gap:3px;padding:6px 0;font-size:11.5px}
+body.v18 #bnav button i{font-size:19px;width:44px;height:28px;display:grid;place-items:center;border-radius:14px;transition:background .15s}
+body.v18 #bnav button[aria-current=true]{color:var(--ink);font-weight:700}
+body.v18 #bnav button[aria-current=true] i{background:#E8E9F6;transform:none}
+/* tab header + strip */
+.v18head{display:flex;align-items:center;gap:10px;margin:0 0 8px}
+.v18head small{display:block;font-size:12px;color:var(--mut);letter-spacing:.02em}
+.v18head h2{font:600 21px/1.25 var(--serif);margin:0}
+.v18back{flex:none;width:38px;height:38px;border-radius:50%;border:1px solid var(--line);background:var(--card);color:var(--txt);font-size:20px;line-height:1;cursor:pointer}
+.v18strip{display:flex;gap:2px;overflow-x:auto;scrollbar-width:none;margin:0 -16px 14px;padding:0 12px;position:sticky;top:0;z-index:5;background:var(--paper);border-bottom:1px solid var(--line)}
+.v18strip::-webkit-scrollbar{display:none}
+.v18strip button{flex:none;border:0;border-bottom:3px solid transparent;background:none;color:var(--mut);padding:10px 10px 9px;font:500 14px var(--sans);cursor:pointer;white-space:nowrap}
+.v18strip button[aria-current=true]{color:var(--txt);font-weight:700;border-bottom-color:var(--kum)}
+body.v18 #out,body.v18 #panel{margin-top:0!important;padding-top:0!important}body.v18 #who{display:none!important}.v18hero{margin-top:0}
+/* hubs */
+.v18hubh{margin:4px 0 6px}.v18hubh h2{font:600 24px var(--serif);margin:0}.v18hubh p{margin:2px 0 0;color:var(--mut);font-size:14px}
+.v18grp{margin:18px 2px 8px;font:600 12.5px var(--sans);letter-spacing:.06em;text-transform:uppercase;color:var(--mut)}
+.v18list{background:var(--card);border:1px solid var(--line);border-radius:16px;overflow:hidden}
+.v18row{display:flex;align-items:center;gap:12px;width:100%;text-align:left;background:none;border:0;border-top:1px solid var(--line);padding:12px 14px;color:var(--txt);font:inherit;cursor:pointer}
+.v18row:first-child{border-top:0}.v18row:active{background:var(--paper)}
+.v18row i{font-style:normal;font-size:20px;width:38px;height:38px;flex:none;display:grid;place-items:center;border-radius:12px;background:var(--paper)}
+.v18row span{flex:1;min-width:0}.v18row b{display:block;font-weight:600;font-size:15px}.v18row small{display:block;color:var(--mut);font-size:12.5px;line-height:1.35;margin-top:1px}
+.v18row em{font-style:normal;color:var(--mut);font-size:20px}
+/* home */
+.v18hero{background:linear-gradient(135deg,#23264F 0%,#3A3E74 100%);color:#fff;border-radius:20px;padding:18px;margin-bottom:14px;box-shadow:0 6px 18px rgba(35,38,79,.18)}
+.v18hi{font:600 21px var(--serif)}
+.v18facts{display:flex;flex-wrap:wrap;gap:6px;margin:10px 0}
+.v18facts span{background:rgba(255,255,255,.12);border-radius:999px;padding:4px 10px;font-size:13px;color:#DADCF0}.v18facts b{color:#fff}
+.v18da{font-size:14px;color:#DADCF0}.v18da b{color:var(--hal)}.v18da span{color:#B9BCDD}
+.v18hb{display:flex;align-items:center;justify-content:space-between;gap:8px;margin-top:12px;padding-top:10px;border-top:1px solid rgba(255,255,255,.15);font-size:12.5px;color:#B9BCDD}
+.v18hb button{flex:none;background:rgba(255,255,255,.14);color:#fff;border:0;border-radius:999px;padding:6px 12px;font:500 13px var(--sans);cursor:pointer}
+.v18h{font:600 18px var(--serif);margin:20px 2px 4px}.v18n{margin:0 2px 8px}
+.v18state{display:grid;grid-template-columns:repeat(3,1fr);gap:8px}
+.v18st{display:flex;flex-direction:column;align-items:center;gap:3px;padding:10px 4px;border-radius:14px;border:1px solid var(--line);background:var(--card);color:var(--txt);font:500 13px var(--sans);cursor:pointer;border-top:4px solid var(--good)}
+.v18st i{font-style:normal;font-size:22px}.v18st small{font-size:11.5px;color:var(--good);font-weight:600}
+.v18st.med{border-top-color:var(--hal)}.v18st.med small{color:#9a6700}.v18st.high{border-top-color:var(--kum);background:var(--badbg)}.v18st.high small{color:var(--kum)}
+.v18grid{display:grid;grid-template-columns:repeat(4,1fr);gap:8px}
+.v18grid button{display:flex;flex-direction:column;align-items:center;gap:6px;background:var(--card);border:1px solid var(--line);border-radius:14px;padding:12px 4px;color:var(--txt);font:500 12.5px/1.25 var(--sans);text-align:center;cursor:pointer}
+.v18grid i{font-style:normal;font-size:24px}
+.v18quick{display:flex;gap:8px;overflow-x:auto;scrollbar-width:none;margin:0 -16px;padding:2px 16px 6px}.v18quick::-webkit-scrollbar{display:none}
+.v18quick button{flex:none;display:flex;align-items:center;gap:6px;border:1px solid var(--line);background:var(--card);color:var(--txt);border-radius:999px;padding:8px 14px;font:500 13.5px var(--sans);cursor:pointer;white-space:nowrap}
+.v18quick i{font-style:normal}
+body.v18 .two{display:grid;grid-template-columns:1fr;gap:0 12px}
+@media(min-width:600px){body.v18 .two{grid-template-columns:1fr 1fr}.v18state{grid-template-columns:repeat(6,1fr)}.v18grid{grid-template-columns:repeat(8,1fr)}}
+@media (prefers-color-scheme:dark){:root:not([data-theme="light"]) body.v18 #bnav button[aria-current=true]{color:#fff}:root:not([data-theme="light"]) body.v18 #bnav button[aria-current=true] i{background:#34375A}
+ :root:not([data-theme="light"]) .v18strip button[aria-current=true]{border-bottom-color:var(--hal)}:root:not([data-theme="light"]) .v18st.med small{color:var(--hal)}}
+@media print{.v18head,.v18strip{display:none!important}}`;document.head.appendChild(st);})();
+
 </script>
 <nav id="bnav" aria-label="Main"></nav>
 </body></html>
