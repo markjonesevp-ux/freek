@@ -5295,6 +5295,113 @@ function vsKpDashaTransit(ch,jd){const da=dashaAt(ch,jd);if(!da)return '';const 
 const _vsGocharHTML=vsGocharHTML;vsGocharHTML=function(ch,jd){let k='';try{k=vsKpDashaTransit(ch,jd);}catch(e){}return _vsGocharHTML(ch,jd)+k;};
 (function(){const st=document.createElement('style');st.textContent=`.seg{flex-wrap:wrap;max-width:100%}.seg button{flex:1 1 auto}`;document.head.appendChild(st);})();
 
+// ===== v16.5 remedy data: rudraksha, gems & substitutes, yantras, vrat & other traditional measures =====
+// Rudraksha by mukhi: [ruling planet index or -1, deity, purpose EN/HI, traditional mantra]
+const VS_RUD={
+ 1:[0,['Lord Shiva','भगवान शिव'],['self-confidence, leadership and spiritual focus','आत्मविश्वास, नेतृत्व और आध्यात्मिक एकाग्रता'],'Om Hreem Namah'],
+ 2:[1,['Ardhanarishvara (Shiva–Parvati)','अर्धनारीश्वर (शिव–पार्वती)'],['emotional balance and harmony in relationships','भावनात्मक संतुलन और संबंधों में सामंजस्य'],'Om Namah'],
+ 3:[2,['Agni','अग्नि'],['courage, energy and freedom from past burdens','साहस, ऊर्जा और पुराने बोझ से मुक्ति'],'Om Kleem Namah'],
+ 4:[3,['Brahma','ब्रह्मा'],['learning, memory, speech and creativity','विद्या, स्मरणशक्ति, वाणी और रचनात्मकता'],'Om Hreem Namah'],
+ 5:[4,['Kalagni Rudra','कालाग्नि रुद्र'],['peace, wisdom and general wellbeing — suitable for everyone','शांति, ज्ञान और सामान्य कल्याण — सबके लिए उपयुक्त'],'Om Hreem Namah'],
+ 6:[5,['Kartikeya','कार्तिकेय'],['charm, arts, comforts and willpower','आकर्षण, कला, सुख-सुविधा और इच्छाशक्ति'],'Om Hreem Hum Namah'],
+ 7:[6,['Mahalakshmi','महालक्ष्मी'],['patience, stability and relief in Saturn periods; prosperity','धैर्य, स्थिरता और शनि काल में राहत; समृद्धि'],'Om Hum Namah'],
+ 8:[7,['Lord Ganesha','भगवान गणेश'],['removal of obstacles and calm during Rahu periods','बाधाओं का निवारण और राहु काल में शांति'],'Om Hum Namah'],
+ 9:[8,['Goddess Durga','देवी दुर्गा'],['fearlessness, protection and focus during Ketu periods','निर्भयता, सुरक्षा और केतु काल में एकाग्रता'],'Om Hreem Hum Namah'],
+ 10:[-1,['Lord Vishnu','भगवान विष्णु'],['protection from negativity and a sense of security','नकारात्मकता से रक्षा और सुरक्षा की भावना'],'Om Hreem Namah Namah'],
+ 11:[-1,['Hanuman ji','हनुमान जी'],['courage, confidence and success in efforts','साहस, आत्मविश्वास और प्रयासों में सफलता'],'Om Hreem Hum Namah'],
+ 12:[0,['Surya','सूर्य'],['radiance, authority and administrative success','तेज, अधिकार और प्रशासनिक सफलता'],'Om Kraum Kshaum Raum Namah'],
+ 13:[5,['Kamadeva','कामदेव'],['attraction, comforts and fulfilment of wishes','आकर्षण, सुख-सुविधा और इच्छापूर्ति'],'Om Hreem Namah'],
+ 14:[6,['Hanuman ji / Shiva','हनुमान जी / शिव'],['intuition, decision-making and protection','अंतर्ज्ञान, निर्णय क्षमता और सुरक्षा'],'Om Namah']
+};
+const VS_RUD_OF=[1,2,3,4,5,6,7,8,9]; // main mukhi for each planet (Sun…Ketu)
+const VS_RUD_SP=[['Ganesha rudraksha','गणेश रुद्राक्ष',['for new beginnings and removal of obstacles','नई शुरुआत और बाधा निवारण के लिए']],['Gauri-Shankar rudraksha','गौरी-शंकर रुद्राक्ष',['for harmony in marriage and family unity','वैवाहिक सामंजस्य और पारिवारिक एकता के लिए']]];
+// Gems: [main gem EN/HI, substitutes EN/HI, finger EN/HI, metal EN/HI, weight hint]
+const VS_GEM=[
+ [['Ruby (Manik)','माणिक्य'],['Red garnet, red spinel, sunstone','गार्नेट (तामड़ा), लाल स्पिनेल, सूर्यकांत'],['ring finger','अनामिका'],['gold or copper','सोना या तांबा'],'3–6 ct'],
+ [['Pearl (Moti)','मोती'],['Moonstone, white coral','चंद्रकांत मणि, सफ़ेद मूंगा'],['little or ring finger','कनिष्ठा या अनामिका'],['silver','चाँदी'],'4–7 ct'],
+ [['Red coral (Moonga)','मूंगा'],['Carnelian, red jasper','कार्नेलियन (लाल अकीक), लाल जैस्पर'],['ring finger','अनामिका'],['gold or copper','सोना या तांबा'],'6–9 ct'],
+ [['Emerald (Panna)','पन्ना'],['Peridot, green onyx, green tourmaline','पेरिडॉट, हरा ओनिक्स, हरा तुरमली'],['little finger','कनिष्ठा'],['gold or silver','सोना या चाँदी'],'3–6 ct'],
+ [['Yellow sapphire (Pukhraj)','पुखराज'],['Yellow topaz, citrine, yellow beryl','सुनहला (पीला टोपाज़), सिट्रीन, पीला बेरिल'],['index finger','तर्जनी'],['gold','सोना'],'3–5 ct'],
+ [['Diamond (Heera)','हीरा'],['White zircon, white sapphire, opal','सफ़ेद ज़िरकॉन, सफ़ेद पुखराज, ओपल'],['middle or little finger','मध्यमा या कनिष्ठा'],['silver or platinum','चाँदी या प्लैटिनम'],'0.5–1 ct (zircon 3–5 ct)'],
+ [['Blue sapphire (Neelam)','नीलम'],['Amethyst, blue spinel, lapis lazuli','जमुनिया (एमेथिस्ट), नीला स्पिनेल, लाजवर्त'],['middle finger','मध्यमा'],['silver or panchdhatu','चाँदी या पंचधातु'],'3–5 ct'],
+ [['Hessonite (Gomed)','गोमेद'],['Orange zircon, spessartine garnet','नारंगी ज़िरकॉन, स्पेसर्टाइन गार्नेट'],['middle finger','मध्यमा'],['silver or panchdhatu','चाँदी या पंचधातु'],'5–8 ct'],
+ [['Cat\'s eye (Lahsuniya)','लहसुनिया'],['Tiger\'s eye, chrysoberyl','टाइगर आई, क्राइसोबेरिल'],['middle or little finger','मध्यमा या कनिष्ठा'],['silver or panchdhatu','चाँदी या पंचधातु'],'4–7 ct']
+];
+// Yantras for goals: [key, EN, HI, yantra EN/HI]
+const VS_YN_GOAL=[
+ ['wealth',['Wealth & prosperity','धन व समृद्धि'],['Shri Yantra, Kanakdhara or Mahalakshmi Yantra','श्री यंत्र, कनकधारा या महालक्ष्मी यंत्र']],
+ ['study',['Education & memory','विद्या व स्मरणशक्ति'],['Saraswati Yantra or Gayatri Yantra','सरस्वती यंत्र या गायत्री यंत्र']],
+ ['obst',['Obstacles in work','कार्य में बाधाएँ'],['Ganesh Yantra','गणेश यंत्र']],
+ ['court',['Enemies & court cases','शत्रु व मुकदमे'],['Baglamukhi Yantra','बगलामुखी यंत्र']],
+ ['prot',['Protection & courage','सुरक्षा व साहस'],['Hanuman Yantra or Durga Beesa Yantra','हनुमान यंत्र या दुर्गा बीसा यंत्र']],
+ ['health',['Health & long life','स्वास्थ्य व दीर्घायु'],['Mahamrityunjaya Yantra','महामृत्युंजय यंत्र']],
+ ['vehicle',['Safe travel & vehicle','सुरक्षित यात्रा व वाहन'],['Vahan Durghatna Nashak Yantra','वाहन दुर्घटना नाशक यंत्र']],
+ ['marriage',['Marriage','विवाह'],['Katyayani Yantra or Gauri-Shankar Yantra','कात्यायनी यंत्र या गौरी-शंकर यंत्र']]
+];
+// Vrat and other measures per planet: [fast day & custom, count, jal-pravah item, bath herbs]
+const VS_VRAT=[
+ [['Sunday — one meal before sunset, no salt','रविवार — सूर्यास्त से पहले एक बार भोजन, बिना नमक'],'12',['wheat or jaggery','गेहूँ या गुड़'],['red flowers, saffron, cardamom','लाल फूल, केसर, इलायची']],
+ [['Monday — white food, milk and rice once a day','सोमवार — सफ़ेद भोजन, दिन में एक बार दूध-चावल'],'10 / 54',['rice or milk','चावल या दूध'],['white sandalwood, rose water','सफ़ेद चंदन, गुलाब जल']],
+ [['Tuesday — one meal, sweet food, Hanuman worship','मंगलवार — एक बार भोजन, मीठा, हनुमान पूजा'],'21 / 45',['red lentils (masoor) or jaggery','मसूर दाल या गुड़'],['red sandalwood, bel bark','लाल चंदन, बेल की छाल']],
+ [['Wednesday — green food, Ganesha or Vishnu worship','बुधवार — हरा भोजन, गणेश या विष्णु पूजा'],'17 / 21',['green moong','हरी मूंग'],['rice water, honey','चावल का पानी, शहद']],
+ [['Thursday — yellow food once a day, no salt; worship with turmeric','गुरुवार — दिन में एक बार पीला भोजन, बिना नमक; हल्दी से पूजा'],'16',['turmeric or chana dal','हल्दी या चना दाल'],['turmeric, mulethi, yellow flowers','हल्दी, मुलेठी, पीले फूल']],
+ [['Friday — white sweet food, Lakshmi or Santoshi Mata worship','शुक्रवार — सफ़ेद मीठा भोजन, लक्ष्मी या संतोषी माता पूजा'],'21 / 31',['rice, sugar or curd','चावल, चीनी या दही'],['cardamom, white flowers','इलायची, सफ़ेद फूल']],
+ [['Saturday — one meal after sunset, black urad or sesame','शनिवार — सूर्यास्त के बाद एक बार भोजन, काली उड़द या तिल'],'19 / 51',['black sesame or mustard oil','काले तिल या सरसों का तेल'],['black sesame, fennel','काले तिल, सौंफ']],
+ [['Saturday — Rahu worship, feed stray dogs','शनिवार — राहु पूजा, आवारा कुत्तों को भोजन'],'18',['coconut or coal','नारियल या कोयला'],['sandalwood, musk-scented water','चंदन, कस्तूरी सुगंधित जल']],
+ [['Tuesday or Saturday — Ganesha worship','मंगलवार या शनिवार — गणेश पूजा'],'18',['multi-coloured blanket (daan) or sesame','रंग-बिरंगा कंबल (दान) या तिल'],['red sandalwood, lobaan','लाल चंदन, लोबान']]
+];
+
+// ===== v16.5: personal remedy guide — rudraksha, gems & substitutes, navagraha/goal yantras, vrat & other measures =====
+Object.assign(I18N.en,{rgTitle:'Personal remedy guide',rgFor:'Planets chosen for your chart',rgR_lagna:'lagna lord',rgR_str:'needs strength',rgR_pac:'needs pacifying',rgR_md:'running mahadasha',rgR_ad:'running antardasha',
+ rgRud:'Rudraksha',rgGem:'Gemstones & substitutes',rgYan:'Yantras',rgVrat:'Fasting (vrat) & other measures',rgMukhi:'mukhi',rgDeity:'deity',rgMantra:'mantra',rgGeneral:'For everyone',
+ rgRudHow:'How to wear: on a Monday morning after bathing, wash the bead with Gangajal or raw milk, chant its mantra 108 times and wear it in a red or yellow thread, or in silver or gold. Remove it for sleep and cremations if you follow the strict tradition.',
+ rgGemOk:'Suitable (lords of the 1st, 5th or 9th house — trikona lords are always auspicious)',rgGemNo:'Avoid (lords of the 6th, 8th or 12th house)',rgSub:'substitute (upratna)',rgFinger:'finger',rgMetal:'metal',rgWeight:'weight',rgDay:'day',
+ rgGemHow:'Wear a new gem first for three days as a trial. Buy only certified natural stones. Blue sapphire and hessonite act fast — wear them only after an astrologer checks the full chart. Substitutes are milder and cheaper.',
+ rgNodes:'Rahu and Ketu gems (hessonite, cat\'s eye) only after expert advice.',rgYanNav:'Navagraha yantras for your chosen planets',rgYanGoal:'Yantras by purpose',rgYanHow:'Install on the planet\'s day facing east or north, after bathing; light a lamp, chant the planet\'s mantra 108 times and keep the yantra clean. Every row, column and diagonal adds to the same total.',
+ rgFast:'fast',rgCount:'traditional count',rgJal:'flow in running water',rgSnaan:'herbs for the bath water',
+ rgDisc:'Remedies are traditional, faith-based practices meant to support effort and right action. They do not replace medical, legal or financial advice — never stop a treatment because of a remedy.'});
+Object.assign(I18N.hi,{rgTitle:'व्यक्तिगत उपाय मार्गदर्शिका',rgFor:'आपकी कुंडली के लिए चुने गए ग्रह',rgR_lagna:'लग्नेश',rgR_str:'बल बढ़ाना है',rgR_pac:'शांत करना है',rgR_md:'चल रही महादशा',rgR_ad:'चल रही अंतर्दशा',
+ rgRud:'रुद्राक्ष',rgGem:'रत्न व उपरत्न',rgYan:'यंत्र',rgVrat:'व्रत व अन्य उपाय',rgMukhi:'मुखी',rgDeity:'देवता',rgMantra:'मंत्र',rgGeneral:'सबके लिए',
+ rgRudHow:'पहनने की विधि: सोमवार सुबह स्नान के बाद रुद्राक्ष को गंगाजल या कच्चे दूध से धोएँ, उसका मंत्र 108 बार जपें और लाल या पीले धागे में, या चाँदी या सोने में पहनें। कड़ी परंपरा मानें तो सोते समय और श्मशान जाते समय उतार दें।',
+ rgGemOk:'उपयुक्त (1, 5 या 9वें भाव के स्वामी — त्रिकोण स्वामी सदा शुभ)',rgGemNo:'न पहनें (6, 8 या 12वें भाव के स्वामी)',rgSub:'उपरत्न',rgFinger:'उंगली',rgMetal:'धातु',rgWeight:'वज़न',rgDay:'दिन',
+ rgGemHow:'नया रत्न पहले तीन दिन परीक्षण के रूप में पहनें। केवल प्रमाणित प्राकृतिक रत्न खरीदें। नीलम और गोमेद तेज़ असर करते हैं — पूरी कुंडली जाँच के बाद ही पहनें। उपरत्न हल्के और सस्ते होते हैं।',
+ rgNodes:'राहु और केतु के रत्न (गोमेद, लहसुनिया) विशेषज्ञ सलाह के बाद ही।',rgYanNav:'चुने गए ग्रहों के नवग्रह यंत्र',rgYanGoal:'उद्देश्य के अनुसार यंत्र',rgYanHow:'ग्रह के दिन स्नान के बाद पूर्व या उत्तर मुख करके स्थापित करें; दीपक जलाएँ, ग्रह का मंत्र 108 बार जपें और यंत्र को स्वच्छ रखें। हर पंक्ति, स्तंभ और विकर्ण का योग समान है।',
+ rgFast:'व्रत',rgCount:'पारंपरिक संख्या',rgJal:'बहते जल में प्रवाह',rgSnaan:'स्नान जल में जड़ी-बूटी',
+ rgDisc:'उपाय पारंपरिक, आस्था आधारित साधन हैं जो प्रयास और सही कर्म को सहारा देते हैं। ये चिकित्सा, कानूनी या आर्थिक सलाह का विकल्प नहीं हैं — किसी उपाय के कारण इलाज कभी न छोड़ें।'});
+function rgPlanets(ch){const m=new Map();const add=(i,r)=>{if(!m.has(i))m.set(i,[]);if(!m.get(i).includes(r))m.get(i).push(r);};
+ add(SIGN_LORD[ch.lagna],'rgR_lagna');let plan=[];try{plan=remedyPlan(ch);}catch(e){}
+ plan.filter(x=>x.kind==='strengthen').forEach(x=>add(x.i,'rgR_str'));plan.filter(x=>x.kind==='pacify').forEach(x=>add(x.i,'rgR_pac'));
+ const da=dashaAt(ch,julianNow());if(da){add(da.md.lord,'rgR_md');add(da.ad.lord,'rgR_ad');}return m;}
+function rgLords(ch,h){return SIGN_LORD[(ch.lagna+h-1)%12];}
+function rgYantraSVG(i){const base=[6,1,8,7,5,3,2,9,4].map(n=>n+i),c=40;let s=`<svg viewBox="0 0 ${c*3+2} ${c*3+2}" width="${c*3+2}" height="${c*3+2}" role="img" aria-label="${pn(i)}"><rect x="1" y="1" width="${c*3}" height="${c*3}" fill="none" stroke="currentColor" stroke-width="1.5"/>`;
+ for(let k=1;k<3;k++)s+=`<line x1="${1+k*c}" y1="1" x2="${1+k*c}" y2="${1+3*c}" stroke="currentColor"/><line x1="1" y1="${1+k*c}" x2="${1+3*c}" y2="${1+k*c}" stroke="currentColor"/>`;
+ base.forEach((n,ix)=>{const x=1+(ix%3)*c+c/2,y=1+Math.floor(ix/3)*c+c/2+6;s+=`<text x="${x}" y="${y}" text-anchor="middle" font-size="17" fill="currentColor">${n}</text>`;});return s+'</svg>';}
+function rgHTML(ch){const P=rgPlanets(ch);const who=[...P.entries()];
+ const tag=i=>`<span class="note">(${P.get(i).map(r=>T(r)).join(', ')})</span>`;
+ let h=`<p><b>${T('rgFor')}:</b> ${who.map(([i])=>`${pn(i)} ${tag(i)}`).join(' · ')}</p>`;
+ // Rudraksha
+ const muk=[...new Set(who.map(([i])=>VS_RUD_OF[i]))];
+ const rudItem=(n,extra)=>{const r=VS_RUD[n];return `<li><b>•</b> <span class="vsp">${n} ${T('rgMukhi')}</span>${r[0]>=0?` — ${pn(r[0])}`:''}${extra||''}: ${vsT(r[2])}. <span class="note">${T('rgDeity')}: ${vsT(r[1])} · ${T('rgMantra')}: ${r[3]}</span></li>`;};
+ const rud=`<ul class="fx vsfx">${muk.map(n=>rudItem(n,' '+tag(VS_RUD[n][0]))).join('')}${muk.includes(5)?'':rudItem(5,` <span class="note">(${T('rgGeneral')})</span>`)}</ul>`
+  +`<ul class="fx vsfx">${VS_RUD_SP.map(x=>`<li><b>•</b> <span class="vsp">${hiV()?x[1]:x[0]}</span> — ${vsT(x[2])}</li>`).join('')}</ul><p class="note">${T('rgRudHow')}</p>`;
+ // Gems
+ const L1=rgLords(ch,1),good=[...new Set([1,5,9].map(h=>rgLords(ch,h)))],badL=[...new Set([6,8,12].map(h=>rgLords(ch,h)))];
+ const ok=good,no=badL.filter(i=>!ok.includes(i)); // Parashara: trikona lords are always auspicious, even if they also own a dusthana
+ const gRow=i=>{const g=VS_GEM[i];return [`<b>${pn(i)}</b>`,vsT(g[0]),vsT(g[1]),vsT(g[2]),vsT(g[3]),g[4],UPC(i).day];};
+ const gem=`<p><b>✓ ${T('rgGemOk')}</b></p>`+tbl([T('planet'),hiV()?'रत्न':'Gem',T('rgSub'),T('rgFinger'),T('rgMetal'),T('rgWeight'),T('rgDay')],ok.map(gRow))
+  +`<p><b>✗ ${T('rgGemNo')}:</b> ${no.length?no.map(i=>`${pn(i)} (${vsT(VS_GEM[i][0])})`).join(', '):'—'}</p><p class="note">${T('rgGemHow')} ${T('rgNodes')}</p>`;
+ // Yantras
+ const yan=`<p><b>${T('rgYanNav')}</b></p><div class="rgy">${who.map(([i])=>`<figure>${rgYantraSVG(i)}<figcaption>${pn(i)} · ${UPC(i).day}</figcaption></figure>`).join('')}</div>`
+  +`<p><b>${T('rgYanGoal')}</b></p><ul class="fx vsfx">${VS_YN_GOAL.map(g=>`<li><b>•</b> <span class="vsp">${vsT(g[1])}</span> — ${vsT(g[2])}</li>`).join('')}</ul><p class="note">${T('rgYanHow')}</p>`;
+ // Vrat & other
+ const vr=`<ul class="fx vsfx">${who.map(([i])=>{const v=VS_VRAT[i];return `<li><b>•</b> <span class="vsp">${pn(i)}</span> ${tag(i)}<br>${T('rgFast')}: ${vsT(v[0])} · ${T('rgCount')}: ${v[1]}<br>${T('rgJal')}: ${vsT(v[2])} · ${T('rgSnaan')}: ${vsT(v[3])} · ${hiV()?'दान':'charity'}: ${UPC(i).daan}</li>`;}).join('')}</ul>`;
+ return `<section class="blk"><h3>${T('rgTitle')}</h3>${h}${vsDet(`<span class="vsp">📿 ${T('rgRud')}</span>`,rud,true)}${vsDet(`<span class="vsp">💎 ${T('rgGem')}</span>`,gem,false)}${vsDet(`<span class="vsp">🔯 ${T('rgYan')}</span>`,yan,false)}${vsDet(`<span class="vsp">🪔 ${T('rgVrat')}</span>`,vr,false)}<p class="note">${T('rgDisc')}</p></section>`;}
+const _renderUpayV=renderUpay;renderUpay=function(ch){const base=_renderUpayV(ch);let add='';try{add=rgHTML(ch);}catch(e){add='';}
+ const k=base.indexOf('</p>');return k>=0?base.slice(0,k+4)+add+base.slice(k+4):add+base;};
+(function(){const st=document.createElement('style');st.textContent=`.rgy{display:flex;flex-wrap:wrap;gap:12px;margin:6px 0 10px}.rgy figure{margin:0;text-align:center;color:var(--ink2)}.rgy figcaption{font-size:13px;color:var(--mut);margin-top:4px}
+@media (prefers-color-scheme:dark){:root:not([data-theme="light"]) .rgy figure{color:var(--txt)}}`;document.head.appendChild(st);})();
+if(NEWT.s_upay){const _su=NEWT.s_upay;NEWT.s_upay=function(ch){let a='';try{a=rgHTML(ch);}catch(e){}return _su(ch)+a;};}
+
 </script>
 <nav id="bnav" aria-label="Main"></nav>
 </body></html>
