@@ -6146,6 +6146,96 @@ body.v18 .two{display:grid;grid-template-columns:1fr;gap:0 12px}
  :root:not([data-theme="light"]) .v18strip button[aria-current=true]{border-bottom-color:var(--hal)}:root:not([data-theme="light"]) .v18st.med small{color:var(--hal)}}
 @media print{.v18head,.v18strip{display:none!important}}`;document.head.appendChild(st);})();
 
+// ===== v19: Labh Srot — which house's work brings income / wish fulfilment / money; customer type by sign nature =====
+// Rules: Parashari — placement of the 11th/2nd/10th lords and links of each house lord with them; KP — houses signified by the 11th, 2nd and 10th cusp sub lords
+// (and their star lords) are the channels of gain. Customer type from movable/fixed/dual signs is an app rule derived from the sign qualities.
+Object.assign(I18N.en,{t_labh:'Income sources',lbT:'Which work brings income?',lbIntro:'The whole chart is checked: where the lords of gains (11th), wealth (2nd) and profession (10th) sit, how each house lord is linked with them, and — by KP — which houses the sub lords of the 11th, 2nd and 10th cusps signify. The house that scores highest is the kind of work that brings you gains.',
+ lbBest:'Most rewarding field of work',lbRank:'Houses ranked by gain (work of which house pays)',lbWhy:'why',lbMoney:'Where money accumulates from (2nd house links)',lbWish:'Wish fulfilment',lbWishT:'Desires are fulfilled mostly through the work of the {h} house; the 11th cusp sub lord {p} is {v}.',lbWishY:'promising — it signifies the 11th',lbWishN:'weak for this — it does not signify the 11th; effort and patience needed',
+ lbPl:'Planets that bring gains',lbCust:'Type of customers / clients',lbMov:'Movable (chara)',lbFix:'Fixed (sthira)',lbDual:'Dual (dwiswabhava)',
+ lbCustMov:'New customers keep coming — one-time or short deals, field work, travel and fresh leads. Focus on marketing, reach and quick service; do not depend on a few old clients.',
+ lbCustFix:'Permanent, repeat customers — long relationships, fixed clients, retainers or a fixed shop/location. Focus on trust, quality and after-sales; one good client stays for years.',
+ lbCustDual:'A mix — some permanent clients plus new ones through referrals. Two streams of income suit you; word-of-mouth brings the best customers.',
+ lbNature:'Nature of work',lbJob:'Service / salaried work gives steadier gains (6th house is stronger than the 7th).',lbBiz:'Own business / partnership gives more gains (7th house is stronger than the 6th).',lbMix:'Job and business are balanced — a job with a side business or consultancy suits you.',
+ lbD10:'Confirmation from the Dashamsha (D10)',lbD10G:'The 11th lord {p} is well placed in D10 (in the {h} house) — gains from work are confirmed.',lbD10B:'The 11th lord {p} is in the {h} house of D10 — gains come, but through extra effort.',
+ lbNow:'Timing',lbNowY:'The running dasha ({md}/{ad}) activates the {h} house — push this work now.',lbNowN:'The running dasha ({md}/{ad}) does not directly activate your best field; build skills and contacts in it for the coming period.',lbNext:'Coming periods that activate your best field and gains',
+ lbSrc:'Method: Parashari lord placements + KP cusp sub lords of the 11th, 2nd and 10th. Customer type is an app rule from the movable/fixed/dual nature of the 7th, 11th and best-field signs.',
+ lbR_l11:'11th lord sits here',lbR_l2:'2nd lord sits here',lbR_l10:'10th lord sits here',lbR_in11:'its lord sits in the 11th',lbR_in2:'its lord sits in the 2nd',lbR_in10:'its lord sits in the 10th',lbR_cj:'its lord is with the 11th lord',lbR_px:'exchange with the 11th lord',
+ lbR_k11:'11th sub lord signifies it',lbR_k2:'2nd sub lord signifies it',lbR_k10:'10th sub lord signifies it',lbR_st:'house is strong',lbR_wk:'house is weak'});
+Object.assign(I18N.hi,{t_labh:'आय स्रोत विश्लेषण',lbT:'किस काम से आय होगी?',lbIntro:'पूरी कुंडली जाँची जाती है: लाभेश (11), धनेश (2) और कर्मेश (10) कहाँ बैठे हैं, हर भाव का स्वामी उनसे कैसे जुड़ा है, और केपी से 11वें, दूसरे और 10वें भाव संधि के उप-स्वामी किन भावों के कारक हैं। जिस भाव का अंक सबसे अधिक है, उसी भाव का काम आपको लाभ देता है।',
+ lbBest:'सबसे लाभकारी कार्य-क्षेत्र',lbRank:'लाभ के क्रम में भाव (किस भाव का काम फल देता है)',lbWhy:'कारण',lbMoney:'धन संचय किस काम से (द्वितीय भाव के संबंध)',lbWish:'इच्छापूर्ति',lbWishT:'इच्छाएँ मुख्यतः {h} भाव के काम से पूरी होती हैं; 11वें भाव का उप-स्वामी {p} {v}।',lbWishY:'शुभ है — यह 11वें भाव का कारक है',lbWishN:'इसके लिए कमज़ोर है — यह 11वें भाव का कारक नहीं; प्रयास और धैर्य चाहिए',
+ lbPl:'लाभ देने वाले ग्रह',lbCust:'ग्राहक / क्लाइंट का प्रकार',lbMov:'चर राशि',lbFix:'स्थिर राशि',lbDual:'द्विस्वभाव राशि',
+ lbCustMov:'नए-नए ग्राहक आते रहते हैं — एक बार या छोटे सौदे, फ़ील्ड का काम, यात्रा और नई लीड। मार्केटिंग, पहुँच और तेज़ सेवा पर ध्यान दें; कुछ पुराने ग्राहकों पर निर्भर न रहें।',
+ lbCustFix:'स्थायी, बार-बार आने वाले ग्राहक — लंबे संबंध, तय क्लाइंट, मासिक अनुबंध या एक जगह की दुकान। भरोसा, गुणवत्ता और बाद की सेवा पर ध्यान दें; एक अच्छा ग्राहक वर्षों तक रहता है।',
+ lbCustDual:'मिश्रित — कुछ स्थायी ग्राहक और कुछ नए, जो सिफ़ारिश से आते हैं। आय के दो स्रोत आपके अनुकूल हैं; मुँह-ज़बानी प्रचार से सबसे अच्छे ग्राहक मिलते हैं।',
+ lbNature:'काम की प्रकृति',lbJob:'नौकरी / वेतन वाला काम अधिक स्थिर लाभ देता है (छठा भाव सातवें से प्रबल)।',lbBiz:'अपना व्यापार / साझेदारी अधिक लाभ देती है (सातवाँ भाव छठे से प्रबल)।',lbMix:'नौकरी और व्यापार बराबर — नौकरी के साथ साइड बिज़नेस या परामर्श उपयुक्त।',
+ lbD10:'दशमांश (D10) से पुष्टि',lbD10G:'लाभेश {p} दशमांश में {h} भाव में शुभ स्थित है — काम से लाभ की पुष्टि।',lbD10B:'लाभेश {p} दशमांश के {h} भाव में है — लाभ मिलेगा, पर अधिक परिश्रम से।',
+ lbNow:'समय',lbNowY:'चल रही दशा ({md}/{ad}) {h} भाव को सक्रिय करती है — अभी इसी काम पर ज़ोर दें।',lbNowN:'चल रही दशा ({md}/{ad}) आपके सबसे अच्छे क्षेत्र को सीधे सक्रिय नहीं करती; आने वाले समय के लिए इसमें कौशल और संपर्क बनाएँ।',lbNext:'आने वाले काल जो सबसे अच्छे क्षेत्र और लाभ को सक्रिय करते हैं',
+ lbSrc:'पद्धति: पाराशरी भावेश स्थिति + केपी में 11वें, दूसरे और 10वें भाव के उप-स्वामी। ग्राहक का प्रकार ऐप का नियम है — सातवें, 11वें और सबसे अच्छे भाव की राशि के चर/स्थिर/द्विस्वभाव गुण से।',
+ lbR_l11:'लाभेश यहाँ बैठा',lbR_l2:'धनेश यहाँ बैठा',lbR_l10:'कर्मेश यहाँ बैठा',lbR_in11:'इसका स्वामी 11वें में',lbR_in2:'इसका स्वामी दूसरे में',lbR_in10:'इसका स्वामी 10वें में',lbR_cj:'इसका स्वामी लाभेश के साथ',lbR_px:'लाभेश से परिवर्तन योग',
+ lbR_k11:'11वें का उप-स्वामी इसका कारक',lbR_k2:'दूसरे का उप-स्वामी इसका कारक',lbR_k10:'10वें का उप-स्वामी इसका कारक',lbR_st:'भाव बलवान',lbR_wk:'भाव कमज़ोर'});
+const LB_WORK=[
+ ['your own name and skill — freelancing, personal brand, consulting in person, health/fitness, self-made work','अपना नाम और हुनर — फ़्रीलांस, व्यक्तिगत ब्रांड, स्वयं परामर्श, स्वास्थ्य/फ़िटनेस, स्वयं का काम'],
+ ['family business, food and restaurants, banking and finance, voice/speech, teaching children, jewellery','पारिवारिक व्यापार, भोजन व होटल, बैंकिंग व वित्त, वाणी/आवाज़, बच्चों को पढ़ाना, आभूषण'],
+ ['communication and sales — marketing, media, writing, phone/online selling, courier and short travel, IT, brokerage, own efforts','संवाद और बिक्री — मार्केटिंग, मीडिया, लेखन, फ़ोन/ऑनलाइन बिक्री, कूरियर व छोटी यात्रा, आईटी, दलाली, अपना पराक्रम'],
+ ['property and home — real estate, construction, vehicles, agriculture, schools, home-based business, dairy','संपत्ति और घर — रियल एस्टेट, निर्माण, वाहन, कृषि, विद्यालय, घर से व्यापार, डेयरी'],
+ ['intelligence and advice — teaching, coaching, astrology/mantra, stock market and investment, entertainment, creative work, children-related work','बुद्धि और सलाह — अध्यापन, कोचिंग, ज्योतिष/मंत्र, शेयर बाज़ार व निवेश, मनोरंजन, रचनात्मक काम, बच्चों से जुड़ा काम'],
+ ['service and problem-solving — job, healthcare, law and disputes, loans and recovery, competition, pets, daily-service businesses','सेवा और समस्या-समाधान — नौकरी, चिकित्सा, कानून व विवाद, ऋण व वसूली, प्रतियोगिता, पशु, रोज़ की सेवा वाले व्यापार'],
+ ['partnership and public dealing — trading, shop and clients, agency, contracts, consultancy for others, import-export','साझेदारी और जनसंपर्क — व्यापार, दुकान व ग्राहक, एजेंसी, अनुबंध, दूसरों के लिए परामर्श, आयात-निर्यात'],
+ ['hidden and research work — insurance, tax, research, occult, inheritance and others\' money, mining, surgery, crisis handling','गुप्त और शोध कार्य — बीमा, कर, शोध, गूढ़ विद्या, विरासत व दूसरों का धन, खनन, शल्य, संकट प्रबंधन'],
+ ['guidance and distance — higher teaching, religion and temples, law, publishing, long travel and tourism, foreign clients','मार्गदर्शन और दूरी — उच्च शिक्षा, धर्म व मंदिर, कानून, प्रकाशन, लंबी यात्रा व पर्यटन, विदेशी ग्राहक'],
+ ['profession and authority — government, management, administration, a respected position, your main career','पेशा और अधिकार — सरकारी काम, प्रबंधन, प्रशासन, प्रतिष्ठित पद, आपका मुख्य करियर'],
+ ['networks and big organisations — commissions, network marketing, clubs and societies, large companies, elder siblings and friends','नेटवर्क और बड़े संगठन — कमीशन, नेटवर्क मार्केटिंग, संस्थाएँ, बड़ी कंपनियाँ, बड़े भाई-बहन और मित्र'],
+ ['foreign and far-off — export, MNCs abroad, hospitals, ashrams, hotels and travel, spiritual work, behind-the-scenes work','विदेश और दूर — निर्यात, विदेश की कंपनियाँ, अस्पताल, आश्रम, होटल व यात्रा, आध्यात्मिक काम, पर्दे के पीछे का काम']];
+function lbF(k,o){return T(k).replace(/\{(\w+)\}/g,(_,x)=>o[x]??'');}
+function lbHo(h){return hiV()?HO[h]:HOUSE_ORD(h);}
+function lbHn(h){return hiV()?HN[h]+' भाव':HOUSE_ORD(h)+' house';}
+function lbCsl(ch,h){return kpLords(ch.cusps[h-1]).sl;}
+function lbSig(ch,L){try{return sigThru(ch,L);}catch(e){return ch.kpSig[L]?ch.kpSig[L].all:[];}}
+function lbScore(ch){const P=ch.planets,Lh=h=>lordOf(ch,h),L11=Lh(11),L2=Lh(2),L10=Lh(10),c11=lbCsl(ch,11),c2=lbCsl(ch,2),c10=lbCsl(ch,10);
+ const s11=lbSig(ch,c11),s2=lbSig(ch,c2),s10=lbSig(ch,c10),st11=ch.kpSig[P[c11].kp.nl]?ch.kpSig[P[c11].kp.nl].all:[];
+ const out=[];for(let h=1;h<=12;h++){let v=0,m=0;const r=[];const add=(w,k,money)=>{v+=w;if(money)m+=money;r.push(k);};const L=Lh(h);
+  if(P[L11].house===h)add(3,'lbR_l11');if(P[L2].house===h)add(1.5,'lbR_l2',3);if(P[L10].house===h)add(1.5,'lbR_l10',0.5);
+  if(h!==11&&L!==L11){if(P[L].house===11)add(2.5,'lbR_in11');if(P[L].sign===P[L11].sign)add(1.5,'lbR_cj');if(P[L].sign===P[L11].sign?false:(OWN[L]&&OWN[L].includes(P[L11].sign)&&OWN[L11]&&OWN[L11].includes(P[L].sign)))add(2,'lbR_px');}
+  if(h!==2&&P[L].house===2)add(1,'lbR_in2',2);if(h!==10&&P[L].house===10)add(1,'lbR_in10');
+  if(s11.includes(h))add(2.5,'lbR_k11');if(st11.includes(h))v+=0.8;if(s2.includes(h))add(1,'lbR_k2',2);if(s10.includes(h))add(1,'lbR_k10');
+  let hv=0;try{hv=smHouse(ch,h).v;}catch(e){}if(hv>=1){v+=0.6;r.push('lbR_st');}else if(hv<=-1){v-=0.6;r.push('lbR_wk');}
+  out.push({h,v,m:m+(P[L].house===2||s2.includes(h)?0:0),r});}
+ return {out,L11,L2,L10,c11,c2,c10,s11};}
+function lbCustomer(ch,best){const P=ch.planets,md=[0,0,0],cs=h=>Math.floor(norm(ch.cusps[h-1])/30);
+ const add=(s,w)=>md[s%3]+=w;add(cs(7),2);add(cs(11),1.5);add(cs(best),1.5);add(P[lordOf(ch,11)].sign,1);add(P[lbCsl(ch,11)].sign,1);
+ const tot=md.reduce((a,b)=>a+b,0);return md.map(x=>Math.round(x/tot*100));}
+function lbTiming(ch,top){const now=julianNow(),da=dashaAt(ch,now);if(!da)return '';const key=top.slice(0,2);
+ const act=L=>{const s=lbSig(ch,L);return key.filter(h=>s.includes(h)&&(s.includes(11)||s.includes(2)));};
+ const a=[...new Set([...act(da.md.lord),...act(da.ad.lord)])];
+ let h=`<p>${a.length?lbF('lbNowY',{md:pn(da.md.lord),ad:pn(da.ad.lord),h:a.map(lbHo).join(', ')}):lbF('lbNowN',{md:pn(da.md.lord),ad:pn(da.ad.lord)})}</p>`;
+ const up=[];let jd=da.ad.end+1;for(let k=0;k<14&&up.length<4;k++){const d=dashaAt(ch,jd);if(!d)break;const x=[...new Set([...act(d.ad.lord)])];if(x.length&&(act(d.md.lord).length||lbSig(ch,d.ad.lord).includes(11)))up.push(`<li><b>•</b> <span class="vsp">${fdate(d.ad.start)} – ${fdate(d.ad.end)}</span> <span class="note">(${pn(d.md.lord)}/${pn(d.ad.lord)} → ${x.map(lbHo).join(', ')})</span></li>`);jd=d.ad.end+1;}
+ if(up.length)h+=`<p><b>${T('lbNext')}:</b></p><ul class="fx vsfx">${up.join('')}</ul>`;return h;}
+function renderLabh(ch){const P=ch.planets,S0=lbScore(ch),ch12=S0.out;const rank=ch12.filter(x=>x.h!==11&&x.h!==2).sort((a,b)=>b.v-a.v),best=rank[0],mx=Math.max(1,rank[0].v);
+ let h=`<div class="pagehead"><h2>${T('t_labh')}</h2></div><p class="note">${T('lbIntro')}</p>`;
+ h+=`<section class="blk lbbest"><h3>🏆 ${T('lbBest')}</h3><p class="lbbig">${lbHn(best.h)}</p><p>${vsT(LB_WORK[best.h-1])}</p>${rank[1]&&rank[1].v>=best.v*0.75?`<p class="note">+ ${lbHn(rank[1].h)}: ${vsT(LB_WORK[rank[1].h-1]).split(' — ')[0]}</p>`:''}</section>`;
+ h+=`<section class="blk"><h3>${T('lbRank')}</h3><div class="lbbars">${rank.slice(0,6).map(x=>`<div class="lbrow"><div class="lbh"><b>${lbHn(x.h)}</b><span>${vsT(LB_WORK[x.h-1]).split(' — ')[0]}</span></div><div class="lbbar"><i style="width:${Math.max(4,Math.round(Math.max(0,x.v)/mx*100))}%"></i></div><small class="note">${[...new Set(x.r)].map(T).join(' · ')}</small></div>`).join('')}</div></section>`;
+ const mon=ch12.filter(x=>x.h!==2).map(x=>({h:x.h,v:x.m+x.v*0.3})).sort((a,b)=>b.v-a.v).slice(0,3);
+ h+=`<section class="blk"><h3>💰 ${T('lbMoney')}</h3><ul class="fx vsfx">${mon.map(x=>`<li><b>•</b> <span class="vsp">${lbHn(x.h)}:</span> ${vsT(LB_WORK[x.h-1])}</li>`).join('')}</ul></section>`;
+ const w11=S0.s11.includes(11);
+ h+=`<section class="blk"><h3>🌟 ${T('lbWish')}</h3><p>${lbF('lbWishT',{h:lbHo(best.h),p:pn(S0.c11),v:T(w11?'lbWishY':'lbWishN')})}</p></section>`;
+ const pls=[...new Set([S0.L11,S0.c11,P[S0.c11].kp.nl,...P.filter(p=>p.house===11).map(p=>p.i),S0.L2])];
+ h+=`<section class="blk"><h3>🪐 ${T('lbPl')}</h3><ul class="fx vsfx">${pls.map(i=>`<li><b>•</b> <span class="vsp">${pn(i)}:</span> ${vsT(VPZ_LIV[i])}</li>`).join('')}</ul></section>`;
+ const cu=lbCustomer(ch,best.h),mi=cu.indexOf(Math.max(...cu)),lab=['lbMov','lbFix','lbDual'],col=['var(--hal)','var(--good)','var(--ink2)'];
+ h+=`<section class="blk"><h3>🤝 ${T('lbCust')}</h3><div class="lbmix">${cu.map((x,k)=>`<i style="width:${x}%;background:${col[k]}"></i>`).join('')}</div><p class="note">${cu.map((x,k)=>`${T(lab[k])} ${x}%`).join(' · ')}</p><p><b>${T(lab[mi])}:</b> ${T(['lbCustMov','lbCustFix','lbCustDual'][mi])}</p></section>`;
+ const s6=ch12[5].v,s7=ch12[6].v;h+=`<section class="blk"><h3>💼 ${T('lbNature')}</h3><p>${T(s6>s7+1?'lbJob':s7>s6+1?'lbBiz':'lbMix')}</p>`;
+ try{const d10L=varga(ch.asc,10),d10s=varga(P[S0.L11].lon,10),dh=((d10s-d10L+12)%12)+1;h+=`<p><b>${T('lbD10')}:</b> ${lbF([1,2,4,5,7,9,10,11].includes(dh)?'lbD10G':'lbD10B',{p:pn(S0.L11),h:lbHo(dh)})}</p>`;}catch(e){}
+ h+=`</section><section class="blk"><h3>⏳ ${T('lbNow')}</h3>${lbTiming(ch,rank.map(x=>x.h))}</section>`;
+ return h+`<p class="note">${T('lbSrc')}</p>`;}
+NEWT.labh=renderLabh;if(!TABS.includes('labh'))TABS.push('labh');
+(function(){const s=SEC18.find(x=>x[0]==='sol');if(s&&!s[2][0][1].includes('labh'))s[2][0][1].splice(1,0,'labh');IC18.labh='💰';
+ D18.labh=['Which house\'s work brings income, money and wishes; customer type','किस भाव के काम से आय, धन और इच्छापूर्ति; ग्राहक का प्रकार'];})();
+const _home18L=NEWT.h_home;NEWT.h_home=function(ch){return _home18L(ch).replace(/<button data-go="charts">[\s\S]*?<\/button>/,'<button data-go="labh"><i>💰</i><span>'+T('t_labh')+'</span></button>');};
+if(NEWT.career){const _carL=NEWT.career;NEWT.career=function(ch){return _carL(ch)+`<p><button class="btn" data-go="labh">💰 ${T('t_labh')} →</button></p>`;};}
+(function(){const st=document.createElement('style');st.textContent=`.lbbest{border-left:5px solid var(--hal)}.lbbig{font:700 24px var(--serif);margin:2px 0 4px;color:var(--kum)}
+.lbrow{margin:10px 0}.lbh{display:flex;gap:8px;align-items:baseline}.lbh b{flex:none;min-width:58px}.lbh span{font-size:13.5px;color:var(--mut)}
+.lbbar{height:9px;border-radius:6px;background:var(--paper);border:1px solid var(--line);margin:4px 0 2px;overflow:hidden}.lbbar i{display:block;height:100%;background:linear-gradient(90deg,var(--hal),var(--kum));border-radius:6px}
+.lbmix{display:flex;height:14px;border-radius:8px;overflow:hidden;margin:6px 0}.lbmix i{display:block;height:100%}`;document.head.appendChild(st);})();
+
 </script>
 <nav id="bnav" aria-label="Main"></nav>
 </body></html>
