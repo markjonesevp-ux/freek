@@ -6238,7 +6238,7 @@ if(NEWT.career){const _carL=NEWT.career;NEWT.career=function(ch){return _carL(ch
 
 // ===== v20: Rishtedar ki Kundali — relatives read from the native's chart (bhavat bhavam / kalpit lagna + karaka + chara karaka + varga + dasha timing) =====
 Object.assign(I18N.en,{t_rishta:'Relatives\' kundali',rsIntro:'The relative\'s house is taken as their lagna and the whole chart is read from there (bhavat bhavam), together with the natural karaka, the Jaimini chara karaka and the matching divisional chart. This shows the relative as they appear in your life — not their own birth chart. Their own lagna and dasha need their own birth details.',
- rsPick:'Choose a relative',rsChart:'Chart turned to {r} (their house = lagna)',rsOverall:'Overall',rsLv:['Needs care','Average','Good','Very good'],
+ rsPick:'Choose a relative',rsChart:'Chart turned to {r} (their house = lagna)',rsOverall:'Their own condition',rsLv:['Needs care','Average','Good','Very good'],
  rsSelf:'Nature',rsStr:'Strength of their house',rsHealth:'Health',rsWork:'Work and status',rsMoney:'Money',rsBond:'Your relationship',
  rsH:['needs attention','average','good'],rsHealthT:'Their health is {v}.',rsHealthW:' Watch: {b}.',rsWorkT:'Their work and standing is {v}; likely fields: {f}.',rsMoneyT:'Their finances are {v}.',
  rsBondG:'Warm and supportive — their house lord is well placed from your lagna.',rsBondM:'Normal — ups and downs, but the bond holds.',rsBondB:'Strained or distant at times — their house lord falls in 6/8/12 from your lagna, or the two lords are enemies. Patience and respect keep it steady.',
@@ -6249,7 +6249,7 @@ Object.assign(I18N.en,{t_rishta:'Relatives\' kundali',rsIntro:'The relative\'s h
  rsCmpY:'Match: their {x} ({s}) falls in {r} from the turned lagna — a supporting sign that the estimate fits (it is a hint, not proof).',rsCmpN:'Their lagna ({a}) and Moon sign ({b}) are not in the turned lagna, its trines or 7th — read the estimate with caution.',rsLag:'lagna',rsMoon:'Moon sign',rsTri:'the same sign / trine / 7th',
  rsSrc:'Method: bhavat bhavam (kalpit lagna), natural karaka, Jaimini 7-karaka scheme, divisional chart (D12 parents, D3 siblings, D7 children, D9 spouse & in-laws). The comparison rule is an app check.'});
 Object.assign(I18N.hi,{t_rishta:'रिश्तेदार की कुंडली',rsIntro:'रिश्तेदार के भाव को उनका लग्न मानकर पूरी कुंडली वहाँ से पढ़ी जाती है (भावात् भावम् / कल्पित लग्न), साथ में नैसर्गिक कारक, जैमिनी चर कारक और संबंधित वर्ग कुंडली। यह रिश्तेदार को वैसा दिखाता है जैसे वे आपके जीवन में हैं — यह उनकी अपनी जन्म कुंडली नहीं है। उनका अपना लग्न और दशा उनके जन्म विवरण से ही मिलेंगे।',
- rsPick:'रिश्तेदार चुनें',rsChart:'{r} की ओर घुमाई कुंडली (उनका भाव = लग्न)',rsOverall:'कुल मिलाकर',rsLv:['ध्यान चाहिए','सामान्य','अच्छा','बहुत अच्छा'],
+ rsPick:'रिश्तेदार चुनें',rsChart:'{r} की ओर घुमाई कुंडली (उनका भाव = लग्न)',rsOverall:'उनकी अपनी स्थिति',rsLv:['ध्यान चाहिए','सामान्य','अच्छा','बहुत अच्छा'],
  rsSelf:'स्वभाव',rsStr:'उनके भाव (लग्न) का बल',rsHealth:'स्वास्थ्य',rsWork:'काम और पद',rsMoney:'धन',rsBond:'आपसे संबंध',
  rsH:['ध्यान चाहिए','सामान्य','अच्छा'],rsHealthT:'उनका स्वास्थ्य {v}।',rsHealthW:' ध्यान दें: {b}।',rsWorkT:'उनका काम और प्रतिष्ठा {v}; संभावित क्षेत्र: {f}।',rsMoneyT:'उनकी आर्थिक स्थिति {v}।',
  rsBondG:'स्नेहपूर्ण और सहयोगी — उनके भाव का स्वामी आपके लग्न से शुभ स्थान में है।',rsBondM:'सामान्य — उतार-चढ़ाव, पर रिश्ता बना रहता है।',rsBondB:'कभी-कभी तनाव या दूरी — उनके भाव का स्वामी आपके लग्न से 6/8/12 में है, या दोनों स्वामी शत्रु हैं। धैर्य और सम्मान से रिश्ता स्थिर रहता है।',
@@ -6290,29 +6290,29 @@ function rsRead(ch,r){const [k,R,kar,jk,vn]=r,P=ch.planets,g=ch.inp.gender||'m',
 function rsTimeline(ch,rd){const R=rd.R,good=[R,rsNat(R,2),rsNat(R,11)],bad=[rsNat(R,6),rsNat(R,8),rsNat(R,12)],now=julianNow(),out=[];
  let jd=ch.jd+1;for(let q=0;q<140;q++){const d=dashaAt(ch,jd);if(!d)break;const s=[...new Set([...lbSig(ch,d.ad.lord),...lbSig(ch,d.md.lord).filter(h=>bad.includes(h)||good.includes(h))])];
   let v=bad.filter(h=>s.includes(h)).length-good.filter(h=>s.includes(h)).length*0.8;if(d.ad.lord===rd.kr||d.md.lord===rd.kr)v*=1.3;if(smPlanet(ch,d.ad.lord).v<-1.5)v+=0.4;
-  out.push({st:d.ad.start,en:d.ad.end,md:d.md.lord,ad:d.ad.lord,v});jd=d.ad.end+1;if(jd>now+12*365.25)break;}
+  out.push({st:Math.max(d.ad.start,ch.jd),en:d.ad.end,md:d.md.lord,ad:d.ad.lord,v});jd=d.ad.end+1;if(jd>now+12*365.25)break;}
  return out;}
 function rsPer(ch,x){return `<span class="pstyr">${fdate(x.st)} – ${fdate(x.en)}</span> <span class="note">(${T('pstDasha')} ${pn(x.md)}/${pn(x.ad)})</span>`;}
 function renderRishta(ch){const P=ch.planets;S.rsk=S.rsk||'father';const r=RS.find(x=>x[0]===S.rsk)||RS[0],rd=rsRead(ch,r),nm=vsT(r[5]),R=r[1],hv=['rsH'];
  let h=`<div class="pagehead"><h2>${T('t_rishta')}</h2></div><p class="note">${T('rsIntro')}</p><p><b>${T('rsPick')}</b></p><div class="rschips">${RS.map(x=>`<button data-rsk="${x[0]}" aria-pressed="${x[0]===r[0]}">${vsT(x[5])}</button>`).join('')}</div>`;
  const lvc=['bad','mid','good','good'];
  h+=`<section class="blk rshead ${lvc[rd.lv]}"><h3>${nm} <small class="note">· ${hiV()?`${HN[R]} भाव`:`house ${R}`} · ${sn((ch.lagna+R-1)%12)}</small></h3><p><b>${T('rsOverall')}:</b> <span class="rslv l${rd.lv}">${T('rsLv')[rd.lv]}</span></p></section>`;
- const ls=(ch.lagna+R-1)%12;h+=`<div class="charts rschart">${chartSVG(housesFrom(ls,P),rsF('rsChart',{r:nm}),ls)}</div>`;
+ const ls=(ch.lagna+R-1)%12,chartH=`<div class="charts rschart">${chartSVG(housesFrom(ls,P),rsF('rsChart',{r:nm}),ls)}</div>`;
  const Hn=T('rsH'),occ=P.filter(p=>p.house===R).map(p=>pn(p.i));
  const b6=[rsNat(R,6),rsNat(R,8)].map(x=>vsT(ROG_BODY[((ls+(x===rsNat(R,6)?5:7))%12)])).map(s=>s.split(',')[0]).join(', ');
  const L10r=lordOf(ch,rsNat(R,10));
- h+=`<section class="blk"><h3>${nm}</h3><ul class="fx vsfx">`
+ let bz=`<ul class="fx vsfx">`
   +`<li><b>•</b> <span class="vsp">${T('rsSelf')}:</span> ${L(SIGN_T)[ls]}${occ.length?` <span class="note">(${occ.join(', ')})</span>`:''}</li>`
   +(()=>{let why='';try{why=smHouse(ch,R).why.filter(w=>w.s<0).slice(0,2).map(smWhyTxt).join('; ');}catch(e){}return `<li class="${rsLvl(rd.self)===2?'pos':''}"><b>•</b> <span class="vsp">${T('rsStr')}:</span> ${Hn[rsLvl(rd.self)]}${why&&rsLvl(rd.self)<2?` <span class="note">(${why})</span>`:''}</li>`;})()
   +`<li class="${rsLvl(rd.health)===2?'pos':''}"><b>•</b> <span class="vsp">${T('rsHealth')}:</span> ${rsF('rsHealthT',{v:Hn[rsLvl(rd.health)]})}${rsLvl(rd.health)===0?rsF('rsHealthW',{b:b6}):''}</li>`
   +`<li class="${rsLvl(rd.work)===2?'pos':''}"><b>•</b> <span class="vsp">${T('rsWork')}:</span> ${rsF('rsWorkT',{v:Hn[rsLvl(rd.work)],f:vsT(VPZ_LIV[L10r]).split(',').slice(0,3).join(',')})}</li>`
   +`<li class="${rsLvl(rd.money)===2?'pos':''}"><b>•</b> <span class="vsp">${T('rsMoney')}:</span> ${rsF('rsMoneyT',{v:Hn[rsLvl(rd.money)]})}</li>`
   +`<li class="${rd.bondGood?'pos':''}"><b>•</b> <span class="vsp">${T('rsBond')}:</span> ${T(rd.bondGood?'rsBondG':rd.bondBad?'rsBondB':'rsBondM')}</li></ul>`;
- const kp=P[rd.kr];h+=`<p class="note">${rsF('rsKar',{p:pn(rd.kr),d:(T('rsKarD')[kp.dign]||T('rsKarD').neutral)+(kp.comb&&rd.kr>1?T('rsKarC'):'')})}</p>`;
- if(rd.jp!=null){const jpp=P[rd.jp];h+=`<p class="note">${rsF('rsJai',{k:vsT(RS_KK[r[3]]),p:pn(rd.jp),h:hiV()?HO[jpp.house]:HOUSE_ORD(jpp.house),v:rd.js>=0.8?T('rsVG'):rd.js<=-0.8?T('rsVB'):T('rsVM')})}</p>`;}
- if(rd.vl)h+=`<p class="note">${rsF('rsVar',{d:`D${rd.vn}`,p:pn(rd.vl.vlord),v:rd.vl.vs>=0.6?T('rsVG'):rd.vl.vs<=-0.4?T('rsVB'):T('rsVM')})}</p>`;
- h+=`</section>`;
- const tl=rsTimeline(ch,rd),now=julianNow(),past=tl.filter(x=>x.en<now&&x.v>=1.5).sort((a,b)=>b.v-a.v).slice(0,4).sort((a,b)=>a.st-b.st),fut=tl.filter(x=>x.en>=now&&Math.abs(x.v)>=1.2).slice(0,5);
+ const kp=P[rd.kr];bz+=`<p class="note">${rsF('rsKar',{p:pn(rd.kr),d:(T('rsKarD')[kp.dign]||T('rsKarD').neutral)+(kp.comb&&rd.kr>1?T('rsKarC'):'')})}</p>`;
+ if(rd.jp!=null){const jpp=P[rd.jp];bz+=`<p class="note">${rsF('rsJai',{k:vsT(RS_KK[r[3]]),p:pn(rd.jp),h:hiV()?HO[jpp.house]:HOUSE_ORD(jpp.house),v:rd.js>=0.8?T('rsVG'):rd.js<=-0.8?T('rsVB'):T('rsVM')})}</p>`;}
+ if(rd.vl)bz+=`<p class="note">${rsF('rsVar',{d:`D${rd.vn}`,p:pn(rd.vl.vlord),v:rd.vl.vs>=0.6?T('rsVG'):rd.vl.vs<=-0.4?T('rsVB'):T('rsVM')})}</p>`;
+ h+=fmStoryHTML(ch,r,rd)+`<section class="blk fmbasis">${vsDet('📐 '+T('fmBasis'),chartH+bz,false)}</section>`;
+ const tl=rsTimeline(ch,rd),now=julianNow(),mn=['spouse','child1','child2','fil','mil'].includes(r[0])?ch.jd+21*365.25:ch.jd,past=tl.filter(x=>x.en<now&&x.st>=mn&&x.v>=1.5).sort((a,b)=>b.v-a.v).slice(0,4).sort((a,b)=>a.st-b.st),fut=tl.filter(x=>x.en>=now&&Math.abs(x.v)>=1.2).slice(0,5);
  h+=`<section class="blk"><h3>⏳ ${T('rsTime')}</h3><h4>${T('rsPast')}</h4>${past.length?`<ul class="fx vsfx pstl">${past.map(x=>`<li><b>•</b> ${rsPer(ch,x)} ${pstAskBtns(ch,'rel:'+r[0]+':'+Math.round(x.st))}</li>`).join('')}</ul>`:`<p>${T('rsNone')}</p>`}`
   +`<h4>${T('rsFut')}</h4>${fut.length?`<ul class="fx vsfx">${fut.map(x=>`<li class="${x.v<0?'pos':''}"><b>${x.v<0?'✓':'!'}</b> ${rsPer(ch,x)} — ${T(x.v<0?'rsFG':'rsFB')}</li>`).join('')}</ul>`:`<p>${T('rsNone')}</p>`}${pstScoreHTML(ch)}</section>`;
  let up='';try{const u=UPC(rd.kr);up=`<p>${hiV()?`हर ${u.day}: ${u.deity} — `:`Every ${u.day}: ${u.deity} — `}<span class="big3">${u.mantra}</span></p>`;}catch(e){}
@@ -6336,6 +6336,99 @@ if(NEWT.family){const _famR=NEWT.family;NEWT.family=function(ch){return _famR(ch
 .rshead{border-left:5px solid var(--hal)}.rshead.good{border-left-color:var(--good)}.rshead.bad{border-left-color:var(--kum)}
 .rslv{padding:2px 10px;border-radius:999px;font-size:13px;font-weight:600;background:var(--warnbg);color:#8a5a00}.rslv.l2,.rslv.l3{background:var(--goodbg);color:var(--good)}.rslv.l0{background:var(--badbg);color:var(--kum)}
 .rschart{max-width:420px;margin:0 auto 14px}.rsno{background:var(--warnbg)}`;document.head.appendChild(st);})();
+
+// ===== v20.1 data: real-life descriptions of relatives (written for this app; "they" form so it fits any relative) =====
+// Personality from the sign of the relative's house
+const FM_SIGN=[
+ ['Quick, bold and straightforward. They like to take charge, get angry fast but also cool down fast, and cannot sit idle. They respect people who are direct with them.','जल्दी निर्णय लेने वाले, साहसी और सीधी बात करने वाले। वे आगे रहकर काम सँभालना पसंद करते हैं, गुस्सा जल्दी आता है पर जल्दी उतर भी जाता है, और खाली बैठना उन्हें पसंद नहीं। जो उनसे सीधी बात करे, उसका वे सम्मान करते हैं।'],
+ ['Calm, patient and practical. They value money, good food and a comfortable home, and do not like sudden changes. Once they trust someone, they stay loyal for life — but they can be stubborn.','शांत, धैर्यवान और व्यावहारिक। उन्हें धन, अच्छा भोजन और आरामदायक घर प्रिय है, और अचानक बदलाव पसंद नहीं। जिस पर भरोसा कर लें, उसके साथ जीवन भर निभाते हैं — पर ज़िद्दी भी हो सकते हैं।'],
+ ['Talkative, curious and quick-minded. They keep many contacts, enjoy news and discussion, and handle many things at once. Their mood changes fast; they dislike boredom.','बातूनी, जिज्ञासु और तेज़ दिमाग वाले। उनके बहुत संपर्क होते हैं, खबरें और चर्चा पसंद है, और एक साथ कई काम सँभाल लेते हैं। मन जल्दी बदलता है; ऊब उन्हें पसंद नहीं।'],
+ ['Emotional, caring and attached to family. They remember small things, worry about everyone\'s food and health, and feel hurt quickly. Home and mother mean a lot to them.','भावुक, देखभाल करने वाले और परिवार से जुड़े। छोटी-छोटी बातें याद रखते हैं, सबके खाने और सेहत की चिंता करते हैं, और जल्दी आहत हो जाते हैं। घर और माँ उनके लिए बहुत मायने रखते हैं।'],
+ ['Proud, generous and dignified. They like respect and a good position, keep their word, and help openly. They dislike being ignored or corrected in front of others.','स्वाभिमानी, उदार और गरिमामय। उन्हें सम्मान और अच्छा पद प्रिय है, वचन के पक्के होते हैं और खुलकर मदद करते हैं। अनदेखा किया जाना या सबके सामने टोका जाना उन्हें पसंद नहीं।'],
+ ['Careful, organised and detail-minded. They notice mistakes, plan expenses and like cleanliness and routine. They help quietly but can be critical and worry about health.','सावधान, व्यवस्थित और बारीकी देखने वाले। गलतियाँ तुरंत पकड़ते हैं, खर्च की योजना बनाते हैं, सफ़ाई और नियम पसंद करते हैं। चुपचाप मदद करते हैं, पर आलोचना भी करते हैं और सेहत की चिंता रहती है।'],
+ ['Polite, balanced and social. They avoid fights, like beauty and good manners, and weigh both sides before deciding — which sometimes makes them slow to decide.','विनम्र, संतुलित और मिलनसार। झगड़े से बचते हैं, सुंदरता और अच्छे व्यवहार को पसंद करते हैं, और दोनों पक्ष तौलकर निर्णय लेते हैं — इसलिए कभी-कभी निर्णय में देर हो जाती है।'],
+ ['Deep, private and intense. They do not show everything they feel, trust few people, and never forget either help or hurt. In a crisis they become very strong.','गहरे, अंतर्मुखी और तीव्र भावना वाले। मन की हर बात नहीं दिखाते, कम लोगों पर भरोसा करते हैं, और मदद या चोट — दोनों नहीं भूलते। संकट में वे बहुत मज़बूत हो जाते हैं।'],
+ ['Optimistic, principled and advice-giving. They value religion, education and fairness, like to guide others, and dislike being tied down. Honest to the point of being blunt.','आशावादी, सिद्धांतवादी और सलाह देने वाले। धर्म, शिक्षा और न्याय को महत्व देते हैं, दूसरों का मार्गदर्शन करना पसंद है, और बंधन पसंद नहीं। इतने ईमानदार कि कभी-कभी बात कड़वी लगती है।'],
+ ['Serious, hard-working and responsible. They plan for the long term, respect rules and duty, and show love through work rather than words. Success comes to them slowly but surely.','गंभीर, मेहनती और ज़िम्मेदार। लंबी योजना बनाते हैं, नियम और कर्तव्य का सम्मान करते हैं, और प्रेम शब्दों से नहीं, काम से दिखाते हैं। सफलता धीरे-धीरे पर पक्की मिलती है।'],
+ ['Independent, thoughtful and a little different from others. They care about society and friends, have their own way of thinking, and can seem emotionally distant even when they care.','स्वतंत्र, विचारशील और दूसरों से थोड़े अलग। समाज और मित्रों की परवाह करते हैं, सोचने का अपना तरीका है, और परवाह करते हुए भी भावनाओं में थोड़े दूर लग सकते हैं।'],
+ ['Soft-hearted, imaginative and forgiving. They are religious or spiritual, help without being asked, and get hurt easily. Sometimes they avoid hard realities or are too trusting.','कोमल हृदय, कल्पनाशील और क्षमाशील। धार्मिक या आध्यात्मिक होते हैं, बिना कहे मदद करते हैं, और जल्दी दुखी हो जाते हैं। कभी-कभी कठोर सच्चाई से बचते हैं या ज़रूरत से ज़्यादा भरोसा कर लेते हैं।']];
+// A planet sitting in the relative's house
+const FM_PL=[
+ ['They carry authority and self-respect; people look up to them. Ego clashes are possible, and heart/BP or eyes need care later in life.','उनमें अधिकार और आत्मसम्मान है; लोग उनका आदर करते हैं। अहं के टकराव हो सकते हैं, और आगे चलकर हृदय/बीपी या आँखों का ध्यान रखना चाहिए।'],
+ ['They are emotional and caring, with moods that change; they need peace at home. Family and public both like them.','वे भावुक और देखभाल करने वाले हैं, मन बदलता रहता है; घर में शांति उनके लिए ज़रूरी है। परिवार और लोग दोनों उन्हें पसंद करते हैं।'],
+ ['They are energetic, brave and quick-tempered; they fight for their family. Minor injuries, BP or disputes about property are possible.','वे ऊर्जावान, साहसी और गर्म स्वभाव के हैं; परिवार के लिए लड़ जाते हैं। छोटी चोट, बीपी या संपत्ति के विवाद संभव हैं।'],
+ ['They are clever, witty and good with talk, numbers or trade; they stay young at heart but can overthink.','वे चतुर, हाज़िरजवाब और बातचीत, हिसाब या व्यापार में अच्छे हैं; मन से युवा रहते हैं पर ज़्यादा सोचते हैं।'],
+ ['They are wise, respected and helpful — a real blessing in the family. Weight or sugar needs watching.','वे समझदार, सम्मानित और मददगार हैं — परिवार के लिए सच्चा आशीर्वाद। वज़न या शुगर पर ध्यान रखना चाहिए।'],
+ ['They are good-looking, pleasant and fond of comfort, clothes and arts; they bring beauty and harmony to the home.','वे आकर्षक, मधुर और सुख-सुविधा, कपड़ों व कला के शौकीन हैं; घर में सुंदरता और सामंजस्य लाते हैं।'],
+ ['Life gave them responsibilities early; they are serious and hard-working, and may seem strict or distant. Joints or long illnesses need care in later years.','जीवन ने उन्हें जल्दी ज़िम्मेदारियाँ दीं; वे गंभीर और मेहनती हैं, और सख़्त या दूर लग सकते हैं। बाद के वर्षों में जोड़ों या लंबी बीमारी का ध्यान रखें।'],
+ ['They are ambitious and unconventional, with sudden ups and downs; misunderstandings with them happen easily, so say things clearly.','वे महत्वाकांक्षी और अलग सोच वाले हैं, जीवन में अचानक उतार-चढ़ाव आते हैं; उनसे गलतफ़हमी जल्दी होती है, इसलिए बात साफ़ कहें।'],
+ ['They are detached, spiritual or a little withdrawn; they may live apart or be busy with their own world. Sudden small health issues are possible.','वे वैरागी, आध्यात्मिक या थोड़े अपने में रहने वाले हैं; अलग रह सकते हैं या अपनी दुनिया में व्यस्त रहते हैं। अचानक छोटी स्वास्थ्य समस्याएँ संभव हैं।']];
+// Aspects on the relative's house (Saturn, Mars, Jupiter, Rahu)
+const FM_ASP={6:['Saturn\'s aspect adds duty and some distance — respect is strong, open affection less.','शनि की दृष्टि कर्तव्य और थोड़ी दूरी जोड़ती है — सम्मान अधिक, खुला स्नेह कम।'],2:['Mars\'s aspect brings arguments over small matters — keep calm in discussions.','मंगल की दृष्टि छोटी बातों पर बहस लाती है — बातचीत में शांत रहें।'],4:['Jupiter\'s aspect protects them and keeps their blessings on you.','गुरु की दृष्टि उनकी रक्षा करती है और उनका आशीर्वाद आप पर बना रहता है।'],7:['Rahu\'s influence can create confusion or distance at times — trust facts, not rumours.','राहु का प्रभाव कभी-कभी भ्रम या दूरी पैदा करता है — अफ़वाह नहीं, तथ्य पर भरोसा करें।']};
+// Where the lord of their house goes, counted from their own house = the focus of their life
+const FM_LORD=[
+ ['Self-made — they built their life on their own strength and identity.','स्वयं बनाए हुए — अपनी शक्ति और पहचान के बल पर जीवन बनाया।'],
+ ['Family and money come first for them; they save, and speak with weight.','उनके लिए परिवार और धन पहले है; बचत करते हैं और उनकी बात में वज़न होता है।'],
+ ['Courageous and communicative; they travel, keep busy, and make their own way through effort.','साहसी और संवाद करने वाले; यात्रा करते हैं, व्यस्त रहते हैं, और प्रयास से अपनी राह बनाते हैं।'],
+ ['Home-loving — house, land, vehicle and peace at home matter most to them.','घर-प्रेमी — घर, ज़मीन, वाहन और घर की शांति उनके लिए सबसे अहम है।'],
+ ['Intelligent and devoted to children; they like teaching, advising or planning.','बुद्धिमान और संतान के प्रति समर्पित; सिखाना, सलाह देना या योजना बनाना पसंद है।'],
+ ['Their life has struggle and service — work, debts, competition or health took a lot of their energy.','उनके जीवन में संघर्ष और सेवा है — काम, कर्ज़, प्रतियोगिता या स्वास्थ्य ने उनकी बहुत ऊर्जा ली।'],
+ ['Focused on partner, business and dealing with people; they do well with others.','जीवनसाथी, व्यापार और लोगों से व्यवहार पर केंद्रित; दूसरों के साथ मिलकर अच्छा करते हैं।'],
+ ['Their life had sudden ups and downs; they keep things to themselves and handle crises well.','उनके जीवन में अचानक उतार-चढ़ाव आए; बातें मन में रखते हैं और संकट अच्छे से सँभालते हैं।'],
+ ['Lucky and religious; they follow principles, respect elders and often travel for good reasons.','भाग्यशाली और धार्मिक; सिद्धांतों पर चलते हैं, बड़ों का सम्मान करते हैं और शुभ कारणों से यात्रा करते हैं।'],
+ ['Career-minded and respected; work and status are central to their life.','कर्म-प्रधान और सम्मानित; काम और प्रतिष्ठा उनके जीवन के केंद्र में है।'],
+ ['Social and gainful; friends, networks and steady income support them.','मिलनसार और लाभ पाने वाले; मित्र, संपर्क और नियमित आय उनका सहारा हैं।'],
+ ['They spend on others, may live far away or abroad, and have a spiritual or withdrawn side.','दूसरों पर खर्च करते हैं, दूर या विदेश में रह सकते हैं, और उनका एक आध्यात्मिक या एकांतप्रिय पक्ष है।']];
+// The same lord seen in the native's own houses = their role in your life
+const FM_ROLE=[
+ ['They shape your personality and confidence directly.','वे सीधे आपके व्यक्तित्व और आत्मविश्वास को आकार देते हैं।'],
+ ['They are linked with your family, savings and speech — often a financial support.','वे आपके परिवार, बचत और वाणी से जुड़े हैं — अक्सर आर्थिक सहारा।'],
+ ['They push your courage and efforts; you learn to stand on your own because of them.','वे आपके साहस और प्रयास को बढ़ाते हैं; उनके कारण आप अपने पैरों पर खड़े होना सीखते हैं।'],
+ ['They are tied to your home, property, vehicle and peace of mind.','वे आपके घर, संपत्ति, वाहन और मन की शांति से जुड़े हैं।'],
+ ['They influence your education, decisions and children; their advice is valuable.','वे आपकी शिक्षा, निर्णयों और संतान को प्रभावित करते हैं; उनकी सलाह कीमती है।'],
+ ['Some tension, health worries or dependence may come through them — handle it with service, not argument.','उनके कारण कुछ तनाव, स्वास्थ्य की चिंता या निर्भरता आ सकती है — बहस नहीं, सेवा से सँभालें।'],
+ ['They affect your marriage and partnerships; their opinion matters in your relationships.','वे आपके विवाह और साझेदारी को प्रभावित करते हैं; रिश्तों में उनकी राय मायने रखती है।'],
+ ['The relationship has hidden layers — sudden events, inheritance or worries connect you with them.','रिश्ते में छिपी परतें हैं — अचानक घटनाएँ, विरासत या चिंताएँ आपको उनसे जोड़ती हैं।'],
+ ['They bring you luck, values and blessings; your fortune rises with their support.','वे आपके लिए भाग्य, संस्कार और आशीर्वाद लाते हैं; उनके सहयोग से आपका भाग्य बढ़ता है।'],
+ ['They influence your career and reputation — directly or by example.','वे आपके करियर और प्रतिष्ठा को प्रभावित करते हैं — सीधे या अपने उदाहरण से।'],
+ ['They help your gains and fulfil your wishes; contacts come through them.','वे आपके लाभ में मदद करते हैं और इच्छाएँ पूरी करते हैं; उनके माध्यम से संपर्क बनते हैं।'],
+ ['There may be physical distance from them, or expenses for them; spiritual bond is stronger than daily contact.','उनसे शारीरिक दूरी या उन पर खर्च हो सकता है; रोज़ के संपर्क से ज़्यादा आध्यात्मिक जुड़ाव है।']];
+// Health / well-being (0 needs care, 1 average, 2 good)
+const FM_WELL=[['Their health and peace need regular attention — encourage check-ups and rest.','उनके स्वास्थ्य और शांति पर नियमित ध्यान चाहिए — जाँच और आराम के लिए प्रेरित करें।'],
+ ['Their health is generally fine, with small ups and downs.','उनका स्वास्थ्य सामान्यतः ठीक है, छोटे उतार-चढ़ाव के साथ।'],
+ ['They enjoy good health, energy and a long active life.','उनका स्वास्थ्य अच्छा, ऊर्जा भरपूर और लंबा सक्रिय जीवन।']];
+// Relationship with you, by role: [good, mixed, strained]
+const FM_BOND={
+ father:[['A close, supportive bond — their guidance helps you rise.','घनिष्ठ और सहयोगी संबंध — उनका मार्गदर्शन आपको आगे बढ़ाता है।'],['A respectful bond with some differences of opinion.','सम्मानजनक संबंध, कुछ विचार-भेद के साथ।'],['Differences, distance or less support at times — especially about career or independence. Respect keeps it steady.','कभी-कभी मतभेद, दूरी या कम सहयोग — विशेषकर करियर या स्वतंत्रता को लेकर। सम्मान से रिश्ता स्थिर रहता है।']],
+ mother:[['A deep emotional bond — their blessings give you peace.','गहरा भावनात्मक जुड़ाव — उनका आशीर्वाद आपको शांति देता है।'],['Loving, with occasional misunderstandings.','स्नेहपूर्ण, कभी-कभी गलतफ़हमी के साथ।'],['Emotional gaps or worry about their health or happiness — spend time with them.','भावनात्मक दूरी या उनके स्वास्थ्य/सुख की चिंता — उनके साथ समय बिताएँ।']],
+ spouse:[['A caring, supportive partnership; you grow together.','स्नेही और सहयोगी साथ; आप साथ मिलकर आगे बढ़ते हैं।'],['A good marriage with normal adjustments; patience helps.','अच्छा वैवाहिक जीवन, सामान्य तालमेल के साथ; धैर्य मदद करता है।'],['Ego clashes, distance or delays are indicated — communication and respect are the key.','अहं का टकराव, दूरी या विलंब के संकेत — संवाद और सम्मान ही कुंजी है।']],
+ child:[['Obedient and bright; they bring pride and support later.','आज्ञाकारी और होनहार; गर्व और आगे चलकर सहारा देते हैं।'],['A normal bond; they need guidance at the right time.','सामान्य संबंध; सही समय पर मार्गदर्शन चाहिए।'],['Worry about their studies, health or behaviour at times — patience and time with them help.','कभी-कभी उनकी पढ़ाई, स्वास्थ्य या व्यवहार की चिंता — धैर्य और साथ बिताया समय मदद करता है।']],
+ sibling:[['Friendly and helpful; they stand by you.','मित्रवत और मददगार; वे आपके साथ खड़े रहते हैं।'],['Normal ties — close in need, busy otherwise.','सामान्य संबंध — ज़रूरत में साथ, बाकी समय अपने में व्यस्त।'],['Rivalry, property issues or distance are possible — keep money matters clear.','प्रतिस्पर्धा, संपत्ति का मुद्दा या दूरी संभव — पैसों के मामले साफ़ रखें।']],
+ inlaw:[['Warm and supportive in-laws.','स्नेही और सहयोगी ससुराल।'],['Normal relations; understanding grows with time.','सामान्य संबंध; समय के साथ समझ बढ़ती है।'],['Some friction or expectations — stay polite and avoid interference.','कुछ घर्षण या अपेक्षाएँ — विनम्र रहें और हस्तक्षेप से बचें।']],
+ mama:[['Good support from the maternal side.','ननिहाल से अच्छा सहयोग।'],['Normal ties with the maternal side.','ननिहाल से सामान्य संबंध।'],['Little support or some disputes with the maternal side.','ननिहाल से कम सहयोग या कुछ विवाद।']]};
+const FM_ROLEOF={father:'father',mother:'mother',spouse:'spouse',child1:'child',child2:'child',ysib:'sibling',esib:'sibling',fil:'inlaw',mil:'inlaw',mama:'mama'};
+
+// ===== v20.1: real-life descriptions for "You & your family" and "Relatives' kundali"; technical basis moved into a collapsed block =====
+Object.assign(I18N.en,{fmBasis:'Astrological basis (for the astrologer)',fmWho:'What kind of person',fmLife:'Direction of their life',fmRole:'Their role in your life',fmBond:'Your relationship',fmWell:'Health and well-being',fmMore:'Full reading',fmFamT:'Your family — as seen in your kundali',fmFamN:'Each card describes the person in everyday words. Tap "Full reading" for timing, remedies and the astrological basis.'});
+Object.assign(I18N.hi,{fmBasis:'ज्योतिषीय आधार (ज्योतिषी के लिए)',fmWho:'कैसे इंसान हैं',fmLife:'उनके जीवन की दिशा',fmRole:'आपके जीवन में उनकी भूमिका',fmBond:'आपसे रिश्ता',fmWell:'स्वास्थ्य और सुख',fmMore:'पूरा विवरण',fmFamT:'आपका परिवार — आपकी कुंडली की नज़र से',fmFamN:'हर कार्ड व्यक्ति को रोज़मर्रा की भाषा में बताता है। समय, उपाय और ज्योतिषीय आधार के लिए "पूरा विवरण" दबाएँ।'});
+function fmParts(ch,r,rd){const P=ch.planets,R=r[1],ls=(ch.lagna+R-1)%12,LR=lordOf(ch,R),role=FM_ROLEOF[r[0]]||'sibling';
+ const occ=P.filter(p=>p.house===R).sort((a,b)=>smPlanet(ch,b.i).v-smPlanet(ch,a.i).v).slice(0,2).map(p=>vsT(FM_PL[p.i]));
+ const asp=[6,2,4,7].filter(i=>P[i].house!==R&&(i===7?false:aspectsHouse(ch,i,R))||(i===7&&(((P[7].house-R+12)%12)+1===7))).slice(0,1).map(i=>vsT(FM_ASP[i]));
+ const n=((P[LR].house-R+12)%12)+1;const bi=rd.bondGood?0:rd.bondBad?2:1;
+ return {who:[vsT(FM_SIGN[ls]),...occ,...asp].join(' '),life:vsT(FM_LORD[n-1]),role:vsT(FM_ROLE[P[LR].house-1]),bond:vsT(FM_BOND[role][bi]),well:vsT(FM_WELL[rsLvl(rd.health)]),bi};}
+function fmStoryHTML(ch,r,rd){const f=fmParts(ch,r,rd),row=(ic,k,t,c)=>`<div class="fmrow ${c||''}"><h4>${ic} ${T(k)}</h4><p>${t}</p></div>`;
+ return `<section class="blk fmstory">${row('🧑','fmWho',f.who)}${row('🧭','fmLife',f.life)}${row('🔗','fmRole',f.role)}${row('🤝','fmBond',f.bond,['good','','care'][f.bi])}${row('🩺','fmWell',f.well)}</section>`;}
+// "You & your family": plain-language cards, old technical text in a collapsed block
+if(NEWT.family){const _famOld=renderFamily;NEWT.family=function(ch){let h='';try{h=parBox(T('fmSelf'),parSelf(ch));}catch(e){}
+ h+=`<h3 class="v18h">${T('fmFamT')}</h3><p class="note v18n">${T('fmFamN')}</p>`;
+ RS.forEach(r=>{const rd=rsRead(ch,r),f=fmParts(ch,r,rd),first=f.who.split(/(?<=[।.])\s/)[0];const old=REL.find(x=>x[0]===r[0]);let tech='';try{if(old)tech=parRelative(ch,old);}catch(e){}
+  h+=`<section class="blk fmcard"><h3>${vsT(r[5])} <span class="rslv l${rd.lv}" title="${T('rsOverall')}">${T('rsOverall')}: ${T('rsLv')[rd.lv]}</span></h3><p>${first} ${f.life}</p><p>${f.role} ${f.bond}</p>`
+   +(tech?vsDet('📐 '+T('fmBasis'),`<p class="note">${tech}</p>`,false):'')+`<p><button class="ghost" data-rsgo="${r[0]}">${T('fmMore')} →</button></p></section>`;});
+ return h+`<p><button class="btn" data-go="rishta">👪 ${T('t_rishta')} →</button></p>`;};}
+document.addEventListener('click',e=>{const b=e.target.closest('button[data-rsgo]');if(!b)return;S.rsk=b.dataset.rsgo;S.rsc=null;S.tab='rishta';S.mode='kundali';S.screen='app';renderAll();window.scrollTo(0,0);});
+(function(){const st=document.createElement('style');st.textContent=`.fmstory .fmrow{padding:10px 0;border-top:1px solid var(--line)}.fmstory .fmrow:first-child{border-top:0;padding-top:0}
+.fmrow h4{margin:0 0 4px;font:600 15px var(--serif)}.fmrow p{margin:0;line-height:1.6}.fmrow.good h4{color:var(--good)}.fmrow.care h4{color:var(--kum)}
+.fmcard h3{display:flex;justify-content:space-between;align-items:center;gap:8px}.fmcard p{line-height:1.6}.fmbasis summary{font-weight:600}`;document.head.appendChild(st);})();
 
 </script>
 <nav id="bnav" aria-label="Main"></nav>
