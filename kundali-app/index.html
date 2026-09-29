@@ -5766,6 +5766,165 @@ const _renderSamasyaV=renderSamasya;renderSamasya=function(ch){let h=_renderSama
 NEWT.samasya=renderSamasya;
 if(NEWT.career){const _car=NEWT.career;NEWT.career=function(ch){let a='';try{a=vpzLivelihood(ch);}catch(e){}return _car(ch)+a;};}
 
+// ===== v17.4 data: Rog Vichar (health tendencies) — classical body map (Kalapurusha), planet body-systems, preventive care. Text written for this app. =====
+// Kalapurusha: house n / sign n-1 governs these body parts
+const ROG_BODY=[
+ ['head, brain, face and headaches','सिर, मस्तिष्क, चेहरा और सिरदर्द'],
+ ['eyes, teeth, mouth, throat and face','आँखें, दाँत, मुख, गला और चेहरा'],
+ ['neck, shoulders, arms, ears and breathing','गर्दन, कंधे, भुजाएँ, कान और श्वास'],
+ ['chest, heart, lungs and emotional peace','छाती, हृदय, फेफड़े और मानसिक सुख'],
+ ['stomach, liver, upper abdomen and heart','पेट, यकृत (लिवर), ऊपरी उदर और हृदय'],
+ ['intestines, digestion, infections and immunity','आँतें, पाचन, संक्रमण और रोग-प्रतिरोधक क्षमता'],
+ ['kidneys, lower back, bladder and urinary system','गुर्दे, कमर का निचला भाग, मूत्राशय और मूत्र तंत्र'],
+ ['reproductive and excretory organs, piles and chronic trouble','प्रजनन व उत्सर्जन अंग, बवासीर और पुराने रोग'],
+ ['hips, thighs, liver and arteries','कूल्हे, जाँघें, यकृत और धमनियाँ'],
+ ['knees, joints, bones and skin','घुटने, जोड़, हड्डियाँ और त्वचा'],
+ ['calves, ankles, circulation and left ear','पिंडलियाँ, टखने, रक्त संचार और बायाँ कान'],
+ ['feet, sleep, left eye and hospital stays','पैर, नींद, बायीं आँख और अस्पताल']];
+// Planet → body systems, preventive check-ups, lifestyle care
+const ROG_PL=[
+ {s:['heart, bones, eyes, vitality and blood pressure','हृदय, हड्डियाँ, आँखें, जीवनशक्ति और रक्तचाप'],
+  c:['BP, eye check-up, heart check (ECG) after 40','बीपी, आँखों की जाँच, 40 के बाद हृदय जाँच (ईसीजी)'],
+  l:['Get morning sunlight, do Surya Namaskar, don\'t skip breakfast, avoid working in anger and excess heat.','सुबह की धूप लें, सूर्य नमस्कार करें, नाश्ता न छोड़ें, गुस्से और अधिक गर्मी में काम करने से बचें।']},
+ {s:['mind, sleep, body fluids, chest and hormones','मन, नींद, शरीर के तरल, छाती और हार्मोन'],
+  c:['thyroid, haemoglobin; for women hormonal check-up','थायरॉइड, हीमोग्लोबिन; महिलाओं के लिए हार्मोन जाँच'],
+  l:['Sleep on time, drink enough water, avoid cold/stale food at night, keep 10 minutes for meditation.','समय पर सोएँ, पर्याप्त पानी पिएँ, रात में ठंडा/बासी भोजन न लें, 10 मिनट ध्यान करें।']},
+ {s:['blood, muscles, inflammation, fevers, injuries and surgery','रक्त, मांसपेशियाँ, सूजन, बुखार, चोट और शल्यक्रिया'],
+  c:['blood count (CBC), BP, blood sugar','रक्त जाँच (सीबीसी), बीपी, ब्लड शुगर'],
+  l:['Drive and handle tools carefully, exercise regularly to use extra energy, reduce spicy/fried food and anger.','वाहन और औज़ार सावधानी से चलाएँ, अतिरिक्त ऊर्जा के लिए नियमित व्यायाम करें, तीखा/तला भोजन और क्रोध कम करें।']},
+ {s:['nerves, skin, speech, breathing and allergies','नसें, त्वचा, वाणी, श्वास और एलर्जी'],
+  c:['skin and allergy check, lung function if breathless','त्वचा व एलर्जी जाँच, साँस फूले तो फेफड़ों की जाँच'],
+  l:['Do pranayama daily, limit screen time, keep the skin clean, avoid overthinking and irregular meals.','रोज़ प्राणायाम करें, स्क्रीन समय कम करें, त्वचा साफ़ रखें, अधिक सोचने और अनियमित भोजन से बचें।']},
+ {s:['liver, fat, blood sugar, cholesterol and ears','यकृत, चर्बी, ब्लड शुगर, कोलेस्ट्रॉल और कान'],
+  c:['blood sugar (HbA1c), lipid profile, liver function test','ब्लड शुगर (HbA1c), लिपिड प्रोफ़ाइल, लिवर फ़ंक्शन टेस्ट'],
+  l:['Control weight, reduce sweets and ghee-heavy food, walk daily, avoid overeating at functions.','वज़न नियंत्रित रखें, मिठाई और अधिक घी वाला भोजन कम करें, रोज़ टहलें, समारोहों में अधिक भोजन से बचें।']},
+ {s:['kidneys, reproductive system, hormones, sugar and throat','गुर्दे, प्रजनन तंत्र, हार्मोन, शुगर और गला'],
+  c:['kidney function and urine test, blood sugar, hormone check','किडनी फ़ंक्शन व मूत्र जाँच, ब्लड शुगर, हार्मोन जाँच'],
+  l:['Drink enough water, keep moderation in pleasures, sweets and late nights, maintain hygiene.','पर्याप्त पानी पिएँ, भोग, मिठाई और देर रात जागने में संयम रखें, स्वच्छता रखें।']},
+ {s:['joints, bones, teeth, nerves, gas and long-term illness','जोड़, हड्डियाँ, दाँत, नसें, गैस और लंबे चलने वाले रोग'],
+  c:['vitamin D and B12, bone and dental check-up, joint check','विटामिन डी व बी12, हड्डी व दाँतों की जाँच, जोड़ों की जाँच'],
+  l:['Stretch daily, keep a fixed routine, sit with good posture, don\'t ignore small pains, avoid cold and dry food.','रोज़ स्ट्रेचिंग करें, नियमित दिनचर्या रखें, सही मुद्रा में बैठें, छोटे दर्द को अनदेखा न करें, ठंडा और रूखा भोजन कम करें।']},
+ {s:['unclear symptoms, allergies, infections, anxiety and addictions','अस्पष्ट लक्षण, एलर्जी, संक्रमण, चिंता और नशे की आदत'],
+  c:['a second opinion when symptoms are unclear; allergy and infection tests','लक्षण अस्पष्ट हों तो दूसरे डॉक्टर की राय; एलर्जी व संक्रमण जाँच'],
+  l:['Stay away from alcohol, tobacco and self-medication; keep food and water clean; don\'t believe online fear.','शराब, तंबाकू और अपने आप दवा लेने से दूर रहें; भोजन-पानी साफ़ रखें; इंटरनेट पर पढ़कर डरें नहीं।']},
+ {s:['hidden problems, viral infections, skin, cuts and sudden fevers','छिपी समस्याएँ, वायरल संक्रमण, त्वचा, कटना और अचानक बुखार'],
+  c:['don\'t delay tests if a problem keeps returning','बार-बार लौटने वाली समस्या में जाँच टालें नहीं'],
+  l:['Keep wounds clean, be careful with sharp objects, and include light fasting and yoga in your routine.','घाव साफ़ रखें, धारदार वस्तुओं से सावधान रहें, दिनचर्या में हल्का उपवास और योग रखें।']}];
+// Nature of the 6th house by element → type of illness tendency
+const ROG_6EL=[
+ ['heat-related: fever, acidity, inflammation, BP','गर्मी से जुड़ी: बुखार, एसिडिटी, सूजन, बीपी'],
+ ['slow and digestive: constipation, weight, sugar, long-running trouble','धीमी व पाचन से जुड़ी: कब्ज़, वज़न, शुगर, लंबी चलने वाली परेशानी'],
+ ['nervous and breathing: gas, nerves, cough, anxiety, sleeplessness','नस व श्वास से जुड़ी: गैस, नसें, खाँसी, चिंता, अनिद्रा'],
+ ['fluid and cold: cold-cough, water retention, infections, emotional stress','तरल व ठंड से जुड़ी: सर्दी-खाँसी, सूजन (पानी रुकना), संक्रमण, भावनात्मक तनाव']];
+// Constitution (prakriti) from dominant dosha
+const ROG_DOSHA=[
+ {n:['Pitta (fire)','पित्त (अग्नि)'],t:['Sharp digestion and energy; prone to acidity, heat, skin rashes, anger and BP.','तेज़ पाचन और ऊर्जा; एसिडिटी, गर्मी, त्वचा पर दाने, क्रोध और बीपी की प्रवृत्ति।'],
+  d:['Prefer cooling food (buttermilk, fruits, green vegetables); limit chilli, fried food and tea; rest in the afternoon heat.','ठंडक देने वाला भोजन (छाछ, फल, हरी सब्ज़ियाँ) लें; मिर्च, तला भोजन और चाय कम करें; दोपहर की गर्मी में आराम करें।']},
+ {n:['Vata (air)','वात (वायु)'],t:['Quick and active but tires easily; prone to gas, joint pain, dryness, anxiety and poor sleep.','तेज़ और सक्रिय पर जल्दी थकान; गैस, जोड़ों का दर्द, रूखापन, चिंता और कम नींद की प्रवृत्ति।'],
+  d:['Eat warm, fresh and oily-moist food at fixed times; oil massage; avoid cold drinks, fasting too long and late nights.','गर्म, ताज़ा और स्निग्ध भोजन तय समय पर लें; तेल मालिश करें; ठंडे पेय, लंबा उपवास और देर रात जागने से बचें।']},
+ {n:['Kapha (water)','कफ (जल)'],t:['Strong stamina and calm nature; prone to weight gain, cold-cough, sugar and laziness.','अच्छी सहनशक्ति और शांत स्वभाव; वज़न बढ़ना, सर्दी-खाँसी, शुगर और आलस्य की प्रवृत्ति।'],
+  d:['Light, warm and less sweet food; daily brisk exercise; avoid day-sleep, heavy dinner and cold dairy at night.','हल्का, गर्म और कम मीठा भोजन; रोज़ तेज़ व्यायाम; दिन में सोना, भारी रात्रि भोजन और रात में ठंडा दूध-दही न लें।']}];
+// Planet → dosha (0 pitta, 1 vata, 2 kapha); Mercury splits
+const ROG_PDOSHA=[[0],[2],[0],[0,1,2],[2],[2,1],[1],[1],[0]];
+
+// ===== v17.4: Rog Vichar — health tendencies & prevention (Kalapurusha body map, planet systems, 6th/8th lords, dosha, dasha & transit timing) =====
+Object.assign(I18N.en,{t_rog:'Disease tendencies',rgT:'Health care — know early, stay protected',rgIntro:'Astrology shows tendencies, not a diagnosis. This page reads the whole chart to show which parts of the body and which systems need extra care, what kind of routine suits you, and which periods need caution — so you can take care in advance.',
+ rgVital:'Overall vitality',rgVs:'Strong — good resistance; keep the routine and it stays that way.',rgVm:'Average — health stays good with a regular routine and yearly check-ups.',rgVw:'Needs care — the body is sensitive; prevention and regular check-ups matter more for you.',
+ rgPrak:'Body constitution (prakriti)',rgPrakN:'Main: {a}; secondary: {b}',rgZones:'Body parts that need extra care',rgZonesN:'No body part stands out as especially sensitive — general care is enough.',
+ rgPl:'Systems to watch (by planet)',rgPlN:'No planet is badly afflicted — keep the general routine.',rgCheck:'Check-up',rgCare:'Care',rgNature:'Nature of illness if it comes',rg6:'6th house (disease) is in {s}: {t}',rg6L:'6th lord {p} is in the {h} house — trouble tends to show in: {b}',
+ rgMind:'Mind and sleep',rgMindT:'The Moon is under pressure ({r}) — stress quickly affects sleep, digestion and BP. Keep a fixed sleep time, meditate, and talk to someone you trust when worried.',
+ rgAcc:'Injury and accidents',rgAccT:'Mars is linked with {r} — be careful while driving, with fire, electricity and sharp tools; avoid haste and anger.',
+ rgNow:'Current period',rgNowT:'Running dasha: {md} / {ad}. ',rgNowBad:'This period activates houses of illness ({h}) — give extra attention to: {s}.',rgNowOk:'The running dasha does not strongly activate illness houses — a good time to build healthy habits.',
+ rgWhen:'Health outlook — next 36 months',rgCaution:'Months needing caution (get check-ups, avoid risk)',rgGood:'Good months for treatment, surgery by choice or starting a fitness plan',rgNoCaution:'No strongly difficult month in this period.',
+ rgList:'Your yearly check-up list',rgDisc:'This is only astrological guidance on tendencies. It does not diagnose disease or replace a doctor. If you have symptoms, see a qualified doctor; never stop medicine because of astrology.',
+ rgR_mal:'{p} in it',rgR_asp:'aspect of {p}',rgR_lord:'its lord {p} is weak',rgR_dl:'{p} (lord of 6/8) sits here',rgR_sgn:'{p} in the matching sign {s}',rgR_sav:'low ashtakavarga',
+ rgP_deb:'debilitated',rgP_comb:'combust',rgP_dust:'in 6/8/12',rgP_mal:'with {p}',rgP_dl:'lord of the {h}',rgP_low:'low shadbala',
+ rgCardT:'Disease tendencies — stay protected',rgCardS:'Which body parts need care, what routine suits you, and when to be careful.',rgSmLink:'Full health reading'});
+Object.assign(I18N.hi,{t_rog:'रोग विचार',rgT:'स्वास्थ्य सावधानी — पहले जानें, सुरक्षित रहें',rgIntro:'ज्योतिष प्रवृत्ति बताता है, रोग का निदान नहीं। यह पृष्ठ पूरी कुंडली देखकर बताता है कि शरीर के किन अंगों और तंत्रों पर अधिक ध्यान चाहिए, कैसी दिनचर्या आपके अनुकूल है, और कौन-सा समय सावधानी का है — ताकि आप पहले से ध्यान रख सकें।',
+ rgVital:'कुल जीवनशक्ति',rgVs:'मज़बूत — अच्छी रोग प्रतिरोधक क्षमता; दिनचर्या बनाए रखें तो ऐसी ही रहेगी।',rgVm:'सामान्य — नियमित दिनचर्या और वार्षिक जाँच से स्वास्थ्य अच्छा रहेगा।',rgVw:'ध्यान चाहिए — शरीर संवेदनशील है; आपके लिए बचाव और नियमित जाँच अधिक ज़रूरी है।',
+ rgPrak:'शारीरिक प्रकृति',rgPrakN:'मुख्य: {a}; सहायक: {b}',rgZones:'शरीर के अंग जिन पर अधिक ध्यान चाहिए',rgZonesN:'कोई अंग विशेष रूप से संवेदनशील नहीं दिखता — सामान्य देखभाल पर्याप्त है।',
+ rgPl:'ग्रह अनुसार किन तंत्रों पर ध्यान दें',rgPlN:'कोई ग्रह बहुत पीड़ित नहीं है — सामान्य दिनचर्या रखें।',rgCheck:'जाँच',rgCare:'देखभाल',rgNature:'रोग आए तो उसकी प्रकृति',rg6:'छठा भाव (रोग) {s} राशि में है: {t}',rg6L:'षष्ठेश {p} {h} भाव में है — परेशानी प्रायः यहाँ दिखती है: {b}',
+ rgMind:'मन और नींद',rgMindT:'चंद्रमा दबाव में है ({r}) — तनाव जल्दी नींद, पाचन और बीपी पर असर करता है। सोने का समय तय रखें, ध्यान करें, और चिंता हो तो किसी भरोसेमंद व्यक्ति से बात करें।',
+ rgAcc:'चोट और दुर्घटना',rgAccT:'मंगल {r} से जुड़ा है — वाहन चलाते समय, आग, बिजली और धारदार औज़ारों से सावधान रहें; जल्दबाज़ी और क्रोध से बचें।',
+ rgNow:'वर्तमान समय',rgNowT:'चल रही दशा: {md} / {ad}। ',rgNowBad:'यह दशा रोग भावों ({h}) को सक्रिय करती है — इन पर विशेष ध्यान दें: {s}।',rgNowOk:'चल रही दशा रोग भावों को अधिक सक्रिय नहीं करती — अच्छी आदतें बनाने का अच्छा समय है।',
+ rgWhen:'स्वास्थ्य का समय — अगले 36 महीने',rgCaution:'सावधानी के महीने (जाँच कराएँ, जोखिम से बचें)',rgGood:'इलाज, अपनी इच्छा से ऑपरेशन या फ़िटनेस शुरू करने के अच्छे महीने',rgNoCaution:'इस अवधि में कोई बहुत कठिन महीना नहीं।',
+ rgList:'आपकी वार्षिक जाँच सूची',rgDisc:'यह केवल प्रवृत्ति पर आधारित ज्योतिषीय मार्गदर्शन है। यह रोग का निदान नहीं करता और डॉक्टर का विकल्प नहीं है। कोई लक्षण हो तो योग्य डॉक्टर को दिखाएँ; ज्योतिष के कारण कभी दवा बंद न करें।',
+ rgR_mal:'इसमें {p}',rgR_asp:'{p} की दृष्टि',rgR_lord:'स्वामी {p} कमज़ोर',rgR_dl:'{p} (6/8 का स्वामी) यहाँ',rgR_sgn:'संबंधित राशि {s} में {p}',rgR_sav:'अष्टकवर्ग कम',
+ rgP_deb:'नीच',rgP_comb:'अस्त',rgP_dust:'6/8/12 में',rgP_mal:'{p} के साथ',rgP_dl:'{h} भाव का स्वामी',rgP_low:'षड्बल कम',
+ rgCardT:'रोग विचार — बीमारी से बचाव',rgCardS:'किन अंगों पर ध्यान दें, कैसी दिनचर्या रखें, और कब सावधान रहें।',rgSmLink:'पूरा स्वास्थ्य विचार'});
+const RG_MAL=[2,6,7,8];
+function rgF(k,o){return T(k).replace(/\{(\w+)\}/g,(_,x)=>o[x]??'');}
+function rgHo(h){return hiV()?HO[h]:HOUSE_ORD(h);}
+function HOUSE_ORD(h){return h+(['th','st','nd','rd'][(h%100>10&&h%100<14)?0:(h%10<4?h%10:0)]);}
+function rgZones(ch){const P=ch.planets,L1=lordOf(ch,1),dl=[...new Set([lordOf(ch,6),lordOf(ch,8)])].filter(x=>x!==L1);const out=[];
+ for(let z=1;z<=12;z++){const hs=smHouse(ch,z);let v=-hs.v;const r=[];
+  P.forEach(p=>{if(p.house===z&&RG_MAL.includes(p.i)&&!['exalted','own','mt'].includes(p.dign))r.push(rgF('rgR_mal',{p:pn(p.i)}));});
+  P.forEach(p=>{if(p.house!==z&&[2,6].includes(p.i)&&aspectsHouse(ch,p.i,z))r.push(rgF('rgR_asp',{p:pn(p.i)}));});
+  if(hs.why.some(w=>['smLordDust','smLordDeb','smLordComb'].includes(w.k)))r.push(rgF('rgR_lord',{p:pn(hs.L)}));
+  if(hs.why.some(w=>w.k==='smSav'))r.push(T('rgR_sav'));
+  dl.forEach(d=>{if(P[d].house===z&&!(OWN[d]&&OWN[d].includes(P[d].sign))){v+=0.6;r.push(rgF('rgR_dl',{p:pn(d)}));}});
+  P.forEach(p=>{if(p.sign===z-1&&RG_MAL.includes(p.i)&&!['exalted','own','mt'].includes(p.dign)){v+=0.4;if(p.house!==z)r.push(rgF('rgR_sgn',{p:pn(p.i),s:sn(z-1)}));}});
+  if(P[4].house===z||aspectsHouse(ch,4,z))v-=0.4;
+  out.push({z,v,r});}
+ return out.filter(x=>x.v>=1.6&&x.r.length).sort((a,b)=>b.v-a.v).slice(0,4);}
+function rgPlanets(ch){const P=ch.planets,L1=lordOf(ch,1),out=[];
+ for(let i=0;i<9;i++){const p=P[i],sp=smPlanet(ch,i);let v=-sp.v;const r=[];
+  if(sp.n.includes('deb'))r.push(T('rgP_deb'));if(sp.n.includes('comb'))r.push(T('rgP_comb'));if(sp.n.includes('dust'))r.push(T('rgP_dust'));if(sp.n.includes('low'))r.push(T('rgP_low'));
+  const w=P.filter(q=>q.i!==i&&q.sign===p.sign&&RG_MAL.includes(q.i));if(w.length){v+=0.6*w.length;r.push(rgF('rgP_mal',{p:w.map(q=>pn(q.i)).join(', ')}));}
+  if(i<7&&i!==L1){const hs=[6,8].filter(h=>lordOf(ch,h)===i);if(hs.length){v+=0.5;r.push(rgF('rgP_dl',{h:hs.map(rgHo).join(hiV()?' व ':' & ')}));}}
+  if(i>=7){if([1,6,8,12].includes(p.house)){v+=0.8;}if(P[0].sign===p.sign||P[1].sign===p.sign)v+=0.6;}
+  if(aspectsHouse(ch,4,p.house)||(i!==4&&P[4].sign===p.sign))v-=0.5;
+  if(r.length||i>=7)out.push({i,v,r});}
+ return out.filter(x=>x.v>=1.3&&x.r.length).sort((a,b)=>b.v-a.v).slice(0,3);}
+function rgDosha(ch){const sc=[0,0,0],P=ch.planets,el=(s,w)=>{const e=s%4;if(e===1){sc[1]+=w/2;sc[2]+=w/2;}else sc[[0,0,1,2][e]]+=w;};
+ el(ch.lagna,2);el(P[1].sign,1.5);el(P[lordOf(ch,1)].sign,1);
+ ROG_PDOSHA[lordOf(ch,1)].forEach(d=>sc[d]+=1/ROG_PDOSHA[lordOf(ch,1)].length);
+ P.filter(p=>p.house===1).forEach(p=>ROG_PDOSHA[p.i].forEach(d=>sc[d]+=0.8/ROG_PDOSHA[p.i].length));
+ const o=[0,1,2].sort((a,b)=>sc[b]-sc[a]);return o;}
+function rgFlags(ch){const P=ch.planets,f=[];
+ const m=P[1],mr=[];P.forEach(p=>{if([6,7,8].includes(p.i)&&p.sign===m.sign)mr.push(pn(p.i));});if([6,8,12].includes(m.house))mr.push(T('rgP_dust'));if(ch.tithi>=26||ch.tithi<=1)mr.push(hiV()?'क्षीण चंद्र':'weak (dark) Moon');
+ if(mr.length>=2||(mr.length&&smPlanet(ch,1).v<-0.5))f.push(['rgMind',rgF('rgMindT',{r:mr.join(', ')})]);
+ const ma=P[2],ar=P.filter(p=>[6,7,8].includes(p.i)&&p.sign===ma.sign).map(p=>pn(p.i));if(ma.house===8)ar.push(hiV()?'आठवें भाव':'the 8th house');
+ if(ar.length)f.push(['rgAcc',rgF('rgAccT',{r:ar.join(', ')})]);return f;}
+function rgNature(ch){const s6=(ch.lagna+5)%12,L6=lordOf(ch,6),h=ch.planets[L6].house;
+ return `<ul class="fx vsfx"><li><b>•</b> ${rgF('rg6',{s:sn(s6),t:vsT(ROG_6EL[s6%4])})}</li><li><b>•</b> ${rgF('rg6L',{p:pn(L6),h:rgHo(h),b:vsT(ROG_BODY[h-1])})}</li></ul>`;}
+function rgNow(ch){const da=dashaAt(ch,julianNow());if(!da)return '';const ls=[da.md.lord,da.ad.lord];
+ const hs=[...new Set(ls.flatMap(L=>sigThru(ch,L).filter(h=>[6,8,12].includes(h))))].sort((a,b)=>a-b);
+ const bad=ls.filter(L=>{const s=sigThru(ch,L);return s.filter(h=>[6,8,12].includes(h)).length>=2&&!s.includes(1)&&!s.includes(11)||smPlanet(ch,L).v<-1.5;});
+ let t=rgF('rgNowT',{md:pn(da.md.lord),ad:pn(da.ad.lord)});
+ t+=bad.length?rgF('rgNowBad',{h:hs.join(', '),s:[...new Set(bad)].map(L=>`${pn(L)} — ${vsT(ROG_PL[L].s)}`).join('; ')}):T('rgNowOk');return {t,bad:[...new Set(bad)]};}
+function rgTimeline(ch){const P=SAM_P.find(x=>x.k==='health');if(!P)return '';const cache=new Map(),nat=smNatal(ch,P),tl=smTimeline(ch,P,cache,nat.v);
+ const lab=m=>{const d=jdToDate(m.jd,ch.inp.tz);return `${L(MON)[d.m-1]} ${d.y}`;};
+ let cau=tl.filter(m=>smSev(m.a)==='high');if(!cau.length)cau=tl.filter(m=>smSev(m.a)==='med').sort((a,b)=>b.a-a.a).slice(0,4).sort((a,b)=>a.jd-b.jd);
+ const good=tl.map((m,q)=>({m,q})).filter(x=>x.q>0).sort((a,b)=>a.m.a-b.m.a).slice(0,3).sort((a,b)=>a.q-b.q).map(x=>lab(x.m));
+ const idx=cau.map(m=>tl.indexOf(m)),rg=[];idx.forEach(q=>{const last=rg[rg.length-1];if(last&&q===last[1]+1)last[1]=q;else rg.push([q,q]);});
+ return `${smBars(tl)}<p><b>${T('rgCaution')}:</b> ${rg.length?rg.map(([a,b])=>a===b?lab(tl[a]):`${lab(tl[a])} – ${lab(tl[b])}`).join(', '):T('rgNoCaution')}</p><p><b>${T('rgGood')}:</b> ${good.join(', ')}</p>`;}
+function rgVital(ch){let v=smHouse(ch,1).v+0.5*(smPlanet(ch,0).v+smPlanet(ch,1).v);try{vpzHealth(ch).forEach(y=>v+=0.4*y.s);}catch(e){}return v>=2?'rgVs':v<=-0.5?'rgVw':'rgVm';}
+function renderRog(ch){const zs=rgZones(ch),ps=rgPlanets(ch),d=rgDosha(ch),vt=rgVital(ch),fl=rgFlags(ch),nw=rgNow(ch);
+ const D=ROG_DOSHA;let h=`<div class="pagehead"><h2>${T('t_rog')}</h2></div><p class="note">${T('rgIntro')}</p>`;
+ h+=`<section class="blk rgsum ${vt}"><h3>🩺 ${T('rgVital')}</h3><p>${T(vt)}</p><h4>${T('rgPrak')}</h4><p><b>${rgF('rgPrakN',{a:vsT(D[d[0]].n),b:vsT(D[d[1]].n)})}</b></p><p>${vsT(D[d[0]].t)}</p><p><b>${T('rgCare')}:</b> ${vsT(D[d[0]].d)}</p></section>`;
+ h+=`<section class="blk"><h3>${T('rgZones')}</h3>${zs.length?`<ul class="fx vsfx">${zs.map(x=>`<li><b>•</b> <span class="vsp">${vsT(ROG_BODY[x.z-1])}</span> <span class="note">(${hiV()?`${HO[x.z]} भाव`:`house ${x.z}`}: ${x.r.slice(0,3).join(', ')})</span></li>`).join('')}</ul>`:`<p>${T('rgZonesN')}</p>`}</section>`;
+ h+=`<section class="blk"><h3>${T('rgPl')}</h3>${ps.length?ps.map((x,ix)=>vsDet(`<span class="vsp">${pn(x.i)} — ${vsT(ROG_PL[x.i].s)}</span>`,`<p class="note">${x.r.join(', ')}</p><p><b>${T('rgCheck')}:</b> ${vsT(ROG_PL[x.i].c)}</p><p><b>${T('rgCare')}:</b> ${vsT(ROG_PL[x.i].l)}</p>`,ix===0)).join(''):`<p>${T('rgPlN')}</p>`}</section>`;
+ h+=`<section class="blk"><h3>${T('rgNature')}</h3>${rgNature(ch)}${fl.map(([k,t])=>`<h4>${T(k)}</h4><p>${t}</p>`).join('')}</section>`;
+ let jp='';try{const ys=vpzHealth(ch);if(ys.length)jp=`<section class="blk"><h3>${T('vpzHealthRule')}</h3><ul class="fx vsfx">${ys.map(y=>`<li class="${y.s>0?'pos':''}"><b>${y.s>0?'✓':'•'}</b> ${T(y.k)}</li>`).join('')}</ul><p class="note">${T('vpzSrc')}</p></section>`;}catch(e){}
+ h+=jp;
+ h+=`<section class="blk"><h3>${T('rgNow')}</h3><p>${nw.t||''}</p><h4>${T('rgWhen')}</h4>${rgTimeline(ch)}</section>`;
+ const cl=[...new Set([...ps.map(x=>x.i),...(nw.bad||[])])];const items=cl.map(i=>`<li><b>☐</b> ${vsT(ROG_PL[i].c)}</li>`);
+ items.push(`<li><b>☐</b> ${hiV()?'सामान्य: रक्त जाँच (सीबीसी), ब्लड शुगर, बीपी — साल में एक बार':'General: blood count (CBC), blood sugar, BP — once a year'}</li>`);
+ h+=`<section class="blk"><h3>${T('rgList')}</h3><ul class="fx vsfx">${items.join('')}</ul></section>`;
+ return h+`<p class="note">${T('rgDisc')}</p>`;}
+NEWT.rog=renderRog;
+(function(){const l=CATS.find(c=>c[0]==='life');if(l&&!l[1].includes('rog')){const k=l[1].indexOf('career');l[1].splice(k>=0?k+1:l[1].length,0,'rog');}if(!TABS.includes('rog'))TABS.push('rog');})();
+// Samasya health card: short pointer to the full page
+const _renderSamasyaR=renderSamasya;renderSamasya=function(ch){let h=_renderSamasyaR(ch);if(!(S.sam||[]).includes('health'))return h;let add='';
+ try{const zs=rgZones(ch).slice(0,3);add=`<section class="blk"><h3>🩺 ${T('rgZones')}</h3><p>${zs.length?zs.map(x=>vsT(ROG_BODY[x.z-1])).join('; '):T('rgZonesN')}</p><button class="btn" data-go="rog">${T('rgSmLink')} →</button></section>`;}catch(e){}
+ const k=h.lastIndexOf('<p class="note">'+T('smDisc'));return k>=0?h.slice(0,k)+add+h.slice(k):h+add;};
+NEWT.samasya=renderSamasya;
+// entry points: Simple-mode home and More hub
+if(NEWT.s_home){const _shR=NEWT.s_home;NEWT.s_home=function(ch){const h=_shR(ch),c=`<section class="blk smentry rgentry"><h3>🩺 ${T('rgCardT')}</h3><p class="note">${T('rgCardS')}</p><button class="btn" data-go="rog">${T('t_rog')} →</button></section>`;const k=h.indexOf('</section>');return k>=0?h.slice(0,k+10)+c+h.slice(k+10):c+h;};}
+const _moreHubR=moreHub;moreHub=function(){const h=_moreHubR();if(!S.ch)return h;const t=`<button class="tile wide1" data-go="rog"><i>🩺</i>${T('t_rog')}</button>`;const k=h.indexOf('<div class="sgrid2">');return k>=0?h.slice(0,k+20)+t+h.slice(k+20):h;};
+(function(){const st=document.createElement('style');st.textContent=`.rgsum{border-left:5px solid var(--hal)}.rgsum.rgVs{border-left-color:var(--good)}.rgsum.rgVw{border-left-color:var(--kum)}.rgsum h4{margin:12px 0 4px;font:600 15px var(--serif)}.rgentry{border-left-color:var(--good)}`;document.head.appendChild(st);})();
+
 </script>
 <nav id="bnav" aria-label="Main"></nav>
 </body></html>
