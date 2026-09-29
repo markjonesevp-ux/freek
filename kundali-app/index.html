@@ -5658,6 +5658,60 @@ function katForProblem(ch,P){const fs=SM_KATF[P.k]||[];let items='';
 const _smRemediesK=smRemedies;smRemedies=function(ch,P,act){let k='';try{k=katForProblem(ch,P);}catch(e){}return _smRemediesK(ch,P,act)+k;};
 (function(){const st=document.createElement('style');st.textContent=`.katf{font-weight:700;color:var(--ink2)}@media (prefers-color-scheme:dark){:root:not([data-theme="light"]) .katf{color:var(--hal)}}`;document.head.appendChild(st);})();
 
+// ===== KAT extension: rules derived from the KAT principle (not in the book) — marked as app rules =====
+// Mars = deha (body): health & energy; Sun = atma: soul, father, authority
+KAT_F[2]={
+ 0:[['Strong vitality and willpower; heat, blood pressure and burn-out when overworked.','प्रबल जीवनशक्ति और इच्छाशक्ति; अधिक काम से गर्मी, रक्तचाप और थकावट।'],['Morning exercise in sunlight; avoid working in anger or skipping meals.','धूप में सुबह व्यायाम करें; गुस्से में काम करने या भोजन छोड़ने से बचें।']],
+ 1:[['Body reacts to emotions — anxiety shows as acidity, BP or poor sleep.','शरीर भावनाओं पर प्रतिक्रिया करता है — चिंता एसिडिटी, बीपी या खराब नींद के रूप में दिखती है।'],['Pair exercise with calming practice: a walk or swim followed by pranayama.','व्यायाम के साथ शांत करने वाला अभ्यास जोड़ें: टहलना या तैरना और फिर प्राणायाम।']],
+ 3:[['Nervous energy; hands, skin and nerves need care.','तंत्रिका ऊर्जा; हाथ, त्वचा और नसों का ध्यान रखें।'],['Sports that need skill (badminton, table tennis) and breathing exercises suit you.','कौशल वाले खेल (बैडमिंटन, टेबल टेनिस) और श्वास व्यायाम आपके अनुकूल हैं।']],
+ 4:[['Body protected by grace; weight, liver and sugar need watching.','कृपा से सुरक्षित शरीर; वज़न, यकृत और शुगर पर नज़र रखें।'],['Yoga with discipline and a moderate diet; serve your teachers.','अनुशासन के साथ योग और संयमित आहार; गुरुजनों की सेवा करें।']],
+ 5:[['Good physique and stamina; indulgence harms kidneys, sugar and hormones.','अच्छा शरीर और सहनशक्ति; भोग-विलास गुर्दे, शुगर और हार्मोन को नुकसान करता है।'],['Dance, sports or gym for fitness; moderation in food and pleasures.','फ़िटनेस के लिए नृत्य, खेल या जिम; भोजन और भोग में संयम।']],
+ 6:[['Chronic stiffness, joints, bones or old injuries; slow recovery.','पुरानी जकड़न, जोड़, हड्डियाँ या पुरानी चोटें; धीमी रिकवरी।'],['Daily stretching and steady, slow exercise; sleep on a firm bed; serve labourers.','रोज़ स्ट्रेचिंग और धीमा, नियमित व्यायाम; सख्त बिस्तर पर सोएँ; श्रमिकों की सेवा करें।']],
+ 7:[['Risk of accidents, infections or hard-to-diagnose problems; restless energy.','दुर्घटना, संक्रमण या कठिन निदान वाली समस्याओं का जोखिम; बेचैन ऊर्जा।'],['Drive carefully, avoid intoxicants; get regular check-ups; worship Hanuman ji.','सावधानी से ड्राइव करें, नशे से बचें; नियमित जाँच कराएँ; हनुमान जी की पूजा करें।']],
+ 8:[['Sudden fevers, cuts or surgeries; strong healing ability.','अचानक ज्वर, कटना या शल्यक्रिया; प्रबल उपचार क्षमता।'],['Martial arts or yoga with focus; handle sharp tools with care; worship Lord Ganesha.','एकाग्रता के साथ युद्धकला या योग; धारदार औज़ार सावधानी से सँभालें; गणेश जी की पूजा करें।']]};
+KAT_F[0]={
+ 1:[['Soul and mind linked — the father travels or relocates; the mother may be authoritative.','आत्मा और मन जुड़े — पिता यात्रा या स्थान परिवर्तन करते हैं; माता अधिकारपूर्ण हो सकती हैं।'],['Keep family harmony; honour both parents equally.','पारिवारिक सामंजस्य रखें; माता-पिता दोनों का समान आदर करें।']],
+ 2:[['Courage and leadership; the father may be strong-willed or in technical/defence work.','साहस और नेतृत्व; पिता दृढ़ इच्छाशक्ति वाले या तकनीकी/रक्षा कार्य में हो सकते हैं।'],['Lead through action, not anger; physical discipline strengthens your standing.','क्रोध नहीं, कर्म से नेतृत्व करें; शारीरिक अनुशासन आपकी स्थिति मज़बूत करता है।']],
+ 3:[['Intelligence recognised by authority; you inherit the father\'s aptitude.','बुद्धि को अधिकारी पहचानते हैं; पिता की योग्यता विरासत में मिलती है।'],['Learn from your father\'s skills; administrative or advisory roles suit you.','पिता के कौशल से सीखें; प्रशासनिक या सलाहकार भूमिकाएँ उपयुक्त हैं।']],
+ 4:[['Divine grace and protection; fame through the father\'s good deeds.','ईश्वरीय कृपा और रक्षा; पिता के सत्कर्मों से यश।'],['Keep faith and ethics; offer water to the Sun and serve elders.','आस्था और नैतिकता रखें; सूर्य को जल दें और बड़ों की सेवा करें।']],
+ 5:[['Charm and recognition through arts; health and eyes need care with indulgence.','कला से आकर्षण और पहचान; भोग के साथ स्वास्थ्य और आँखों का ध्यान।'],['Avoid excess in pleasures; offer sweets made of flour to Lord Ram.','भोग में अति से बचें; आटे से बनी मिठाई भगवान राम को अर्पित करें।']],
+ 6:[['Friction with father or bosses; recognition comes late through hard work.','पिता या वरिष्ठों से घर्षण; परिश्रम से पहचान देर से मिलती है।'],['Serve your father and be patient with authority; government work through persistence.','पिता की सेवा करें और अधिकारियों के साथ धैर्य रखें; लगन से सरकारी कार्य।']],
+ 7:[['Trouble with authority, government or the father\'s wellbeing; ego confusion.','अधिकारियों, सरकार या पिता के स्वास्थ्य को लेकर परेशानी; अहं का भ्रम।'],['Keep all dealings with government clean; perform ancestral rites; offer water to the Sun.','सरकार से सभी व्यवहार स्वच्छ रखें; पितृ कर्म करें; सूर्य को जल दें।']],
+ 8:[['Detachment from status; spiritual or research path; the father may be distant.','पद से वैराग्य; आध्यात्मिक या शोध मार्ग; पिता दूर हो सकते हैं।'],['Serve without seeking credit; meditate at sunrise.','श्रेय की इच्छा के बिना सेवा करें; सूर्योदय पर ध्यान करें।']]};
+KAT_FOC.push([2,['Body, health & courage','शरीर, स्वास्थ्य व साहस']],[0,['Soul, father & authority','आत्मा, पिता व अधिकार']]);
+// Karaka keywords for generic dasha/transit lines
+const KAT_KW=[
+ ['authority, father, recognition','अधिकार, पिता, पहचान'],['mind, mother, public, travel','मन, माता, जनता, यात्रा'],['energy, courage, property, siblings','ऊर्जा, साहस, संपत्ति, भाई-बहन'],['learning, communication, trade','शिक्षा, संवाद, व्यापार'],
+ ['wisdom, teachers, growth','ज्ञान, गुरुजन, उन्नति'],['wealth, relationships, comforts, arts','धन, संबंध, सुख-सुविधा, कला'],['work, discipline, responsibility','कार्य, अनुशासन, ज़िम्मेदारी'],['ambition, foreign links, technology','महत्वाकांक्षा, विदेशी संपर्क, तकनीक'],['detachment, research, spirituality','वैराग्य, शोध, आध्यात्मिकता']];
+
+// ===== v17.2: rules derived from the KAT principle — Mars (body), Sun (soul/father), spouse karaka, dasha karma, transit activation =====
+Object.assign(I18N.en,{katApp:'✦ app rule (derived from the KAT principle)',katDashaT:'Karma for your running dasha',katDashaTxt:'{kw} — results come by combining it with',katDashaDo:'Put effort into',
+ katSpT:'Spouse & marriage (Nadi karaka: {p})',katSpTxt:'Your spouse and married life take on the qualities of {kw}.',katSpNone:'No planet links to the spouse karaka — marriage follows its own sign and house.',
+ katTrJ:'✦ Jupiter in transit is activating this area now — opportunities open; act and align now.',katTrS:'✦ Saturn in transit is testing this area now — take responsibility and stay patient.',katTrB:'✦ Both Jupiter and Saturn are touching this area in transit — a major phase of change with effort rewarded.'});
+Object.assign(I18N.hi,{katApp:'✦ ऐप नियम (KAT सिद्धांत से निकाला गया)',katDashaT:'चल रही दशा का कर्म',katDashaTxt:'{kw} — फल इनके साथ जोड़ने से आता है',katDashaDo:'प्रयास लगाएँ',
+ katSpT:'जीवनसाथी व विवाह (नाड़ी कारक: {p})',katSpTxt:'आपके जीवनसाथी और वैवाहिक जीवन में {kw} के गुण आते हैं।',katSpNone:'जीवनसाथी कारक से कोई ग्रह नहीं जुड़ा — विवाह अपनी राशि और भाव पर चलता है।',
+ katTrJ:'✦ गोचर का गुरु अभी इस क्षेत्र को सक्रिय कर रहा है — अवसर खुलते हैं; अभी कदम उठाएँ और संरेखित हों।',katTrS:'✦ गोचर का शनि अभी इस क्षेत्र की परीक्षा ले रहा है — ज़िम्मेदारी लें और धैर्य रखें।',katTrB:'✦ गुरु और शनि दोनों गोचर में इस क्षेत्र को छू रहे हैं — बड़े परिवर्तन का दौर, प्रयास का फल मिलेगा।'});
+const KAT_APPF=[2,0];
+const katKw=i=>vsT(KAT_KW[i]);
+function katSpouseK(ch){return (ch.inp.gender||'m')==='f'?2:5;}
+function katTransit(ch,f,jd){const tr=transitAt(ch,jd||julianNow(),true),fs=ch.planets[f].sign;const hit=i=>[1,5,9,7].includes(((tr[i].sign-fs+12)%12)+1);const j=hit(4),s=hit(6);return j&&s?'katTrB':j?'katTrJ':s?'katTrS':null;}
+const _katFocalA=katFocal;katFocal=function(ch,f,label,max){let h=_katFocalA(ch,f,label,max);const t=katTransit(ch,f);if(t)h=`<p class="${t==='katTrS'?'note':''}"><b>${T(t)}</b></p>`+h;if(KAT_APPF.includes(f))h=`<p class="note kapp">${T('katApp')}</p>`+h;return h;};
+function katDashaHTML(ch){const da=dashaAt(ch,julianNow());if(!da)return '';const lv={md:T('md'),ad:T('ad')};
+ return [['md',da.md.lord],['ad',da.ad.lord]].map(([k,L])=>{const lk=katLinks(ch,L).links.slice(0,3);if(!lk.length)return `<li><b>•</b> <span class="vsp">${pn(L)} ${lv[k]}</span> — ${katKw(L)}</li>`;
+  const acts=lk.map(x=>KAT_F[L]&&KAT_F[L][x.i]?vsT(KAT_F[L][x.i][1]):`${T('katDashaDo')}: ${katKw(x.i)}`);
+  return `<li><b>•</b> <span class="vsp">${pn(L)} ${lv[k]}</span> — ${T('katDashaTxt').replace('{lv}',lv[k]).replace('{p}',pn(L)).replace('{kw}',katKw(L))}: ${lk.map(x=>pn(x.i)).join(', ')}${hiV()?'।':'.'}<br>${acts.map(a=>`→ ${a}`).join('<br>')}</li>`;}).join('');}
+function katSpouseHTML(ch){const K=katSpouseK(ch),lk=katLinks(ch,K).links.slice(0,4);const head=T('katSpT').replace('{p}',pn(K));
+ const body=lk.length?`<p>${T('katSpTxt').replace('{kw}',lk.map(x=>`${pn(x.i)} (${katKw(x.i)})`).join('; '))}</p>`:`<p>${T('katSpNone')}</p>`;return {head,body:`<p class="note kapp">${T('katApp')}</p>`+body};}
+const _renderKatA=renderKat;renderKat=function(ch){let h=_renderKatA(ch);const sp=katSpouseHTML(ch);
+ const add=vsDet(`<span class="vsp">${sp.head}</span>`,sp.body,false)+vsDet(`<span class="vsp">${T('katDashaT')}</span>`,`<p class="note kapp">${T('katApp')}</p><ul class="fx vsfx">${katDashaHTML(ch)}</ul>`,true);
+ const k=h.lastIndexOf('<p class="note">'+T('katSrc'));return k>=0?h.slice(0,k)+add+h.slice(k):h+add;};
+NEWT.kat=renderKat;
+// Samasya: health uses Mars (body) + Sun; family uses Moon + spouse karaka; add transit activation line
+SM_KATF.health=[2,0];
+const _katForProblemA=katForProblem;katForProblem=function(ch,P){if(P.k==='family')SM_KATF.family=[1,katSpouseK(ch)];let h=_katForProblemA(ch,P);
+ const f=(SM_KATF[P.k]||[])[0];if(f!=null){const t=katTransit(ch,f);if(t)h=h.replace('</ul>',`<li><b>•</b> ${pn(f)}: ${T(t)}</li></ul>`);}return h;};
+(function(){const st=document.createElement('style');st.textContent=`.kapp{color:var(--hal)!important;font-weight:600}`;document.head.appendChild(st);})();
+
 </script>
 <nav id="bnav" aria-label="Main"></nav>
 </body></html>
