@@ -5925,6 +5925,61 @@ if(NEWT.s_home){const _shR=NEWT.s_home;NEWT.s_home=function(ch){const h=_shR(ch)
 const _moreHubR=moreHub;moreHub=function(){const h=_moreHubR();if(!S.ch)return h;const t=`<button class="tile wide1" data-go="rog"><i>🩺</i>${T('t_rog')}</button>`;const k=h.indexOf('<div class="sgrid2">');return k>=0?h.slice(0,k+20)+t+h.slice(k+20):h;};
 (function(){const st=document.createElement('style');st.textContent=`.rgsum{border-left:5px solid var(--hal)}.rgsum.rgVs{border-left-color:var(--good)}.rgsum.rgVw{border-left-color:var(--kum)}.rgsum h4{margin:12px 0 4px;font:600 15px var(--serif)}.rgentry{border-left-color:var(--good)}`;document.head.appendChild(st);})();
 
+// ===== v17.5: Past timeline (birth → today) for every problem — for checking the chart's accuracy against real life =====
+Object.assign(I18N.en,{pstT:'Past timeline (birth to today) — to verify the chart',pstIntro:'The same dasha + transit method run backwards. Ask the person whether these years really were difficult in this area. If most match, the birth time is reliable; if not, check the birth time.',
+ pstHard:'Difficult periods (ask about these)',pstGood:'Easier periods',pstNone:'No strongly difficult period in the past.',pstAge:'age',pstDasha:'dasha',pstAsk:'Did this happen?',pstYes:'Yes',pstNo:'No',
+ pstScore:'Match so far: {y} of {n} answered periods ({p}%)',pstOk:'Good match — the chart and birth time look reliable.',pstMid:'Partial match — mostly fine, but confirm the birth time.',pstBad:'Weak match — the birth time may be wrong; use the birth-time correction below with real events.',pstFew:'Answer at least 4 periods to judge the match.',
+ pstMatT:'Life timeline by problem — all areas at a glance',pstMatN:'Each row is one area of life; each column one year from birth. Red = difficult, yellow = mixed, green = easy.',pstQ:'Questions to ask the person',pstGo:'Verify with past events'});
+Object.assign(I18N.hi,{pstT:'अतीत की समयरेखा (जन्म से आज तक) — कुंडली सत्यापन के लिए',pstIntro:'यही दशा + गोचर पद्धति पीछे की ओर चलाई गई है। जातक से पूछें कि क्या इन वर्षों में इस क्षेत्र में सच में कठिनाई रही। अधिकतर मिलें तो जन्म समय विश्वसनीय है; न मिलें तो जन्म समय जाँचें।',
+ pstHard:'कठिन समय (इनके बारे में पूछें)',pstGood:'अपेक्षाकृत अच्छा समय',pstNone:'अतीत में कोई बहुत कठिन समय नहीं।',pstAge:'आयु',pstDasha:'दशा',pstAsk:'क्या ऐसा हुआ था?',pstYes:'हाँ',pstNo:'नहीं',
+ pstScore:'अब तक मिलान: {n} में से {y} काल सही ({p}%)',pstOk:'अच्छा मिलान — कुंडली और जन्म समय विश्वसनीय लगते हैं।',pstMid:'आंशिक मिलान — अधिकतर ठीक, पर जन्म समय की पुष्टि करें।',pstBad:'कमज़ोर मिलान — जन्म समय गलत हो सकता है; नीचे असली घटनाओं से जन्म समय सुधार करें।',pstFew:'मिलान जानने के लिए कम से कम 4 काल का उत्तर दें।',
+ pstMatT:'समस्या-वार जीवन समयरेखा — सभी क्षेत्र एक नज़र में',pstMatN:'हर पंक्ति जीवन का एक क्षेत्र है; हर खाना जन्म से एक वर्ष। लाल = कठिन, पीला = मिश्रित, हरा = सरल।',pstQ:'जातक से पूछने के प्रश्न',pstGo:'पिछली घटनाओं से जाँच'});
+const PST_CACHE=new WeakMap(),PST_MIN={job:18,loss:20,expense:20,family:10,mind:12,health:0},PST_SH={job:['Job','नौकरी'],family:['Home quarrels','घर में कलह'],mind:['Mind','मानसिक अशांति'],loss:['Loss','धन हानि'],expense:['Expenses','खर्चे'],health:['Health','स्वास्थ्य']};
+function pstYears(ch,P){let m=PST_CACHE.get(ch);if(!m){m={tc:new Map()};PST_CACHE.set(ch,m);}if(m[P.k])return m[P.k];
+ const nv=smNatal(ch,P).v,now=julianNow(),by=jdToDate(ch.jd,ch.inp.tz).y,ys=new Map();
+ for(let jd=ch.jd+15;jd<now;jd+=45.66){const a=smActive(ch,P,jd,m.tc).a-SM_NW*nv,y=jdToDate(jd,ch.inp.tz).y;if(!ys.has(y))ys.set(y,{y,age:y-by,s:[],jd,da:[]});const o=ys.get(y);o.s.push(a);const d=dashaAt(ch,jd);if(d)o.da.push(d.md.lord+'/'+d.ad.lord);}
+ const out=[...ys.values()].map(o=>{const s=o.s.slice().sort((a,b)=>b-a),k=Math.max(1,Math.ceil(s.length/2));return {y:o.y,age:o.age,a:s.slice(0,k).reduce((x,z)=>x+z,0)/k,da:o.da};});
+ return m[P.k]=out;}
+function pstRanges(ys,test){const r=[];ys.forEach((o,q)=>{if(!test(o))return;const l=r[r.length-1];if(l&&l.q2===q-1){l.q2=q;l.it.push(o);}else r.push({q1:q,q2:q,it:[o]});});return r;}
+function pstDaLab(it){const c=new Map();it.forEach(o=>o.da.forEach(d=>c.set(d,(c.get(d)||0)+1)));return [...c.entries()].sort((a,b)=>b[1]-a[1]).slice(0,2).map(([d])=>d.split('/').map(Number).map(pn).join('/')).join(', ');}
+function pstLab(rg){const a=rg.it[0],b=rg.it[rg.it.length-1];return `<span class="pstyr">${a.y===b.y?a.y:`${a.y}–${b.y}`}</span> <span class="note">(${T('pstAge')} ${a.age===b.age?a.age:`${a.age}–${b.age}`} · ${T('pstDasha')} ${pstDaLab(rg.it)})</span>`;}
+function pstHardRanges(ys,P){const mn=PST_MIN[P.k]||0;let hard=pstRanges(ys,o=>o.age>=mn&&smSev(o.a)==='high');if(hard.length<2)hard=pstRanges(ys,o=>o.age>=mn&&o.a>=1.6);
+ return hard.map(r=>({...r,pk:Math.max(...r.it.map(o=>o.a))})).sort((a,b)=>b.pk-a.pk).slice(0,5).sort((a,b)=>a.q1-b.q1);}
+function pstBars(ys,mn){mn=mn||0;const n=ys.length,bw=Math.max(3,Math.min(9,Math.floor(340/Math.max(n,1)))),W=n*bw,H=50,mx=4;let s=`<svg viewBox="0 0 ${W+22} ${H+14}" width="100%" style="max-width:${W+32}px" role="img">`;
+ ys.forEach((o,k)=>{const v=Math.max(0.15,Math.min(mx,o.a+0.6)),h=v/mx*H,sv=smSev(o.a),c=sv==='high'?'var(--kum)':sv==='med'?'var(--hal)':'var(--good)';s+=`<rect x="${k*bw+0.5}" y="${H-h}" width="${bw-1}" height="${h}" rx="1" fill="${c}" opacity="${o.age<mn?0.3:1}"><title>${o.y} (${o.age})</title></rect>`;
+  if(o.age%10===0)s+=`<text x="${k*bw}" y="${H+11}" font-size="8" fill="currentColor">${o.y}</text>`;});return s+'</svg>';}
+// yes/no answers kept per birth data on this device only
+function pstKey(ch){const i=ch.inp;return 'pst:'+[i.y,i.m,i.d,i.h,i.mi,i.lat,i.lon].join(',');}
+function pstGet(ch){if(!S.pstA)S.pstA={};const k=pstKey(ch);if(!S.pstA[k]){let v={};try{v=JSON.parse(localStorage.getItem(k)||'{}')||{};}catch(e){}S.pstA[k]=v;}return S.pstA[k];}
+function pstSet(ch,id,v){const a=pstGet(ch);if(a[id]===v)delete a[id];else a[id]=v;try{localStorage.setItem(pstKey(ch),JSON.stringify(a));}catch(e){}}
+function pstAskBtns(ch,id){const a=pstGet(ch)[id];return `<span class="pstab"><button class="pstb${a===1?' on y':''}" data-pst="${id}" data-v="1">✓ ${T('pstYes')}</button><button class="pstb${a===0?' on n':''}" data-pst="${id}" data-v="0">✗ ${T('pstNo')}</button></span>`;}
+function pstScoreHTML(ch){const a=Object.values(pstGet(ch)),n=a.length,y=a.filter(x=>x===1).length;if(!n)return '';const p=Math.round(y/n*100);
+ return `<p class="pstsc"><b>${T('pstScore').replace('{y}',y).replace('{n}',n).replace('{p}',p)}</b><br>${n<4?T('pstFew'):p>=70?T('pstOk'):p>=45?T('pstMid'):T('pstBad')}</p>`;}
+function pstBlock(ch,P){const ys=pstYears(ch,P);if(ys.length<2)return '';const hard=pstHardRanges(ys,P),mn=PST_MIN[P.k]||0;
+ const good=pstRanges(ys,o=>o.age>=mn&&o.a<0.3).filter(r=>r.it.length>=2).sort((a,b)=>b.it.length-a.it.length).slice(0,3).sort((a,b)=>a.q1-b.q1);
+ const body=`<p class="note">${T('pstIntro')}</p>${pstBars(ys,mn)}<h4>${T('pstHard')}</h4>${hard.length?`<ul class="fx vsfx pstl">${hard.map(r=>`<li><b>•</b> ${pstLab(r)} ${pstAskBtns(ch,P.k+':'+r.it[0].y)}</li>`).join('')}</ul>`:`<p>${T('pstNone')}</p>`}`
+  +(good.length?`<p><b>${T('pstGood')}:</b> ${good.map(pstLab).join('; ')}</p>`:'')+pstScoreHTML(ch);
+ return `<div class="pstbox">${vsDet(`📜 ${T('pstT')}`,body,true)}</div>`;}
+document.addEventListener('click',e=>{const b=e.target.closest('button[data-pst]');if(!b||!S.ch)return;pstSet(S.ch,b.dataset.pst,+b.dataset.v);const y=window.scrollY;renderAll();window.scrollTo(0,y);});
+// Samasya: add the past block into every selected problem card (before its remedies)
+const _renderSamasyaP=renderSamasya;renderSamasya=function(ch){const h=_renderSamasyaP(ch),mk=`<h4>${T('smUpay')}</h4>`,parts=h.split(mk);if(parts.length<2)return h;
+ const ks=(S.sam||[]).filter(k=>SAM_P.some(P=>P.k===k));let out=parts[0];for(let q=1;q<parts.length;q++){const P=SAM_P.find(x=>x.k===ks[q-1]);let add='';try{if(P)add=pstBlock(ch,P);}catch(e){}out+=add+mk+parts[q];}return out;};
+NEWT.samasya=renderSamasya;
+// Rog Vichar: health past timeline after the 36-month outlook
+const _rgTimelineP=rgTimeline;rgTimeline=function(ch){let a='';try{const P=SAM_P.find(x=>x.k==='health');if(P)a=pstBlock(ch,P);}catch(e){}return _rgTimelineP(ch)+a;};
+// Verify tab: all problems as a year-by-year matrix + question list with the running match score
+function pstMatrix(ch){const rows=SAM_P.map(P=>({P,ys:pstYears(ch,P)}));const n=rows[0].ys.length;if(n<2)return '';const cw=Math.max(3,Math.min(8,Math.floor(250/n))),lw=86,rh=16,W=lw+n*cw,H=rows.length*rh+14;
+ let s=`<svg viewBox="0 0 ${W+22} ${H}" width="100%" style="max-width:${W+32}px" role="img">`;
+ rows.forEach((r,ri)=>{s+=`<text x="0" y="${ri*rh+11}" font-size="9" fill="currentColor">${P_short(r.P)}</text>`;r.ys.forEach((o,k)=>{const sv=smSev(o.a),c=sv==='high'?'var(--kum)':sv==='med'?'var(--hal)':'var(--good)';s+=`<rect x="${lw+k*cw}" y="${ri*rh+2}" width="${cw-0.6}" height="${rh-4}" fill="${c}" opacity="${o.age<(PST_MIN[r.P.k]||0)?0.2:sv==='low'?0.55:1}"><title>${o.y} (${o.age})</title></rect>`;});});
+ rows[0].ys.forEach((o,k)=>{if(o.age%10===0)s+=`<text x="${lw+k*cw}" y="${H-2}" font-size="8" fill="currentColor">${o.y}</text>`;});return s+'</svg>';}
+function P_short(P){return P.ic+' '+(PST_SH[P.k]?vsT(PST_SH[P.k]):vsT(P.n));}
+function pstVerify(ch){let q='';SAM_P.forEach(P=>{const hard=pstHardRanges(pstYears(ch,P),P).slice(0,2);hard.forEach(r=>{q+=`<li><b>${P.ic}</b> ${vsT(P.n)}: ${pstLab(r)} ${pstAskBtns(ch,P.k+':'+r.it[0].y)}</li>`;});});
+ return `<section class="blk"><h3>${T('pstMatT')}</h3><p class="note">${T('pstMatN')}</p>${pstMatrix(ch)}<h4>${T('pstQ')}</h4><ul class="fx vsfx pstl">${q}</ul>${pstScoreHTML(ch)}</section>`;}
+const _verifyP=NEWT.verify;NEWT.verify=function(ch){let a='';try{a=pstVerify(ch);}catch(e){}return a+_verifyP(ch);};
+(function(){const st=document.createElement('style');st.textContent=`.pstbox{margin:10px 0}.pstbox h4{margin:10px 0 4px;font:600 15px var(--serif)}
+.pstab{display:inline-flex;gap:4px;margin-left:4px;vertical-align:middle}.pstb{font:inherit;font-size:12px;padding:2px 8px;border-radius:999px;border:1px solid var(--line);background:var(--card);color:var(--txt);cursor:pointer}
+.pstb.on.y{background:var(--good);border-color:var(--good);color:#fff}.pstb.on.n{background:var(--kum);border-color:var(--kum);color:#fff}.pstl li{margin-bottom:6px}.pstyr{font-weight:700}.pstsc{padding:8px 10px;border-radius:8px;background:var(--goodbg)}`;document.head.appendChild(st);})();
+
 </script>
 <nav id="bnav" aria-label="Main"></nav>
 </body></html>
