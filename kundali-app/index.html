@@ -6236,6 +6236,107 @@ if(NEWT.career){const _carL=NEWT.career;NEWT.career=function(ch){return _carL(ch
 .lbbar{height:9px;border-radius:6px;background:var(--paper);border:1px solid var(--line);margin:4px 0 2px;overflow:hidden}.lbbar i{display:block;height:100%;background:linear-gradient(90deg,var(--hal),var(--kum));border-radius:6px}
 .lbmix{display:flex;height:14px;border-radius:8px;overflow:hidden;margin:6px 0}.lbmix i{display:block;height:100%}`;document.head.appendChild(st);})();
 
+// ===== v20: Rishtedar ki Kundali — relatives read from the native's chart (bhavat bhavam / kalpit lagna + karaka + chara karaka + varga + dasha timing) =====
+Object.assign(I18N.en,{t_rishta:'Relatives\' kundali',rsIntro:'The relative\'s house is taken as their lagna and the whole chart is read from there (bhavat bhavam), together with the natural karaka, the Jaimini chara karaka and the matching divisional chart. This shows the relative as they appear in your life — not their own birth chart. Their own lagna and dasha need their own birth details.',
+ rsPick:'Choose a relative',rsChart:'Chart turned to {r} (their house = lagna)',rsOverall:'Overall',rsLv:['Needs care','Average','Good','Very good'],
+ rsSelf:'Nature',rsStr:'Strength of their house',rsHealth:'Health',rsWork:'Work and status',rsMoney:'Money',rsBond:'Your relationship',
+ rsH:['needs attention','average','good'],rsHealthT:'Their health is {v}.',rsHealthW:' Watch: {b}.',rsWorkT:'Their work and standing is {v}; likely fields: {f}.',rsMoneyT:'Their finances are {v}.',
+ rsBondG:'Warm and supportive — their house lord is well placed from your lagna.',rsBondM:'Normal — ups and downs, but the bond holds.',rsBondB:'Strained or distant at times — their house lord falls in 6/8/12 from your lagna, or the two lords are enemies. Patience and respect keep it steady.',
+ rsKar:'Natural karaka {p}: {d}.',rsKarD:{exalted:'exalted — very strong',own:'in own sign — strong',mt:'in moolatrikona — strong',friend:'in a friend\'s sign — good',neutral:'neutral',enemy:'in an enemy\'s sign — weak',debil:'debilitated — weak'},rsKarC:' (combust)',
+ rsJai:'Jaimini {k}: {p} in the {h} house — {v}.',rsVar:'{d}: their house has {p} as lord, {v}.',rsVG:'well placed',rsVB:'under pressure',rsVM:'average',
+ rsTime:'Their life through your dasha',rsPast:'Past periods to verify (difficult for them)',rsFut:'Coming periods',rsFG:'good for them',rsFB:'take care of them',rsNone:'No strong period found.',
+ rsUpay:'What you can do for them',rsCmp:'Compare with their saved kundali',rsCmpNo:'Save their kundali in the app (same phone) to compare. ',rsCmpSel:'Choose saved kundali',
+ rsCmpY:'Match: their {x} ({s}) falls in {r} from the turned lagna — a supporting sign that the estimate fits (it is a hint, not proof).',rsCmpN:'Their lagna ({a}) and Moon sign ({b}) are not in the turned lagna, its trines or 7th — read the estimate with caution.',rsLag:'lagna',rsMoon:'Moon sign',rsTri:'the same sign / trine / 7th',
+ rsSrc:'Method: bhavat bhavam (kalpit lagna), natural karaka, Jaimini 7-karaka scheme, divisional chart (D12 parents, D3 siblings, D7 children, D9 spouse & in-laws). The comparison rule is an app check.'});
+Object.assign(I18N.hi,{t_rishta:'रिश्तेदार की कुंडली',rsIntro:'रिश्तेदार के भाव को उनका लग्न मानकर पूरी कुंडली वहाँ से पढ़ी जाती है (भावात् भावम् / कल्पित लग्न), साथ में नैसर्गिक कारक, जैमिनी चर कारक और संबंधित वर्ग कुंडली। यह रिश्तेदार को वैसा दिखाता है जैसे वे आपके जीवन में हैं — यह उनकी अपनी जन्म कुंडली नहीं है। उनका अपना लग्न और दशा उनके जन्म विवरण से ही मिलेंगे।',
+ rsPick:'रिश्तेदार चुनें',rsChart:'{r} की ओर घुमाई कुंडली (उनका भाव = लग्न)',rsOverall:'कुल मिलाकर',rsLv:['ध्यान चाहिए','सामान्य','अच्छा','बहुत अच्छा'],
+ rsSelf:'स्वभाव',rsStr:'उनके भाव (लग्न) का बल',rsHealth:'स्वास्थ्य',rsWork:'काम और पद',rsMoney:'धन',rsBond:'आपसे संबंध',
+ rsH:['ध्यान चाहिए','सामान्य','अच्छा'],rsHealthT:'उनका स्वास्थ्य {v}।',rsHealthW:' ध्यान दें: {b}।',rsWorkT:'उनका काम और प्रतिष्ठा {v}; संभावित क्षेत्र: {f}।',rsMoneyT:'उनकी आर्थिक स्थिति {v}।',
+ rsBondG:'स्नेहपूर्ण और सहयोगी — उनके भाव का स्वामी आपके लग्न से शुभ स्थान में है।',rsBondM:'सामान्य — उतार-चढ़ाव, पर रिश्ता बना रहता है।',rsBondB:'कभी-कभी तनाव या दूरी — उनके भाव का स्वामी आपके लग्न से 6/8/12 में है, या दोनों स्वामी शत्रु हैं। धैर्य और सम्मान से रिश्ता स्थिर रहता है।',
+ rsKar:'नैसर्गिक कारक {p}: {d}।',rsKarD:{exalted:'उच्च — बहुत बलवान',own:'स्वराशि — बलवान',mt:'मूलत्रिकोण — बलवान',friend:'मित्र राशि — अच्छा',neutral:'सम',enemy:'शत्रु राशि — कमज़ोर',debil:'नीच — कमज़ोर'},rsKarC:' (अस्त)',
+ rsJai:'जैमिनी {k}: {p} {h} भाव में — {v}।',rsVar:'{d}: उनके भाव का स्वामी {p}, {v}।',rsVG:'शुभ स्थिति',rsVB:'दबाव में',rsVM:'सामान्य',
+ rsTime:'आपकी दशा में उनका जीवन',rsPast:'सत्यापन के लिए बीते काल (उनके लिए कठिन)',rsFut:'आने वाले काल',rsFG:'उनके लिए शुभ',rsFB:'उनका ध्यान रखें',rsNone:'कोई प्रबल काल नहीं मिला।',
+ rsUpay:'आप उनके लिए क्या करें',rsCmp:'उनकी सहेजी कुंडली से मिलान',rsCmpNo:'मिलान के लिए उनकी कुंडली इसी फ़ोन में सहेजें। ',rsCmpSel:'सहेजी कुंडली चुनें',
+ rsCmpY:'मेल: उनका {x} ({s}) घुमाए गए लग्न से {r} में है — अनुमान के पक्ष में सहायक संकेत (प्रमाण नहीं, केवल संकेत)।',rsCmpN:'उनका लग्न ({a}) और चंद्र राशि ({b}) घुमाए गए लग्न, उसके त्रिकोण या सप्तम में नहीं — अनुमान सावधानी से पढ़ें।',rsLag:'लग्न',rsMoon:'चंद्र राशि',rsTri:'उसी राशि / त्रिकोण / सप्तम',
+ rsSrc:'पद्धति: भावात् भावम् (कल्पित लग्न), नैसर्गिक कारक, जैमिनी सप्त-कारक, वर्ग कुंडली (D12 माता-पिता, D3 भाई-बहन, D7 संतान, D9 जीवनसाथी व ससुराल)। मिलान वाला नियम ऐप की जाँच है।'});
+// [key, house, natural karaka, chara-karaka index (0 AK,1 AmK,2 BK,3 MK,4 PK,5 GK,6 DK), varga, labels en/hi]
+const RS=[
+ ['father',9,0,3,12,['Father','पिता']],['mother',4,1,3,12,['Mother','माता']],['spouse',7,5,6,9,['Spouse','जीवनसाथी']],
+ ['child1',5,4,4,7,['First child','पहली संतान']],['child2',7,4,4,7,['Second child','दूसरी संतान']],
+ ['ysib',3,2,2,3,['Younger sibling','छोटे भाई-बहन']],['esib',11,4,2,3,['Elder sibling','बड़े भाई-बहन']],
+ ['fil',3,0,6,9,['Father-in-law','ससुर']],['mil',10,1,6,9,['Mother-in-law','सास']],['mama',6,3,3,12,['Maternal uncle','मामा']]];
+const RS_KK=[['Atmakaraka','आत्मकारक'],['Amatyakaraka','अमात्यकारक'],['Bhratrikaraka','भ्रातृकारक'],['Matrikaraka','मातृकारक'],['Putrakaraka','पुत्रकारक'],['Gnatikaraka','ज्ञातिकारक'],['Darakaraka','दाराकारक']];
+const RS_ACT={father:['Offer water to the Sun at sunrise; touch your father\'s feet; do not argue with him or with seniors.','सूर्योदय पर सूर्य को जल दें; पिता के चरण छुएँ; उनसे या वरिष्ठों से विवाद न करें।'],
+ mother:['Serve your mother, take her blessings before important work; on Mondays give milk or rice.','माता की सेवा करें, ज़रूरी काम से पहले उनका आशीर्वाद लें; सोमवार को दूध या चावल दान करें।'],
+ spouse:['Respect your spouse in front of others; keep Fridays pleasant — flowers, sweets, clean clothes.','दूसरों के सामने जीवनसाथी का सम्मान करें; शुक्रवार को सुखद रखें — फूल, मिठाई, स्वच्छ वस्त्र।'],
+ child1:['Spend daily time with the child; feed cows or give yellow sweets on Thursdays.','रोज़ बच्चे के साथ समय बिताएँ; गुरुवार को गाय को भोजन या पीली मिठाई दान करें।'],child2:['Spend daily time with the child; feed cows or give yellow sweets on Thursdays.','रोज़ बच्चे के साथ समय बिताएँ; गुरुवार को गाय को भोजन या पीली मिठाई दान करें।'],
+ ysib:['Help your younger siblings with courage and time; donate red lentils on Tuesdays.','छोटे भाई-बहनों की हिम्मत और समय से मदद करें; मंगलवार को मसूर दान करें।'],
+ esib:['Take advice from elder siblings; on Thursdays offer yellow flowers at a temple.','बड़े भाई-बहनों की सलाह लें; गुरुवार को मंदिर में पीले फूल चढ़ाएँ।'],
+ fil:['Show respect to your father-in-law; offer water to the Sun.','ससुर का सम्मान करें; सूर्य को जल दें।'],mil:['Treat your mother-in-law like your mother; keep silver or white items in the home clean.','सास को माता समान मानें; घर में चाँदी या सफ़ेद वस्तुएँ स्वच्छ रखें।'],
+ mama:['Keep good ties with the maternal side; give green vegetables or moong on Wednesdays.','ननिहाल से अच्छे संबंध रखें; बुधवार को हरी सब्ज़ी या मूँग दान करें।']};
+const RS_FR={0:{f:[1,2,4],e:[5,6]},1:{f:[0,3],e:[]},2:{f:[0,1,4],e:[3]},3:{f:[0,5],e:[1]},4:{f:[0,1,2],e:[3,5]},5:{f:[3,6],e:[0,1]},6:{f:[3,5],e:[0,1,2]}};
+function rsF(k,o){return T(k).replace(/\{(\w+)\}/g,(_,x)=>o[x]??'');}
+function rsNat(R,n){return ((R-1+n-1)%12)+1;} // n-th house from relative lagna R → natal house
+function rsLvl(v){return v>=1?2:v<=-0.6?0:1;}
+function rsHv(ch,h){try{return smHouse(ch,h).v;}catch(e){return 0;}}
+function rsRead(ch,r){const [k,R,kar,jk,vn]=r,P=ch.planets,g=ch.inp.gender||'m',kr=k==='spouse'&&g==='f'?4:kar;
+ const hv=n=>rsHv(ch,rsNat(R,n)),self=hv(1),health=(hv(1)*1.2+hv(6)*0.6+hv(8)*0.6)/2.4,work=(hv(10)+hv(1)*0.4)/1.4,money=(hv(2)+hv(11))/2;
+ const LR=lordOf(ch,R),L1=lordOf(ch,1),fromL=P[LR].house,frL=RS_FR[L1],bondBad=[6,8,12].includes(fromL)||(frL&&frL.e.includes(LR)),bondGood=[1,4,5,7,9,10,11].includes(fromL)&&!(frL&&frL.e.includes(LR));
+ const ks=smPlanet(ch,kr).v,jp=ch.jai&&ch.jai.kk?ch.jai.kk[jk]:null,js=jp!=null?smPlanet(ch,jp).v:0;
+ let vs=0,vl=null;try{const vL=varga(ch.asc,vn),vsg=(vL+R-1)%12,vlord=SIGN_LORD[vsg],vp=varga(P[vlord].lon,vn),vh=((vp-vL+12)%12)+1,dg=dignity(vlord,vp);
+  vs=(['exalted','own','mt'].includes(dg)?1:dg==='debil'?-1:dg==='enemy'?-0.4:0.2)+([1,4,5,7,9,10].includes(((vh-R+12)%12)+1)?0.4:[6,8,12].includes(((vh-R+12)%12)+1)?-0.6:0);vl={vlord,vs};}catch(e){}
+ const tot=0.45*self+0.2*health+0.15*ks+0.1*js+0.2*vs+(bondGood?0.2:bondBad?-0.3:0);
+ return {k,R,kr,jp,self,health,work,money,bondBad,bondGood,ks,js,vl,vn,tot,lv:tot>=1.1?3:tot>=0.35?2:tot>=-0.4?1:0};}
+function rsTimeline(ch,rd){const R=rd.R,good=[R,rsNat(R,2),rsNat(R,11)],bad=[rsNat(R,6),rsNat(R,8),rsNat(R,12)],now=julianNow(),out=[];
+ let jd=ch.jd+1;for(let q=0;q<140;q++){const d=dashaAt(ch,jd);if(!d)break;const s=[...new Set([...lbSig(ch,d.ad.lord),...lbSig(ch,d.md.lord).filter(h=>bad.includes(h)||good.includes(h))])];
+  let v=bad.filter(h=>s.includes(h)).length-good.filter(h=>s.includes(h)).length*0.8;if(d.ad.lord===rd.kr||d.md.lord===rd.kr)v*=1.3;if(smPlanet(ch,d.ad.lord).v<-1.5)v+=0.4;
+  out.push({st:d.ad.start,en:d.ad.end,md:d.md.lord,ad:d.ad.lord,v});jd=d.ad.end+1;if(jd>now+12*365.25)break;}
+ return out;}
+function rsPer(ch,x){return `<span class="pstyr">${fdate(x.st)} – ${fdate(x.en)}</span> <span class="note">(${T('pstDasha')} ${pn(x.md)}/${pn(x.ad)})</span>`;}
+function renderRishta(ch){const P=ch.planets;S.rsk=S.rsk||'father';const r=RS.find(x=>x[0]===S.rsk)||RS[0],rd=rsRead(ch,r),nm=vsT(r[5]),R=r[1],hv=['rsH'];
+ let h=`<div class="pagehead"><h2>${T('t_rishta')}</h2></div><p class="note">${T('rsIntro')}</p><p><b>${T('rsPick')}</b></p><div class="rschips">${RS.map(x=>`<button data-rsk="${x[0]}" aria-pressed="${x[0]===r[0]}">${vsT(x[5])}</button>`).join('')}</div>`;
+ const lvc=['bad','mid','good','good'];
+ h+=`<section class="blk rshead ${lvc[rd.lv]}"><h3>${nm} <small class="note">· ${hiV()?`${HN[R]} भाव`:`house ${R}`} · ${sn((ch.lagna+R-1)%12)}</small></h3><p><b>${T('rsOverall')}:</b> <span class="rslv l${rd.lv}">${T('rsLv')[rd.lv]}</span></p></section>`;
+ const ls=(ch.lagna+R-1)%12;h+=`<div class="charts rschart">${chartSVG(housesFrom(ls,P),rsF('rsChart',{r:nm}),ls)}</div>`;
+ const Hn=T('rsH'),occ=P.filter(p=>p.house===R).map(p=>pn(p.i));
+ const b6=[rsNat(R,6),rsNat(R,8)].map(x=>vsT(ROG_BODY[((ls+(x===rsNat(R,6)?5:7))%12)])).map(s=>s.split(',')[0]).join(', ');
+ const L10r=lordOf(ch,rsNat(R,10));
+ h+=`<section class="blk"><h3>${nm}</h3><ul class="fx vsfx">`
+  +`<li><b>•</b> <span class="vsp">${T('rsSelf')}:</span> ${L(SIGN_T)[ls]}${occ.length?` <span class="note">(${occ.join(', ')})</span>`:''}</li>`
+  +(()=>{let why='';try{why=smHouse(ch,R).why.filter(w=>w.s<0).slice(0,2).map(smWhyTxt).join('; ');}catch(e){}return `<li class="${rsLvl(rd.self)===2?'pos':''}"><b>•</b> <span class="vsp">${T('rsStr')}:</span> ${Hn[rsLvl(rd.self)]}${why&&rsLvl(rd.self)<2?` <span class="note">(${why})</span>`:''}</li>`;})()
+  +`<li class="${rsLvl(rd.health)===2?'pos':''}"><b>•</b> <span class="vsp">${T('rsHealth')}:</span> ${rsF('rsHealthT',{v:Hn[rsLvl(rd.health)]})}${rsLvl(rd.health)===0?rsF('rsHealthW',{b:b6}):''}</li>`
+  +`<li class="${rsLvl(rd.work)===2?'pos':''}"><b>•</b> <span class="vsp">${T('rsWork')}:</span> ${rsF('rsWorkT',{v:Hn[rsLvl(rd.work)],f:vsT(VPZ_LIV[L10r]).split(',').slice(0,3).join(',')})}</li>`
+  +`<li class="${rsLvl(rd.money)===2?'pos':''}"><b>•</b> <span class="vsp">${T('rsMoney')}:</span> ${rsF('rsMoneyT',{v:Hn[rsLvl(rd.money)]})}</li>`
+  +`<li class="${rd.bondGood?'pos':''}"><b>•</b> <span class="vsp">${T('rsBond')}:</span> ${T(rd.bondGood?'rsBondG':rd.bondBad?'rsBondB':'rsBondM')}</li></ul>`;
+ const kp=P[rd.kr];h+=`<p class="note">${rsF('rsKar',{p:pn(rd.kr),d:(T('rsKarD')[kp.dign]||T('rsKarD').neutral)+(kp.comb&&rd.kr>1?T('rsKarC'):'')})}</p>`;
+ if(rd.jp!=null){const jpp=P[rd.jp];h+=`<p class="note">${rsF('rsJai',{k:vsT(RS_KK[r[3]]),p:pn(rd.jp),h:hiV()?HO[jpp.house]:HOUSE_ORD(jpp.house),v:rd.js>=0.8?T('rsVG'):rd.js<=-0.8?T('rsVB'):T('rsVM')})}</p>`;}
+ if(rd.vl)h+=`<p class="note">${rsF('rsVar',{d:`D${rd.vn}`,p:pn(rd.vl.vlord),v:rd.vl.vs>=0.6?T('rsVG'):rd.vl.vs<=-0.4?T('rsVB'):T('rsVM')})}</p>`;
+ h+=`</section>`;
+ const tl=rsTimeline(ch,rd),now=julianNow(),past=tl.filter(x=>x.en<now&&x.v>=1.5).sort((a,b)=>b.v-a.v).slice(0,4).sort((a,b)=>a.st-b.st),fut=tl.filter(x=>x.en>=now&&Math.abs(x.v)>=1.2).slice(0,5);
+ h+=`<section class="blk"><h3>⏳ ${T('rsTime')}</h3><h4>${T('rsPast')}</h4>${past.length?`<ul class="fx vsfx pstl">${past.map(x=>`<li><b>•</b> ${rsPer(ch,x)} ${pstAskBtns(ch,'rel:'+r[0]+':'+Math.round(x.st))}</li>`).join('')}</ul>`:`<p>${T('rsNone')}</p>`}`
+  +`<h4>${T('rsFut')}</h4>${fut.length?`<ul class="fx vsfx">${fut.map(x=>`<li class="${x.v<0?'pos':''}"><b>${x.v<0?'✓':'!'}</b> ${rsPer(ch,x)} — ${T(x.v<0?'rsFG':'rsFB')}</li>`).join('')}</ul>`:`<p>${T('rsNone')}</p>`}${pstScoreHTML(ch)}</section>`;
+ let up='';try{const u=UPC(rd.kr);up=`<p>${hiV()?`हर ${u.day}: ${u.deity} — `:`Every ${u.day}: ${u.deity} — `}<span class="big3">${u.mantra}</span></p>`;}catch(e){}
+ h+=`<section class="blk"><h3>🪔 ${T('rsUpay')}</h3><p>${vsT(RS_ACT[r[0]])}</p>${up}</section>`;
+ let cmp='';try{const pr=getProfiles().filter(p=>!(p.y===ch.inp.y&&p.m===ch.inp.m&&p.d===ch.inp.d&&p.h===ch.inp.h&&p.mi===ch.inp.mi));
+  if(!pr.length)cmp=`<p class="note">${T('rsCmpNo')}</p>`;else{cmp=`<label>${T('rsCmpSel')} <select id="rscmp"><option value="">—</option>${pr.map((p,i)=>`<option value="${i}"${S.rsc===i?' selected':''}>${esc(p.name||'—')} · ${pad(p.d)}-${pad(p.m)}-${p.y}</option>`).join('')}</select></label>`;
+   if(S.rsc!=null&&pr[S.rsc]){const q=pr[S.rsc],oc=buildChart({...q,city:q.city||q.place||'x'}),rel=s=>((s-ls+12)%12)+1,ok=s=>[1,5,9,7].includes(rel(s));
+    const hit=ok(oc.lagna)?['rsLag',oc.lagna]:ok(oc.planets[1].sign)?['rsMoon',oc.planets[1].sign]:null;
+    cmp+=hit?`<p class="pstsc">✓ ${rsF('rsCmpY',{x:T(hit[0]),s:sn(hit[1]),r:T('rsTri')})}</p>`:`<p class="pstsc rsno">${rsF('rsCmpN',{a:sn(oc.lagna),b:sn(oc.planets[1].sign)})}</p>`;}}}catch(e){}
+ h+=`<section class="blk"><h3>🔗 ${T('rsCmp')}</h3>${cmp}</section>`;
+ return h+`<p class="note">${T('rsSrc')}</p>`;}
+NEWT.rishta=renderRishta;if(!TABS.includes('rishta'))TABS.push('rishta');
+document.addEventListener('click',e=>{const b=e.target.closest('button[data-rsk]');if(!b)return;S.rsk=b.dataset.rsk;S.rsc=null;renderAll();});
+document.addEventListener('change',e=>{if(e.target&&e.target.id==='rscmp'){S.rsc=e.target.value===''?null:+e.target.value;renderAll();}});
+(function(){const s=SEC18.find(x=>x[0]==='read');if(s){const g=s[2][0][1];if(!g.includes('rishta'))g.splice(g.indexOf('family')+1,0,'rishta');}IC18.rishta='👪';
+ D18.rishta=['Father, mother, spouse, children, siblings, in-laws — read from your chart','पिता, माता, जीवनसाथी, संतान, भाई-बहन, ससुराल — आपकी कुंडली से'];})();
+if(NEWT.family){const _famR=NEWT.family;NEWT.family=function(ch){return _famR(ch)+`<p><button class="btn" data-go="rishta">👪 ${T('t_rishta')} →</button></p>`;};}
+(function(){const st=document.createElement('style');st.textContent=`.rschips{display:flex;flex-wrap:wrap;gap:6px;margin:6px 0 12px}
+.rschips button{border:1px solid var(--line);background:var(--card);color:var(--txt);border-radius:999px;padding:7px 13px;font:500 13.5px var(--sans);cursor:pointer}
+.rschips button[aria-pressed=true]{background:var(--ink);border-color:var(--ink);color:#fff}
+.rshead{border-left:5px solid var(--hal)}.rshead.good{border-left-color:var(--good)}.rshead.bad{border-left-color:var(--kum)}
+.rslv{padding:2px 10px;border-radius:999px;font-size:13px;font-weight:600;background:var(--warnbg);color:#8a5a00}.rslv.l2,.rslv.l3{background:var(--goodbg);color:var(--good)}.rslv.l0{background:var(--badbg);color:var(--kum)}
+.rschart{max-width:420px;margin:0 auto 14px}.rsno{background:var(--warnbg)}`;document.head.appendChild(st);})();
+
 </script>
 <nav id="bnav" aria-label="Main"></nav>
 </body></html>
