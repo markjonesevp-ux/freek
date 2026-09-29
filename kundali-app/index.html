@@ -5712,6 +5712,60 @@ const _katForProblemA=katForProblem;katForProblem=function(ch,P){if(P.k==='famil
  const f=(SM_KATF[P.k]||[])[0];if(f!=null){const t=katTransit(ch,f);if(t)h=h.replace('</ul>',`<li><b>•</b> ${pn(f)}: ${T(t)}</li></ul>`);}return h;};
 (function(){const st=document.createElement('style');st.textContent=`.kapp{color:var(--hal)!important;font-weight:600}`;document.head.appendChild(st);})();
 
+// ===== v17.3: rules from "Jyotish Piyush" (Pt. Kalyandutt Sharma) — Aajeevika (livelihood) and Nirogata (health) yogas; text written afresh =====
+Object.assign(I18N.en,{vpzSrc:'Jyotish Piyush',vpzLivT:'Livelihood indications (aajeevika vichar)',vpzLivIntro:'Classical five-way method: planets in the 10th from the Lagna, the Moon and the Sun; the planet ruling the navamsa of the 10th lord; and planets aspecting the 10th house.',
+ vpzFromL:'10th from Lagna',vpzFromM:'10th from Moon',vpzFromS:'10th from Sun',vpzEmpty:'empty',vpzNavL:'10th lord {p} is in the navamsa of {n} — the main livelihood signature',vpzAsp:'Planets aspecting the 10th house',
+ vpzMode:'Style of work',vpzMov:'Most career planets are in movable signs — independent work or business that needs wit and initiative suits you.',vpzFix:'Most career planets are in fixed signs — steady service suits you: government, established institutions, companies, teaching or agency work.',vpzDual:'Career planets are mostly in dual signs — a mix works: a job alongside consulting, teaching or a side business.',
+ vpzX1:'Jupiter or Venus in the 3rd/11th from the Moon — gains from independent enterprise or a high position.',vpzX2:'Sun in the 10th — government service or your own independent work.',vpzX3:'Sun and Mercury in the 2nd — salaried service is favoured.',vpzX4:'Sun and Mercury together in a kendra — business is favoured.',
+ vpzHealthRule:'Jyotish Piyush health yoga',
+ hp1:'Lagna lord or 6th lord is with Jupiter — good resistance to illness',hp2:'A benefic aspects the 8th house — health stays protected',hp3:'Benefics occupy the Lagna — a naturally healthy constitution',hp4:'Jupiter or the Moon aspects the Sun — vitality is supported',hp5:'Jupiter is linked with the 6th house — recovery from illness',hp6:'Malefics (Saturn/Mars/Rahu) sit in the 3rd, 6th or 11th — they fight disease rather than cause it',hp7:'Lagna lord is in a kendra or trikona — a sound body',
+ hr1:'A malefic occupies the 2nd house — vulnerability to illness',hr2:'Lagna lord is joined with a lord of the 6th/8th/12th, or such a lord sits in the Lagna — falls ill quickly',hr3:'8th lord is in a dusthana while the Lagna lord is weak — recurring health issues',hr4:'Sun or Moon in the 3rd house — health needs attention',hr5:'Malefic in the Lagna with a weak Lagna lord — many small ailments and worry',hr6:'Saturn in the 5th/9th aspected by a malefic — prolonged troubles',hr7:'Moon in the 6th with a malefic — health tied to stress and digestion',hr8:'Malefics in kendras with no benefic aspect — take preventive care',hr9:'A malefic occupies the 8th house — chronic or recurring problems possible',hr10:'Lagna lord and 8th lord are together with a malefic — a sensitive constitution'});
+Object.assign(I18N.hi,{vpzSrc:'ज्योतिष पीयूष',vpzLivT:'आजीविका के संकेत (आजीविका विचार)',vpzLivIntro:'शास्त्रीय पंचविध पद्धति: लग्न, चंद्र और सूर्य से दशम में स्थित ग्रह; दशमेश जिस नवांश में है उसका स्वामी; और दशम भाव को देखने वाले ग्रह।',
+ vpzFromL:'लग्न से दशम',vpzFromM:'चंद्र से दशम',vpzFromS:'सूर्य से दशम',vpzEmpty:'रिक्त',vpzNavL:'दशमेश {p} {n} के नवांश में है — आजीविका का मुख्य संकेत',vpzAsp:'दशम भाव को देखने वाले ग्रह',
+ vpzMode:'कार्य की शैली',vpzMov:'करियर के अधिकांश ग्रह चर राशि में — बुद्धि और पहल वाला स्वतंत्र कार्य या व्यापार उपयुक्त।',vpzFix:'करियर के अधिकांश ग्रह स्थिर राशि में — स्थिर सेवा उपयुक्त: सरकारी नौकरी, पुरानी संस्था, कंपनी, अध्यापन या एजेंसी।',vpzDual:'करियर के ग्रह अधिकतर द्विस्वभाव राशि में — मिला-जुला कार्य: नौकरी के साथ परामर्श, अध्यापन या छोटा व्यापार।',
+ vpzX1:'चंद्र से 3/11 में गुरु या शुक्र — स्वतंत्र उद्यम या उच्च पद से लाभ।',vpzX2:'दशम में सूर्य — सरकारी नौकरी या अपना स्वतंत्र कार्य।',vpzX3:'दूसरे भाव में सूर्य और बुध — नौकरी अनुकूल।',vpzX4:'केंद्र में सूर्य-बुध साथ — व्यापार अनुकूल।',
+ vpzHealthRule:'ज्योतिष पीयूष आरोग्य योग',
+ hp1:'लग्नेश या षष्ठेश गुरु के साथ — रोग प्रतिरोधक क्षमता अच्छी',hp2:'अष्टम भाव पर शुभ ग्रह की दृष्टि — स्वास्थ्य सुरक्षित',hp3:'लग्न में शुभ ग्रह — स्वाभाविक रूप से स्वस्थ शरीर',hp4:'सूर्य पर गुरु या चंद्र की दृष्टि — जीवनशक्ति को सहारा',hp5:'छठे भाव से गुरु का संबंध — रोग से छुटकारा',hp6:'शनि/मंगल/राहु 3, 6 या 11 में — रोग देने के बजाय रोग से लड़ते हैं',hp7:'लग्नेश केंद्र या त्रिकोण में — सुदृढ़ शरीर',
+ hr1:'दूसरे भाव में पाप ग्रह — रोग की संभावना',hr2:'लग्नेश 6/8/12 के स्वामी के साथ, या ऐसा स्वामी लग्न में — जल्दी बीमार पड़ना',hr3:'अष्टमेश दुःस्थान में और लग्नेश कमज़ोर — बार-बार स्वास्थ्य समस्या',hr4:'सूर्य या चंद्र तीसरे भाव में — स्वास्थ्य पर ध्यान आवश्यक',hr5:'लग्न में पाप ग्रह और लग्नेश कमज़ोर — छोटे-छोटे रोग और चिंता',hr6:'5/9 में शनि पर पाप दृष्टि — लंबे समय की परेशानी',hr7:'छठे भाव में चंद्र पाप ग्रह के साथ — स्वास्थ्य तनाव और पाचन से जुड़ा',hr8:'केंद्र में पाप ग्रह, शुभ दृष्टि नहीं — बचाव पर ध्यान दें',hr9:'अष्टम भाव में पाप ग्रह — पुरानी या बार-बार की समस्या संभव',hr10:'लग्नेश और अष्टमेश पाप ग्रह के साथ — संवेदनशील शरीर'});
+const VPZ_LIV=[
+ ['government service, administration, medicine and pharma, politics, gold, advisory roles','सरकारी सेवा, प्रशासन, चिकित्सा व दवाइयाँ, राजनीति, स्वर्ण, सलाहकार भूमिका'],
+ ['agriculture, dairy, water and liquids, pearls, food, hospitality, travel, nursing and public dealing','कृषि, दुग्ध, जल व तरल पदार्थ, मोती, भोजन, आतिथ्य, यात्रा, नर्सिंग और जनसंपर्क'],
+ ['engineering, metals, machinery, chemicals, defence or police, surgery, construction, property, mining','इंजीनियरिंग, धातु, मशीनरी, रसायन, रक्षा या पुलिस, शल्य-चिकित्सा, निर्माण, संपत्ति, खनन'],
+ ['mathematics, accounts, writing and publishing, IT, astrology, teaching, trade, stationery','गणित, लेखा, लेखन व प्रकाशन, आईटी, ज्योतिष, अध्यापन, व्यापार, स्टेशनरी'],
+ ['teaching, religion and spiritual guidance, law and judiciary, banking and finance, counselling','अध्यापन, धर्म व आध्यात्मिक मार्गदर्शन, कानून व न्यायपालिका, बैंकिंग व वित्त, परामर्श'],
+ ['gems and jewellery, fashion, cosmetics, perfumes, music and arts, dairy, vehicles, luxury and hospitality','रत्न व आभूषण, फ़ैशन, सौंदर्य प्रसाधन, सुगंध, संगीत व कला, दुग्ध, वाहन, विलासिता व आतिथ्य'],
+ ['hard-working service, transport and logistics, manufacturing, oil and iron, mining, construction labour, large organisations','परिश्रम वाली सेवा, परिवहन व लॉजिस्टिक्स, विनिर्माण, तेल व लोहा, खनन, निर्माण श्रम, बड़े संगठन'],
+ ['technology, foreign companies, machines and tools, chemicals, unconventional or new-age work','तकनीक, विदेशी कंपनियाँ, मशीन व औज़ार, रसायन, अपरंपरागत या नए युग का कार्य'],
+ ['research, healing, spiritual work, animals, technical specialisation, behind-the-scenes roles','शोध, उपचार, आध्यात्मिक कार्य, पशु, तकनीकी विशेषज्ञता, पर्दे के पीछे की भूमिका']];
+const VPZ_MAL=[0,2,6,7,8],VPZ_BEN=ch=>[3,4,5].concat(ch.tithi<15?[1]:[]);
+function vpzAspectsPlanet(ch,i,j){return aspectsHouse(ch,i,ch.planets[j].house);}
+function vpzLivelihood(ch){const P=ch.planets,hs=(from,n)=>((from+n-1)%12);const inSign=s=>P.filter(p=>p.sign===s).map(p=>p.i);
+ const t=[[T('vpzFromL'),hs(ch.lagna,10)],[T('vpzFromM'),hs(P[1].sign,10)],[T('vpzFromS'),hs(P[0].sign,10)]].map(([l,s])=>({l,s,pl:inSign(s)}));
+ const L10=lordOf(ch,10),nav=SIGN_LORD[varga(P[L10].lon,9)];const asp=P.filter(p=>p.house!==10&&aspectsHouse(ch,p.i,10)).map(p=>p.i);
+ const kp=[...new Set([...t.flatMap(x=>x.pl),L10])];const md=[0,0,0];kp.forEach(i=>md[P[i].sign%3]++);const mode=md[0]>md[1]&&md[0]>=md[2]?'vpzMov':md[1]>md[0]&&md[1]>=md[2]?'vpzFix':'vpzDual';
+ const x=[];const fm=i=>((P[i].sign-P[1].sign+12)%12)+1;if([4,5].some(i=>[3,11].includes(fm(i))))x.push('vpzX1');if(P[0].house===10)x.push('vpzX2');if(P[0].house===2&&P[3].house===2)x.push('vpzX3');if(P[0].sign===P[3].sign&&[1,4,7,10].includes(P[0].house))x.push('vpzX4');
+ const li=[`<li><b>★</b> <span class="vsp">${T('vpzNavL').replace('{p}',pn(L10)).replace('{n}',pn(nav))}:</span> ${vsT(VPZ_LIV[nav])}</li>`,
+  ...t.map(r=>`<li><b>•</b> <span class="vsp">${r.l} (${sn(r.s)}):</span> ${r.pl.length?r.pl.map(i=>`${pn(i)} — ${vsT(VPZ_LIV[i]).split(',').slice(0,3).join(',')}`).join('; '):T('vpzEmpty')}</li>`),
+  `<li><b>•</b> <span class="vsp">${T('vpzAsp')}:</span> ${asp.length?asp.map(pn).join(', '):'—'}</li>`];
+ return `<section class="blk"><h3>${T('vpzLivT')}</h3><p class="note">${T('vpzLivIntro')}</p><ul class="fx vsfx">${li.join('')}</ul><p><b>${T('vpzMode')}:</b> ${T(mode)}</p>${x.length?`<ul class="fx vsfx">${x.map(k=>`<li class="pos"><b>✓</b> ${T(k)}</li>`).join('')}</ul>`:''}<p class="note">${T('vpzSrc')}</p></section>`;}
+function vpzHealth(ch){const P=ch.planets,B=VPZ_BEN(ch),L1=lordOf(ch,1),L6=lordOf(ch,6),L8=lordOf(ch,8),dL=[6,8,12].map(h=>lordOf(ch,h));const out=[];const add=(ok,k,s)=>{if(ok)out.push({k,s});};
+ const same=(a,b)=>P[a].sign===P[b].sign;const occ=h=>P.filter(p=>p.house===h).map(p=>p.i);const weakL1=smPlanet(ch,L1).v<0;
+ add(same(L1,4)&&L1!==4||same(L6,4)&&L6!==4,'hp1',1);add(B.some(i=>aspectsHouse(ch,i,8)),'hp2',1);add(occ(1).some(i=>B.includes(i))&&!occ(1).some(i=>VPZ_MAL.includes(i)),'hp3',1);
+ add(vpzAspectsPlanet(ch,4,0)||vpzAspectsPlanet(ch,1,0),'hp4',1);add(P[4].house===6||aspectsHouse(ch,4,6),'hp5',1);add([6,2,7].filter(i=>[3,6,11].includes(P[i].house)).length>=2,'hp6',1);add([1,4,5,7,9,10].includes(P[L1].house),'hp7',1);
+ add(occ(2).some(i=>[2,6,7,8].includes(i)),'hr1',-1);add(dL.some(d=>d!==L1&&same(L1,d))||dL.some(d=>d!==L1&&P[d].house===1),'hr2',-1);add([6,8,12].includes(P[L8].house)&&weakL1,'hr3',-1);
+ add(P[0].house===3||P[1].house===3,'hr4',-1);add(occ(1).some(i=>[2,6,7,8].includes(i))&&weakL1,'hr5',-1);add([5,9].includes(P[6].house)&&[2,7].some(i=>vpzAspectsPlanet(ch,i,6)),'hr6',-1);
+ add(P[1].house===6&&occ(6).some(i=>[2,6,7,8].includes(i)),'hr7',-1);const km=[1,4,7,10].filter(h=>occ(h).some(i=>[2,6,7,8].includes(i)));add(km.length>=2&&km.every(h=>!B.some(i=>aspectsHouse(ch,i,h))),'hr8',-1);
+ add(occ(8).some(i=>[2,6,7,8].includes(i)),'hr9',-1);add(L1!==L8&&same(L1,L8)&&[2,6,7,8].some(i=>i!==L1&&i!==L8&&same(i,L1)),'hr10',-1);return out;}
+// Samasya health: include these yogas in the natal picture (each ±0.4)
+const _smNatalV=smNatal;smNatal=function(ch,P){const r=_smNatalV(ch,P);if(P.k!=='health')return r;const ys=vpzHealth(ch);
+ ys.forEach(y=>{r.v+=0.4*y.s;r.why.push({s:y.s>0?1:-0.9,k:y.k,o:{},src:1});});r.why.sort((a,b)=>a.s-b.s);return r;};
+const _smWhyTxtV=smWhyTxt;smWhyTxt=function(w){const t=_smWhyTxtV(w);return w.src?`${t} <span class="note">(${T('vpzSrc')})</span>`:t;};
+// Livelihood block: Samasya job card and the Career tab
+const _renderSamasyaV=renderSamasya;renderSamasya=function(ch){let h=_renderSamasyaV(ch);if(!(S.sam||[]).includes('job'))return h;let add='';try{add=vpzLivelihood(ch);}catch(e){}
+ const k=h.lastIndexOf('<p class="note">'+T('smDisc'));return k>=0?h.slice(0,k)+add+h.slice(k):h+add;};
+NEWT.samasya=renderSamasya;
+if(NEWT.career){const _car=NEWT.career;NEWT.career=function(ch){let a='';try{a=vpzLivelihood(ch);}catch(e){}return _car(ch)+a;};}
+
 </script>
 <nav id="bnav" aria-label="Main"></nav>
 </body></html>
