@@ -6516,6 +6516,30 @@ const _renderAllRB=renderAll;renderAll=function(){_renderAllRB();try{const p=$('
 .rbasis>summary{cursor:pointer;padding:9px 0;font:600 13.5px var(--sans);color:var(--mut)}.rbasis[open]>summary{border-bottom:1px dashed var(--line);margin-bottom:6px}.rbb{padding-bottom:8px;font-size:14px}
 .rblife{background:var(--goodbg);border-radius:10px;padding:9px 12px;line-height:1.6}.rblife b{color:var(--good)}.rblife.l1{background:var(--warnbg)}.rblife.l1 b{color:#8a5a00}.rblife.l0{background:var(--badbg)}.rblife.l0 b{color:var(--kum)}`;document.head.appendChild(st);})();
 
+// ===== v20.3: second child read from the Saptamsa (D7) — 7th from the D7 lagna (3rd from 5th) — so it no longer mirrors the spouse (D1 7th) =====
+Object.assign(I18N.en,{c2Sign:'D7 sign of the second child',c2Lord:'Its lord {p} in D7: {d}, in the {h} house from it',c2Occ:'Planets in it (D7)',c2None:'none',c2Head:'D7: 7th from Saptamsa lagna',c2Chart:'Saptamsa (D7) turned to the second child',c2Note:'The second child is read from the Saptamsa (D7), the chart for children: the 7th house from the D7 lagna (3rd from the 5th). In the main chart the same 7th house also shows the spouse, so D7 keeps the two apart. Timing still uses your main dasha.'});
+Object.assign(I18N.hi,{c2Sign:'दूसरी संतान की D7 राशि',c2Lord:'स्वामी {p} सप्तांश में: {d}, उससे {h} भाव में',c2Occ:'उसमें ग्रह (D7)',c2None:'कोई नहीं',c2Head:'D7: सप्तांश लग्न से सातवाँ',c2Chart:'दूसरी संतान की ओर घुमाई सप्तांश (D7) कुंडली',c2Note:'दूसरी संतान सप्तांश (D7) से पढ़ी गई है, जो संतान की कुंडली है: सप्तांश लग्न से सातवाँ भाव (पाँचवें से तीसरा)। मुख्य कुंडली में यही सातवाँ भाव जीवनसाथी भी दिखाता है, इसलिए D7 दोनों को अलग करता है। समय अब भी आपकी मुख्य दशा से है।'});
+const C2_DS={exalted:1.5,own:1.2,mt:1.2,friend:0.5,neutral:0,enemy:-0.5,debil:-1.5};
+function c2D7(ch){const P=ch.planets,vL=varga(ch.asc,7),vp=P.map(p=>({i:p.i,sign:varga(p.lon,7)})),sg=(vL+6)%12;
+ const hs=n=>{const s=(sg+n-1)%12,L=SIGN_LORD[s],dg=dignity(L,vp[L].sign),fr=((vp[L].sign-s+12)%12)+1;let v=C2_DS[dg]??0;
+  vp.forEach(q=>{if(q.sign!==s)return;if([3,4,5].includes(q.i))v+=0.5;else if([2,6,7,8].includes(q.i))v-=0.5;});v+=[6,8,12].includes(fr)?-0.8:[1,4,5,7,9,10].includes(fr)?0.5:0;return v;};
+ return {vL,vp,sg,hs};}
+const _rsReadC2=rsRead;rsRead=function(ch,r){const rd=_rsReadC2(ch,r);if(r[0]!=='child2')return rd;try{const d=c2D7(ch),L=SIGN_LORD[d.sg],fromL=((d.vp[L].sign-d.vL+12)%12)+1;
+ const self=d.hs(1),health=(d.hs(1)*1.2+d.hs(6)*0.6+d.hs(8)*0.6)/2.4,work=d.hs(10),money=(d.hs(2)+d.hs(11))/2,bondBad=[6,8,12].includes(fromL),bondGood=[1,4,5,7,9,10,11].includes(fromL);
+ const tot=0.45*self+0.2*health+0.15*rd.ks+0.1*rd.js+0.2*self+(bondGood?0.2:bondBad?-0.3:0);
+ return {...rd,self,health,work,money,bondBad,bondGood,vl:{vlord:L,vs:self},tot,lv:tot>=1.1?3:tot>=0.35?2:tot>=-0.4?1:0,d7:true};}catch(e){return rd;}};
+const _fmPartsC2=fmParts;fmParts=function(ch,r,rd){if(r[0]!=='child2')return _fmPartsC2(ch,r,rd);try{const P=ch.planets,d=c2D7(ch),L=SIGN_LORD[d.sg];
+ const occ=d.vp.filter(q=>q.sign===d.sg).sort((a,b)=>smPlanet(ch,b.i).v-smPlanet(ch,a.i).v).slice(0,2).map(q=>vsT(FM_PL[q.i]));
+ const n=((d.vp[L].sign-d.sg+12)%12)+1,bi=rd.bondGood?0:rd.bondBad?2:1;
+ return {who:[vsT(FM_SIGN[d.sg]),...occ].join(' '),life:vsT(FM_LORD[n-1]),role:vsT(FM_ROLE[P[L].house-1]),bond:vsT(FM_BOND.child[bi]),well:vsT(FM_WELL[rsLvl(rd.health)]),bi};}catch(e){return _fmPartsC2(ch,r,rd);}};
+const _renderRishtaC2=renderRishta;renderRishta=function(ch){const h=_renderRishtaC2(ch);if(S.rsk!=='child2')return h;try{const d=c2D7(ch),t=document.createElement('template');t.innerHTML=h;
+ const sm=t.content.querySelector('.rshead h3 small');if(sm)sm.textContent=` · ${T('c2Head')} · ${sn(d.sg)}`;
+ const c=t.content.querySelector('.rschart');if(c)c.innerHTML=chartSVG(housesFrom(d.sg,ch.planets.map(p=>({...p,sign:d.vp[p.i].sign}))),T('c2Chart'),d.sg);
+ const b=t.content.querySelector('.fmbasis .vsb');if(b){const u=b.querySelector('ul.fx');const LD=SIGN_LORD[d.sg],dg=dignity(LD,d.vp[LD].sign),fr=((d.vp[LD].sign-d.sg+12)%12)+1,oc=d.vp.filter(q=>q.sign===d.sg).map(q=>pn(q.i));
+  const li=`<ul class="fx vsfx"><li><b>•</b> <span class="vsp">${T('c2Sign')}:</span> ${sn(d.sg)} — ${L(SIGN_T)[d.sg]}</li><li><b>•</b> ${T('c2Lord').replace('{p}',pn(LD)).replace('{d}',(T('rsKarD')[dg]||T('rsKarD').neutral)).replace('{h}',hiV()?HO[fr]:HOUSE_ORD(fr))}</li><li><b>•</b> <span class="vsp">${T('c2Occ')}:</span> ${oc.length?oc.join(', '):T('c2None')}</li></ul>`;
+  if(u)u.outerHTML=li;b.insertAdjacentHTML('afterbegin',`<p class="note">${T('c2Note')}</p>`);}return t.innerHTML;}catch(e){return h;}};
+NEWT.rishta=renderRishta;
+
 </script>
 <nav id="bnav" aria-label="Main"></nav>
 </body></html>
