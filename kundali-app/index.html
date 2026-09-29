@@ -5402,6 +5402,31 @@ const _renderUpayV=renderUpay;renderUpay=function(ch){const base=_renderUpayV(ch
 @media (prefers-color-scheme:dark){:root:not([data-theme="light"]) .rgy figure{color:var(--txt)}}`;document.head.appendChild(st);})();
 if(NEWT.s_upay){const _su=NEWT.s_upay;NEWT.s_upay=function(ch){let a='';try{a=rgHTML(ch);}catch(e){}return _su(ch)+a;};}
 
+// ===== v16.6: remedies made chart-specific — Manglik cancellation rules, stricter Pitra dosha, personal remedies first =====
+Object.assign(I18N.en,{mgCancel:'Mangal dosha is present by house but cancelled',mgC_own:'Mars is in its own or exaltation sign',mgC_lagna:'for this lagna Mars is the lagna lord or yogakaraka',mgC_house:'Mars sits in a sign that classically cancels the dosha for this house',
+ mgC_leoaq:'Mars is in Leo or Aquarius',mgC_jup:'Jupiter conjoins or aspects Mars',mgMild:'Mild Manglik (from lagna only; not from the Moon)',mgStrong:'Manglik from both lagna and the Moon',mgNone:'No Mangal dosha'});
+Object.assign(I18N.hi,{mgCancel:'भाव से मंगल दोष है पर भंग (निरस्त) हो जाता है',mgC_own:'मंगल अपनी या उच्च राशि में है',mgC_lagna:'इस लग्न के लिए मंगल लग्नेश या योगकारक है',mgC_house:'मंगल ऐसी राशि में है जो इस भाव के लिए शास्त्रीय रूप से दोष भंग करती है',
+ mgC_leoaq:'मंगल सिंह या कुंभ राशि में है',mgC_jup:'गुरु मंगल के साथ है या उस पर दृष्टि डालता है',mgMild:'सामान्य मांगलिक (केवल लग्न से; चंद्र से नहीं)',mgStrong:'लग्न और चंद्र दोनों से मांगलिक',mgNone:'मंगल दोष नहीं'});
+function vsManglik(ch){const P=ch.planets,m=P[2],h=m.house,MH=[1,2,4,7,8,12];if(!MH.includes(h))return {has:false};
+ const c=[];if([0,7,9].includes(m.sign))c.push('mgC_own');if([0,7,3,4].includes(ch.lagna))c.push('mgC_lagna');
+ const HX={1:[4,10],2:[2,5],4:[0,7],7:[3,9],8:[8,11],12:[1,6]};if((HX[h]||[]).includes(m.sign))c.push('mgC_house');
+const dj=((m.sign-P[4].sign+12)%12)+1;if([1,5,7,9].includes(dj))c.push('mgC_jup');
+ const fromMoon=MH.includes(((m.sign-P[1].sign+12)%12)+1);return {has:true,cancel:[...new Set(c)],fromMoon};}
+function vsPitra(ch){const P=ch.planets,h9=(ch.lagna+8)%12,L9=SIGN_LORD[h9];
+ return P[0].sign===P[7].sign||P[7].house===9||(P[0].sign===P[6].sign&&P[0].house===9);}
+const _remedyPlanV=remedyPlan;remedyPlan=function(ch){let a=_remedyPlanV(ch);
+ const mg=vsManglik(ch);a=a.filter(x=>!(x.kind==='dosha'&&x.i==='manglik'));if(mg.has&&!mg.cancel.length)a.unshift({kind:'dosha',i:'manglik',why:mg.fromMoon?'strong':'mild'});
+ // Mercury is almost always near the Sun; treat its combustion as weakness only when very close (within 6°), as Budhaditya tradition holds
+ a=a.filter(x=>{if(x.kind!=='strengthen'||x.i!==3)return true;const d=Math.abs(((ch.planets[3].lon-ch.planets[0].lon+540)%360)-180);x.why=x.why.filter(w=>w!=='comb'||d<=6);return x.why.length>0;});
+ a=a.filter(x=>!(x.kind==='dosha'&&x.i==='pitra'));if(vsPitra(ch))a.push({kind:'dosha',i:'pitra'});
+ // personal planet remedies first, then doshas, alternating so the short Simple-mode list stays chart-specific
+ const pl=[...a.filter(x=>x.kind==='pacify'),...a.filter(x=>x.kind==='strengthen')],ds=a.filter(x=>x.kind==='dosha'),out=[];
+ while(pl.length||ds.length){if(pl.length)out.push(pl.shift());if(ds.length)out.push(ds.shift());}return out;};
+// show the Manglik verdict with its reasons at the top of the Upay tab
+const _renderUpayM=renderUpay;renderUpay=function(ch){const h=_renderUpayM(ch);const mg=vsManglik(ch);let note;
+ if(!mg.has)note=`<p class="note">✓ ${T('mgNone')}</p>`;else if(mg.cancel.length)note=`<p class="note">✓ ${T('mgCancel')}: ${mg.cancel.map(T).join('; ')}${hiV()?'।':'.'}</p>`;else note=`<p class="note">⚠ ${T(mg.fromMoon?'mgStrong':'mgMild')}</p>`;
+ const t=`<h3>${T('upDoshaT')}</h3>`,k0=h.indexOf(t),k=k0>=0?k0+t.length-5:-1;return k>=0?h.slice(0,k+5)+note+h.slice(k+5):note+h;};
+
 </script>
 <nav id="bnav" aria-label="Main"></nav>
 </body></html>
