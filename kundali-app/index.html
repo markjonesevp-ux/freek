@@ -6486,7 +6486,7 @@ function rbTransform(){if(!(S.mode==='kundali'&&S.ch&&S.screen!=='start'))return
  // 1) real-life line per house card
  pan.querySelectorAll('section.blk').forEach(s=>{const h3=s.querySelector('h3');if(!h3)return;let h=null;
   if(h3.dataset.h)h=+h3.dataset.h;else if(S.tab==='report'){const m=(h3.querySelector('small')||{}).textContent;const x=m&&m.match(/(\d+)/);if(x)h=+x[1];}
-  else if(S.tab==='final'){const n=s.querySelector('details.narr');const x=n&&n.textContent.match(/(\d+)\s*(?:वाँ|वां|th|st|nd|rd)?\s*(?:भाव|house)/);if(x)h=+x[1];}
+  else if(S.tab==='final'){const n=s.querySelector('details.narr');const x=n&&(n.textContent.match(/(\d+)\s*(?:वाँ|वां|th|st|nd|rd)?\s*(?:भाव|house)/)||n.textContent.match(/House\s+(\d+)/));if(x)h=+x[1];}
   if(!h||h<1||h>12||s.querySelector('.rblife'))return;const lv=rbLvl(h3);
   if(S.tab==='report'||S.tab==='bhava'){const p=[...s.children].find(c=>c.tagName==='P'&&!c.className);if(p){p.outerHTML=rbLife(h,lv);return;}}
   const after=s.querySelector('p.sgm')||[...s.children].find(c=>c.tagName==='P')||h3;after.insertAdjacentHTML('afterend',rbLife(h,lv));});
