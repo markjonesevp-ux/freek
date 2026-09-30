@@ -6649,7 +6649,14 @@ body.v18 .two{grid-template-columns:repeat(auto-fit,minmax(min(300px,100%),1fr))
 figure.chart svg,.chart svg,.charts svg{max-width:100%;height:auto}
 .tw{max-width:100%;overflow-x:auto}
 li .rk,p .rk,.vsfx .rk{white-space:normal;display:inline-block;max-width:100%}
-#panel{overflow-wrap:anywhere}}`;document.head.appendChild(st);})();
+#panel p,#panel li,#panel h3,#panel h4,#panel summary{overflow-wrap:break-word}
+#panel td,#panel th{word-break:normal;overflow-wrap:normal}
+.tw{position:relative;-webkit-overflow-scrolling:touch;background:linear-gradient(to right,var(--card) 30%,transparent),linear-gradient(to left,var(--card) 30%,transparent) right,radial-gradient(farthest-side at 0 50%,rgba(0,0,0,.12),transparent),radial-gradient(farthest-side at 100% 50%,rgba(0,0,0,.12),transparent) right;background-repeat:no-repeat;background-size:30px 100%,30px 100%,10px 100%,10px 100%;background-attachment:local,local,scroll,scroll}
+.tw table{min-width:100%}}`;document.head.appendChild(st);})();
+
+// every table gets its own sideways scroll box instead of squeezing the page
+const _renderAllTW=renderAll;renderAll=function(){_renderAllTW();try{document.querySelectorAll('#panel table,#modeOther table').forEach(t=>{if(t.closest('.tw'))return;const w=document.createElement('div');w.className='tw';t.parentNode.insertBefore(w,t);w.appendChild(t);});
+ document.querySelectorAll('#panel td,#panel th,#modeOther td').forEach(c=>{const x=c.textContent.trim();if(x.length<=44&&/\d{1,2}[-/.]\d{1,2}[-/.]\d{2,4}|\d{1,2}:\d{2}|\d+°/.test(x))c.style.whiteSpace='nowrap';});}catch(e){}};
 
 // ===== v20.6: Gochar reading in plain words — each planet's transit with lagna-karaka check, natal contacts, tara, ashtakavarga, how long, remedies =====
 Object.assign(I18N.en,{gcT:'Gochar reading — in plain words',gcIntro:'Where each planet is moving now, which area of your life it touches, and whether it helps or tests you. Results are judged from your Moon (classical gochar) and placed in life areas from your lagna; a planet that is a karaka for your lagna gives better results even in a hard position.',
@@ -6734,6 +6741,56 @@ document.addEventListener('click',e=>{const b=e.target.closest('#rpdl');if(!b||!
 .frsec{margin-top:18px}.frsec h2{border-bottom:2px solid var(--hal);padding-bottom:4px}
 @media print{.frsec{break-before:page}.frtoc{break-before:page}.report details>summary{list-style:none}.report details>summary::-webkit-details-marker{display:none}
  .report .vsd,.report .rbasis{border:0;padding:0}.report svg{max-width:100%}.report .tw{overflow:visible}.v18head,.v18strip,#bnav,header.top{display:none!important}}`;document.head.appendChild(st);})();
+
+// ===== v20.8: all-sections index built from the new sections; single-word bold labels in tables never break letter by letter =====
+renderIndex=function(){const q=(S.idxq||'').toLowerCase(),m=t=>!q||T('t_'+t).toLowerCase().includes(q)||(D18[t]&&vsT(D18[t]).toLowerCase().includes(q));
+ const groups=SEC18.filter(s=>s[0]!=='home').map(s=>{const items=s[2].flatMap(g=>g[1]).filter(t=>tabs18(s[0]).includes(t)&&m(t));return items.length?`<div class="v18grp">${s[1]} ${T('h_'+s[0])}</div><div class="v18list">${items.map(row18).join('')}</div>`:'';}).join('');
+ const tools=[['match','💑','m_match','d_match'],['panch','📅','m_panch','d_panch'],['hor','🔮','m_hor','d_hor'],['num','🔢','m_num','d_num']].filter(([k,ic,l])=>!q||T(l).toLowerCase().includes(q)).map(([k,ic,l,d])=>`<button class="v18row" data-mode="${k}"><i>${ic}</i><span><b>${T(l)}</b><small>${T(d)}</small></span><em>›</em></button>`).join('');
+ return `<div class="pagehead"><button class="back" data-go="more">‹</button><h2>${T('t_index')}</h2></div><p class="note">${T('idxNote')}</p><input id="idxq" class="cityin" placeholder="${T('idxSearch')}" value="${esc(S.idxq||'')}" style="width:100%;margin-bottom:10px">${groups}${tools?`<div class="v18grp">${T('g_tools')}</div><div class="v18list">${tools}</div>`:''}`;};
+(function(){const st=document.createElement('style');st.textContent=`#panel td>b,#panel td>span.vsp,#panel th{white-space:nowrap}.fx li b{width:auto!important;min-width:16px}.vsd>summary:has(.vsr){display:grid;grid-template-columns:1fr auto auto;column-gap:8px;row-gap:2px;align-items:center}.vsd>summary:has(.vsr)>.vsp{grid-column:1;grid-row:1}.vsd>summary:has(.vsr)>.vsr{grid-column:2;grid-row:1;margin:0;white-space:nowrap}.vsd>summary:has(.vsr)::after{grid-column:3;grid-row:1;margin:0}.vsd>summary:has(.vsr)>.note{grid-column:1/-1;grid-row:2}`;document.head.appendChild(st);})();
+
+// ===== v20.9: Varshphal reading in plain words — year verdict, best and careful areas, month-by-month (mudda dasha), lagna-karaka check, remedies =====
+Object.assign(I18N.en,{vpT:'Your year {y} — in plain words',vpIntro:'Summary of the annual chart (from birthday {a} to birthday {b}): how the year feels overall, which areas move well, which need care, and what each period brings.',
+ vpLv:['A testing year','A mixed year','A good year'],vpLvT:['Expect effort and delays; move carefully, protect health and money, and keep patience — gains come late in the year or after it.','Ups and downs balance out; progress comes in some areas while others need care. Use the good periods below for important steps.','Support is strong; plans move forward. Use the good periods below for big steps and keep the careful areas in check.'],
+ vpBest:'Areas that move well',vpCare:'Areas that need care',vpLord:'Lord of the year: {p} — {s}',vpLordG:'strong in the annual chart, so the year\'s promise is delivered',vpLordB:'weak in the annual chart, so results need extra effort',vpLordM:'average',vpKar:' It is also a karaka for your birth lagna — its help is real.',vpNon:'',
+ vpMun:'Muntha (focus of the year) is in the {h} house: {t}',vpMonths:'Month by month',vpNow:'running now',vpDasha:'Your main dasha during this year: {d}',vpUpay:'Remedies for this year',vpTj:'Tajaka yogas this year: {g} helpful, {b} difficult.',vpSrc:'From the Tajaka annual chart: muntha, year lord, mudda dasha, Tajaka yogas; readings written for this app.'});
+Object.assign(I18N.hi,{vpT:'आपका वर्ष {y} — सरल भाषा में',vpIntro:'वार्षिक कुंडली का सार (जन्मदिन {a} से जन्मदिन {b} तक): वर्ष कुल मिलाकर कैसा रहेगा, कौन-से क्षेत्र अच्छे चलेंगे, किनमें ध्यान चाहिए, और हर अवधि क्या लाएगी।',
+ vpLv:['परीक्षा का वर्ष','मिश्रित वर्ष','अच्छा वर्ष'],vpLvT:['मेहनत और देरी की उम्मीद रखें; सावधानी से कदम उठाएँ, स्वास्थ्य और धन की रक्षा करें, धैर्य रखें — लाभ वर्ष के अंत में या उसके बाद आता है।','उतार-चढ़ाव बराबर रहेंगे; कुछ क्षेत्रों में प्रगति, कुछ में सावधानी। महत्वपूर्ण कदम नीचे दिए शुभ समय में उठाएँ।','सहयोग प्रबल है; योजनाएँ आगे बढ़ेंगी। बड़े कदम नीचे दिए शुभ समय में उठाएँ और सावधानी वाले क्षेत्रों पर नज़र रखें।'],
+ vpBest:'अच्छे चलने वाले क्षेत्र',vpCare:'ध्यान चाहने वाले क्षेत्र',vpLord:'वर्ष का स्वामी: {p} — {s}',vpLordG:'वार्षिक कुंडली में बलवान, इसलिए वर्ष का वादा पूरा होता है',vpLordB:'वार्षिक कुंडली में कमज़ोर, इसलिए फल के लिए अधिक प्रयास चाहिए',vpLordM:'सामान्य',vpKar:' यह आपके जन्म लग्न का कारक भी है — इसका सहयोग वास्तविक है।',vpNon:'',
+ vpMun:'मुंथा (वर्ष का केंद्र) {h} भाव में है: {t}',vpMonths:'महीने-दर-महीने',vpNow:'अभी चल रही',vpDasha:'इस वर्ष आपकी मुख्य दशा: {d}',vpUpay:'इस वर्ष के उपाय',vpTj:'इस वर्ष ताजिक योग: {g} सहायक, {b} कठिन।',vpSrc:'ताजिक वार्षिक कुंडली से: मुंथा, वर्षेश, मुद्दा दशा, ताजिक योग; फल इस ऐप के लिए लिखे गए।'});
+const VP_DS={exalted:1.5,own:1,mt:1,friend:0.5,neutral:0,enemy:-0.5,debil:-1.5};
+function vpPl(vc,i){const p=vc.planets[i];let v=VP_DS[dignity(i,p.sign)]??0;v+=[1,4,5,7,9,10,11].includes(p.house)?0.6:[6,8,12].includes(p.house)?-0.8:0;return v;}
+function vpHouse(vc,h){const P=vc.planets,s=(vc.lagna+h-1)%12,L=SIGN_LORD[s];let v=0;
+ P.forEach(p=>{if(p.house!==h)return;if([3,4,5].includes(p.i)||(p.i===1))v+=1;else if([2,6,7,8,0].includes(p.i))v+=[3,6,11].includes(h)?0.5:-1;});
+ const lh=P[L].house;v+=[1,4,5,7,9,10,11].includes(lh)?0.5:[6,8,12].includes(lh)?-0.6:0;v+=(VP_DS[dignity(L,P[L].sign)]??0)*0.4;return v;}
+function renderVarshPlain(ch){const y=S.vyear,v=varshphal(ch,y),vc=v.vc,now=julianNow();let ve=null;try{ve=varshesha(ch,v).lord;}catch(e){}
+ const mgood=[1,2,3,5,9,10,11].includes(v.mh),ML=SIGN_LORD[v.muntha];let g=0,bq=0;try{const t=document.createElement('div');t.innerHTML=vsTajakaHTML(ch);g=t.querySelectorAll('li.pos').length;bq=t.querySelectorAll('li.neg').length;}catch(e){}
+ const vl=ve!=null?vpPl(vc,ve):0,ll=vpPl(vc,SIGN_LORD[vc.lagna]);
+ const sc=(mgood?1:-1)+vl*0.8+ll*0.5+(g-bq)*0.3+(vpPl(vc,4)>0?0.4:-0.2);const lv=sc>=1.4?2:sc<=-1.1?0:1;
+ const hs=[];for(let h=1;h<=12;h++)hs.push({h,v:vpHouse(vc,h)});const best=hs.slice().sort((a,b)=>b.v-a.v).slice(0,3).filter(x=>x.v>0),care=hs.slice().sort((a,b)=>a.v-b.v).slice(0,2).filter(x=>x.v<0);
+ const end=v.jd+365.2422;
+ let h=`<section class="blk ntp"><h3>🎂 ${T('vpT').replace('{y}',y)}</h3><p class="note">${T('vpIntro').replace('{a}',fdate(v.jd)).replace('{b}',fdate(end))}</p>`
+  +`<p class="rblife l${lv}"><b>${T('vpLv')[lv]}:</b> ${T('vpLvT')[lv]}</p>`;
+ if(ve!=null)h+=`<p>${T('vpLord').replace('{p}',pn(ve)).replace('{s}',T(vl>=0.8?'vpLordG':vl<=-0.6?'vpLordB':'vpLordM'))}.${ntpIsKar(ch,ve)?T('vpKar'):''}</p>`;
+ h+=`<p>${T('vpMun').replace('{h}',hiV()?HO[v.mh]:HOUSE_ORD(v.mh)).replace('{t}',vsT(GC_H[v.mh-1][mgood?0:1]))}</p>`;
+ if(g||bq)h+=`<p class="note">${T('vpTj').replace('{g}',g).replace('{b}',bq)}</p>`;
+ let dd='';try{const a=dashaAt(ch,v.jd),b=dashaAt(ch,end-1);dd=`${pn(a.md.lord)}/${pn(a.ad.lord)}${b&&(b.ad.lord!==a.ad.lord||b.md.lord!==a.md.lord)?` → ${pn(b.md.lord)}/${pn(b.ad.lord)} (${fdate(b.ad.start)})`:''}`;}catch(e){}
+ if(dd)h+=`<p class="note">${T('vpDasha').replace('{d}',dd)}</p>`;h+=`</section>`;
+ h+=`<section class="blk"><h3>✅ ${T('vpBest')}</h3><ul class="fx vsfx">${best.map(x=>`<li class="pos"><b>✓</b> <span class="vsp">${L(HOUSE_S)[x.h-1]}:</span> ${vsT(GC_H[x.h-1][0])}</li>`).join('')||'<li>—</li>'}</ul>`
+  +`<h3>⚠️ ${T('vpCare')}</h3><ul class="fx vsfx">${care.map(x=>`<li class="neg"><b>!</b> <span class="vsp">${L(HOUSE_S)[x.h-1]}:</span> ${vsT(GC_H[x.h-1][1])}</li>`).join('')||'<li>—</li>'}</ul></section>`;
+ const vq=i=>{const p=vc.planets[i],mal=[2,6,7,8,0].includes(i);let q=vpPl(vc,i)*0.6+vpHouse(vc,p.house)*0.6;if(mal&&[3,6,11].includes(p.house))q+=0.8;else if(mal&&[1,4,5,7,8,9,12].includes(p.house))q-=0.7;return q;};
+ const rows=v.mudda.map(m=>{const p=vc.planets[m.lord],good=vq(m.lord)>=0,cur=now>=m.start&&now<m.end;
+  return `<li class="${good?'pos':'neg'}${cur?' vpcur':''}"><b>${good?'✓':'!'}</b> <span class="vsp">${fdate(m.start)} – ${fdate(m.end)} · ${pn(m.lord)}</span>${cur?` <span class="rk strong">${T('vpNow')}</span>`:''}<br>${L(HOUSE_S)[p.house-1]}: ${vsT(GC_H[p.house-1][good?0:1])}</li>`;});
+ h+=`<section class="blk"><h3>🗓️ ${T('vpMonths')}</h3><ul class="fx vsfx">${rows.join('')}</ul></section>`;
+ const up=[];if(ve!=null&&vl<0)up.push(ve);if(!mgood)up.push(ML);v.mudda.forEach(m=>{if(vq(m.lord)<-0.8&&!up.includes(m.lord))up.push(m.lord);});
+ if(up.length)h+=`<section class="blk"><h3>🪔 ${T('vpUpay')}</h3><ul class="fx vsfx">${up.slice(0,4).map(i=>{let u={};try{u=UPC(i);}catch(e){}return `<li><b>•</b> <span class="vsp">${pn(i)}:</span> ${vsT(GC_TIP[i])}${u.mantra?` · ${u.day}: ${u.mantra}`:''}</li>`;}).join('')}</ul></section>`;
+ return h;}
+const _renderVarshP=renderVarsh;renderVarsh=function(ch){const old=_renderVarshP(ch);let a='';try{a=renderVarshPlain(ch);}catch(e){console.error(e);return old;}
+ try{const t=document.createElement('template');t.innerHTML=old;const f=t.content.firstElementChild;if(f&&f.querySelector('#vy')){const bar=f.outerHTML;f.remove();return bar+a+`<section class="blk">${vsDet('📊 '+(hiV()?'विस्तृत वर्षफल (कुंडली, ताजिक योग, सहम, मुद्दा दशा)':'Detailed Varshphal (chart, Tajaka yogas, sahams, mudda dasha)'),t.innerHTML,false)}</section><p class="note">${T('vpSrc')}</p>`;}}catch(e){}
+ return a+old;};
+if(typeof RB_SKIP!=='undefined'&&!RB_SKIP.includes('varsh'))RB_SKIP.push('varsh');
+document.addEventListener('change',e=>{if(e.target&&e.target.id==='vy'&&S.ch&&S.tab==='varsh'){S.vyear=+e.target.value;renderAll();}});
+(function(){const st=document.createElement('style');st.textContent=`.vpcur{background:var(--warnbg);border-radius:8px;padding:6px 8px!important}`;document.head.appendChild(st);})();
 
 </script>
 <nav id="bnav" aria-label="Main"></nav>
