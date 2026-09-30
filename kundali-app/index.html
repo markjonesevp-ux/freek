@@ -7228,6 +7228,75 @@ IP_A.forEach(A=>A.pg.forEach(t=>{if(!NEWT[t])return;const f=NEWT[t];NEWT[t]=func
 // full PDF report: the integrated page is included once; area pages there skip the repeated card
 if(typeof frBuildAll==='function'){const _fb220=frBuildAll;frBuildAll=function(ch){S.frBuilding=true;try{return _fb220(ch);}finally{S.frBuilding=false;}};}
 
+// ===== v22.1: Which systems are most recognised for accurate prediction (ranked, with stated criteria) + how each system actually performs on YOUR recorded events
+// (hits vs what chance would give) + those results re-weight the integrated engine for this chart + chance line on the accident date check =====
+Object.assign(I18N.en,{t_pmrank:'Recognition & accuracy of systems',rkT:'Which system is most recognised for accurate prediction',rkN:'There is no survey that measures this in numbers, so the ranking below is built from six stated criteria, each scored 1–5: classical authority of the texts, teaching in universities and institutes, use among practising astrologers, published case studies / research, how little it depends on an exact birth time, and its reputation among astrologers for accurate prediction. The ranking changes with the purpose — see the second table.',
+ rkC:['Classical texts','Taught formally','Used by astrologers','Published case research','Works without exact time','Reputation for accurate prediction'],rkTot:'Total',rkRank:'Rank',rkPur:'Best system by purpose',rkSci:'Scientific tests',rkSciN:'In controlled double-blind tests astrologers have not beaten chance: Carlson (Nature, 1985) with 28 astrologers, and Narlikar et al. (Pune, 2009) with 27 Indian astrologers who scored 43% at telling bright from mentally challenged children. Claims of high accuracy (for example 98% for the double-transit marriage rule) come from studies within the astrological community that have not been independently repeated. So recognition is not proof — the only real measure is how a method performs on verified events, which the table above does for you.',
+ rkMy:'How each system performed on YOUR recorded events',rkMyN:'For every event you recorded (Verify tab), each system is checked on that date. "By chance" is how often the same system says yes on random dates of your life in the same age range. A system that hits clearly more than chance has earned trust for this chart; the integrated prediction now gives it more weight (and less to those that did worse).',
+ rkSys:'System',rkHit:'Hits',rkExp:'By chance',rkRes:'Result',rkBetter:'better than chance',rkSame:'about chance',rkWorse:'worse than chance',rkNeed:'Record at least 3 past events (marriage, job, child, property…) in the Verify tab to see this.',rkGoV:'Open Verify tab',rkW:'Weight in the integrated prediction for this chart',rkProm:'Promise check on your events',rkPromN:'Did the birth chart promise what happened?',rkKPay:'KP calculations already use the Krishnamurti ayanamsa (cusps and sub lords), while Parashari, Jaimini and Nadi use Lahiri — as each system requires.',
+ c7Chance:'This rule marks about {p}% of your life, so any random date would fall in a marked period about {p}% of the time.'});
+Object.assign(I18N.hi,{t_pmrank:'पद्धतियों की मान्यता व सटीकता',rkT:'फलादेश की सटीकता में कौन-सी पद्धति सबसे अधिक मान्य है',rkN:'इसे अंकों में मापने वाला कोई सर्वेक्षण उपलब्ध नहीं है, इसलिए नीचे की रैंकिंग छह स्पष्ट मापदंडों पर बनी है (हर एक 1–5 अंक): ग्रंथों का शास्त्रीय आधार, विश्वविद्यालयों व संस्थानों में पढ़ाई, ज्योतिषियों में प्रचलन, प्रकाशित केस-अध्ययन/शोध, सटीक जन्म-समय पर कितनी कम निर्भरता, और ज्योतिषियों में सटीक फलादेश की प्रतिष्ठा। उद्देश्य के अनुसार रैंकिंग बदलती है — दूसरी तालिका देखें।',
+ rkC:['शास्त्रीय ग्रंथ','औपचारिक पढ़ाई','ज्योतिषियों में प्रचलन','प्रकाशित केस-शोध','बिना सटीक समय के काम','सटीक फलादेश की प्रतिष्ठा'],rkTot:'कुल',rkRank:'रैंक',rkPur:'उद्देश्य के अनुसार सबसे उपयुक्त पद्धति',rkSci:'वैज्ञानिक परीक्षण',rkSciN:'नियंत्रित डबल-ब्लाइंड परीक्षणों में ज्योतिषी संयोग से बेहतर नहीं कर पाए: कार्लसन (Nature, 1985) में 28 ज्योतिषी, और नार्लीकर व साथी (पुणे, 2009) में 27 भारतीय ज्योतिषी, जो मेधावी और मानसिक रूप से कमज़ोर बच्चों की कुंडली अलग करने में 43% ही सही रहे। ऊँची सटीकता के दावे (जैसे विवाह के दोहरे गोचर नियम पर 98%) ज्योतिष समुदाय के भीतर के अध्ययनों से हैं, जिन्हें स्वतंत्र रूप से दोहराया नहीं गया। इसलिए मान्यता प्रमाण नहीं है — असली माप यह है कि पद्धति सत्यापित घटनाओं पर कैसी चलती है, जो ऊपर की तालिका आपके लिए करती है।',
+ rkMy:'आपकी दर्ज घटनाओं पर हर पद्धति का प्रदर्शन',rkMyN:'आपकी हर दर्ज घटना (सत्यापन टैब) की तारीख पर हर पद्धति जाँची जाती है। "संयोग से" का अर्थ है: आपके जीवन की उसी आयु-सीमा की किसी भी random तारीख पर वही पद्धति कितनी बार "हाँ" कहती। जो पद्धति संयोग से साफ़ अधिक सही बैठी, उसे इस कुंडली के लिए अधिक भरोसा मिला; एकीकृत फलादेश अब उसे अधिक वज़न देता है (और कमज़ोर को कम)।',
+ rkSys:'पद्धति',rkHit:'सही',rkExp:'संयोग से',rkRes:'निष्कर्ष',rkBetter:'संयोग से बेहतर',rkSame:'लगभग संयोग जितना',rkWorse:'संयोग से कम',rkNeed:'यह देखने के लिए सत्यापन टैब में कम से कम 3 बीती घटनाएँ (विवाह, नौकरी, संतान, संपत्ति…) दर्ज करें।',rkGoV:'सत्यापन टैब खोलें',rkW:'इस कुंडली के एकीकृत फलादेश में वज़न',rkProm:'आपकी घटनाओं पर वादा जाँच',rkPromN:'जो हुआ, क्या जन्म कुंडली में उसका वादा था?',rkKPay:'केपी गणनाएँ (संधि व उप-स्वामी) पहले से कृष्णमूर्ति अयनांश से होती हैं, और पाराशरी, जैमिनी व नाड़ी लाहिड़ी से — जैसा हर पद्धति माँगती है।',
+ c7Chance:'यह नियम आपके जीवन का लगभग {p}% समय चिह्नित करता है — यानी कोई भी random तारीख लगभग {p}% बार चिह्नित काल में पड़ जाती।'});
+// criteria scores: classical, taught, used, published research, time-robust
+const RK_SYS=[['para',['Parashari (BPHS: houses, lords, vargas, Vimshottari)','पाराशरी (बृहत् पाराशर होरा: भाव, भावेश, वर्ग, विंशोत्तरी)'],[5,5,5,4,3,4]],
+ ['jai',['Jaimini (sutras, karakas, chara dasha)','जैमिनी (सूत्र, कारक, चर दशा)'],[5,4,3,3,3,3]],
+ ['av',['Ashtakavarga (BPHS chapter; transit strength)','अष्टकवर्ग (पाराशर; गोचर बल)'],[5,4,3,2,4,3]],
+ ['kp',['KP — Krishnamurti Paddhati (sub lords)','केपी — कृष्णमूर्ति पद्धति (उप-स्वामी)'],[3,3,4,4,1,5]],
+ ['taj',['Tajika Varshphal (annual chart)','ताजिक वर्षफल (वार्षिक कुंडली)'],[4,4,4,2,3,3]],
+ ['pra',['Prashna (horary: Prashna Marga, KP horary)','प्रश्न कुंडली (प्रश्न मार्ग, केपी प्रश्न)'],[4,3,3,2,5,4]],
+ ['nadi',['Nadi (Bhrigu Nandi Nadi)','नाड़ी (भृगु नंदी नाड़ी)'],[3,2,3,2,5,4]],
+ ['lk',['Lal Kitab (remedy-centred)','लाल किताब (उपाय-केंद्रित)'],[2,1,4,1,4,2]]];
+const RK_PUR=[[['Yes/no questions and exact timing of an event','घटना हाँ/ना और सटीक समय'],['kp','para','jai','pra']],[['Life direction, character, major phases','जीवन की दिशा, स्वभाव, बड़े दौर'],['para','jai','nadi','av']],
+ [['When the birth time is uncertain','जब जन्म-समय अनिश्चित हो'],['pra','nadi','jai','para']],[['The coming year','आने वाला वर्ष'],['taj','av','para']],[['Remedies','उपाय'],['para','lk']]];
+function rkName(k){const x=RK_SYS.find(s=>s[0]===k);return x?vsT(x[1]).split(' (')[0]:k;}
+function rkTables(){const R=RK_SYS.map(s=>({k:s[0],n:vsT(s[1]),c:s[2],t:s[2].reduce((a,x)=>a+x,0)})).sort((a,b)=>b.t-a.t||b.c[3]-a.c[3]);const C=L({en:I18N.en.rkC,hi:I18N.hi.rkC});
+ const dots=v=>`<span class="rkd">${'●'.repeat(v)}<span>${'●'.repeat(5-v)}</span></span>`;
+ const t1=`<ol class="rkl">${R.map((r,i)=>`<li><div class="rkh"><b class="rki">${i+1}</b><span class="rkn">${r.n}</span><b class="rks">${r.t}/30</b></div><span class="ipm"><span style="width:${Math.round(r.t/30*100)}%;background:${i<3?'var(--good)':i<6?'var(--hal)':'var(--kum)'}"></span></span><div class="rkg">${r.c.map((v,j)=>`<span>${C[j]} ${dots(v)}</span>`).join('')}</div></li>`).join('')}</ol>`;
+ const t2=`<ul class="fx vsfx">${RK_PUR.map(p=>`<li><b>•</b> <b>${vsT(p[0])}:</b> ${p[1].map((k,i)=>`${i+1}. ${rkName(k)}`).join(' · ')}</li>`).join('')}</ul>`;
+ return {t1,t2};}
+// ---- personal backtest of the 8 timing systems on recorded events
+function rkEvents(ch){return getPev(ch).map(e=>{const m=/^(\d{4})-(\d{2})-(\d{2})/.exec(e.d||'');return m&&pDef(e.k)?{k:e.k,jd:julian(+m[1],+m[2],+m[3],12-ch.inp.tz)}:null;}).filter(x=>x&&x.jd>ch.jd&&x.jd<julianNow());}
+function rkBacktest(ch){const ev=rkEvents(ch),key='rk'+ch.jd+JSON.stringify(ev.map(e=>e.k+Math.round(e.jd)));if(S.rkb&&S.rkb.key===key)return S.rkb;const now=julianNow(),res={};
+ const sysK=Object.keys(CT_W);sysK.forEach(k=>res[k]={h:0,e:0,n:0});const base={};
+ ev.forEach(e=>{const da=dashaAt(ch,e.jd);if(!da)return;const c=_ctRaw(ch,e.k,da.md.lord,da.ad.lord,da.pd.lord,e.jd);if(!c)return;
+  if(!base[e.k]){const ag=keyAge(e.k),a0=Math.max(ch.jd+ag[0]*365.25,ch.jd+365),a1=Math.min(ch.jd+ag[1]*365.25,now);const cnt={},tot={};sysK.forEach(k=>{cnt[k]=0;tot[k]=0;});
+   const step=Math.max(30,(a1-a0)/90);for(let j=a0;j<a1;j+=step){const d=dashaAt(ch,j);if(!d)continue;const x=_ctRaw(ch,e.k,d.md.lord,d.ad.lord,d.pd.lord,j);if(!x)continue;x.T.forEach(t=>{tot[t.k]++;if(t.v>0)cnt[t.k]++;});}
+   base[e.k]={};sysK.forEach(k=>base[e.k][k]=tot[k]?cnt[k]/tot[k]:0.5);}
+  c.T.forEach(t=>{const r=res[t.k];if(!r)return;r.n++;if(t.v>0)r.h++;r.e+=base[e.k][t.k];});});
+ const mult={};sysK.forEach(k=>{const r=res[k];mult[k]=r.n>=3?Math.max(0.5,Math.min(1.6,1+(r.h-r.e)/(r.n+2)*1.5)):1;});
+ const pr=ev.map(e=>{let kp=null,pa=null;try{const q=kpvPromise(ch,e.k);kp=q?q.ok:null;}catch(x){}try{const p=paraPromise(ch,e.k);pa=p?p.st!=='weak':null;}catch(x){}return {k:e.k,jd:e.jd,kp,pa};});
+ return S.rkb={key,ev,res,mult,pr,on:ev.length>=3};}
+// convergeTiming uses the chart's own weights once 3+ events are recorded
+const _ctRaw=convergeTiming;convergeTiming=function(ch,key,md,ad,pd,jd,tr){const r=_ctRaw(ch,key,md,ad,pd,jd,tr);if(!r||!ch)return r;const b=S.rkb&&S.rkb.key&&S.rkb.key.startsWith('rk'+ch.jd)?S.rkb:null;if(!b||!b.on)return r;
+ let ws=0,wt=0;r.T.forEach(t=>{const w=t.w*(b.mult[t.k]||1);ws+=t.v*w;wt+=w;});r.score=wt?ws/wt:r.score;r.cal=true;return r;};
+function rkMine(ch){const b=rkBacktest(ch),nm=L({en:I18N.en.ipTN,hi:I18N.hi.ipTN}),hi=hiV();
+ if(!b.on)return `<section class="blk"><h3>🎯 ${T('rkMy')}</h3><p>${T('rkNeed')}</p><p class="note">${hi?`अभी दर्ज घटनाएँ: ${b.ev.length}`:`Events recorded now: ${b.ev.length}`}</p><button class="btn ghost" data-go="verify">${T('rkGoV')} ›</button></section>`;
+ const rows=Object.keys(b.res).map(k=>({k,...b.res[k]})).filter(r=>r.n).sort((x,y)=>(y.h-y.e)/y.n-(x.h-x.e)/x.n);
+ const verdict=r=>{const d=(r.h-r.e)/r.n;return d>=0.15?['pos',hi?'↑ बेहतर':'↑ better']:d<=-0.15?['neg',hi?'↓ कम':'↓ worse']:['',hi?'≈ बराबर':'≈ same'];};
+ const pr=b.pr,kpN=pr.filter(x=>x.kp!==null),paN=pr.filter(x=>x.pa!==null);
+ return `<section class="blk"><h3>🎯 ${T('rkMy')}</h3><p class="note">${T('rkMyN')}</p><div class="tw"><table class="rkt"><tr><th>${T('rkSys')}</th><th>${T('rkHit')}</th><th>${T('rkExp')}</th><th>${T('rkRes')}</th></tr>
+  ${rows.map(r=>{const v=verdict(r);return `<tr class="${v[0]}"><td class="rkn">${nm[r.k]}</td><td><b>${r.h}/${r.n}</b></td><td>${r.e.toFixed(1)}</td><td>${v[1]}<br><span class="note">${hi?'वज़न':'weight'} ×${b.mult[r.k].toFixed(2)}</span></td></tr>`;}).join('')}</table></div>
+  <h4>${T('rkProm')}</h4><p class="note">${T('rkPromN')}</p><ul class="fx vsfx">${kpN.length?`<li class="${kpN.every(x=>x.kp)?'pos':''}"><b>•</b> ${rkName('kp')}: <b>${kpN.filter(x=>x.kp).length}/${kpN.length}</b></li>`:''}${paN.length?`<li class="${paN.every(x=>x.pa)?'pos':''}"><b>•</b> ${rkName('para')}: <b>${paN.filter(x=>x.pa).length}/${paN.length}</b></li>`:''}</ul>
+  <p class="note">${hi?`${b.ev.length} घटनाओं पर आधारित। कम घटनाओं पर निष्कर्ष कच्चा है — जितनी अधिक सत्यापित घटनाएँ, उतना भरोसेमंद।`:`Based on ${b.ev.length} events. With few events the result is rough — the more verified events, the more reliable.`}</p></section>`;}
+function renderPmrank(ch){const t=rkTables();let mine='';try{mine=rkMine(ch);}catch(e){console.error(e);}
+ return `<div class="pagehead"><h2>${T('t_pmrank')}</h2></div><section class="blk"><h3>🏆 ${T('rkT')}</h3><p class="note">${T('rkN')}</p>${t.t1}</section><section class="blk"><h3>🧭 ${T('rkPur')}</h3>${t.t2}<p class="note">✅ ${T('rkKPay')}</p></section>${mine}<section class="blk"><h3>🔬 ${T('rkSci')}</h3><p>${T('rkSciN')}</p></section>`;}
+NEWT.pmrank=renderPmrank;if(!TABS.includes('pmrank'))TABS.push('pmrank');
+(function(){const s=SEC18.find(x=>x[0]==='more');const g=s&&s[2].find(x=>x[0]==='g18_sys');if(g&&!g[1].includes('pmrank'))g[1].unshift('pmrank');IC18.pmrank='🏆';D18.pmrank=['Which system is most recognised, by purpose, and how each did on your own events','कौन-सी पद्धति कितनी मान्य, किस काम के लिए, और आपकी घटनाओं पर कौन सही बैठी'];})();
+if(typeof RB_SKIP!=='undefined'&&!RB_SKIP.includes('pmrank'))RB_SKIP.push('pmrank');
+// shared engine: calibrate from recorded events before judging (cached per chart + events)
+const _ipCtx221=ipCtx;ipCtx=function(ch){let b=null;try{b=rkBacktest(ch);}catch(e){}if(S.ipc&&b&&S.ipc.rk!==b.key)S.ipc=null;const x=_ipCtx221(ch);if(b)x.rk=b.key;return x;};
+if(NEWT.ekikrit){const _ek221=NEWT.ekikrit;NEWT.ekikrit=function(ch){let cal='';try{const b=rkBacktest(ch);cal=b.on?`<p class="rblife l2">🎯 ${hiV()?`आपकी ${b.ev.length} दर्ज घटनाओं से हर समय-पद्धति का वज़न इस कुंडली के लिए समायोजित किया गया है।`:`Timing systems are re-weighted for this chart from your ${b.ev.length} recorded events.`}</p>`:'';}catch(e){}
+ const h=_ek221(ch);const link=`<button class="btn ghost ipgo" data-go="pmrank">🏆 ${T('t_pmrank')} ›</button>`;const k=h.indexOf('</section>');return k>=0?h.slice(0,k)+cal+link+h.slice(k):h;};}
+// method guide opens with the ranking link
+if(NEWT.method){const _m221=NEWT.method;NEWT.method=function(ch){const h=_m221(ch);return ipInsert(h,`<section class="blk"><button class="btn ghost ipgo" data-go="pmrank">🏆 ${T('t_pmrank')} ›</button></section>`);};}
+// accident date check: chance line
+if(typeof c7Check==='function'){const _c7c=c7Check;c7Check=function(ch,d){const h=_c7c(ch,d);try{const sm=S.c7.sm.filter(x=>x.jd<julianNow()),p=Math.round(100*sm.filter(x=>x.on).length/Math.max(1,sm.length));return h+`<p class="note">🎲 ${T('c7Chance').replace(/\{p\}/g,p)}</p>`;}catch(e){return h;}};}
+(function(){const st=document.createElement('style');st.textContent=`.rkt td,.rkt th{padding:5px 6px;font-size:13px;vertical-align:middle}.rkt th{font-weight:600;white-space:normal;min-width:54px}.rkt td.rkn{min-width:150px}.rkd{letter-spacing:-1px;color:var(--hal);white-space:nowrap;font-size:11px}.rkd span{opacity:.2}.rkt tr.pos td{color:var(--good)}.rkl{list-style:none;padding:0;margin:8px 0}.rkl li{padding:8px 0;border-bottom:1px solid var(--line)}.rkh{display:flex;gap:8px;align-items:baseline}.rki{min-width:18px;font-size:18px}.rkh .rkn{flex:1;font-weight:600}.rks{white-space:nowrap}.rkl .ipm{margin:4px 0 4px 26px}.rkg{display:flex;flex-wrap:wrap;gap:2px 12px;margin-left:26px;font-size:12px;color:var(--mut)}.rkg span{white-space:nowrap}.rkt td:first-child{min-width:110px}.rkt tr.neg td{color:var(--kum)}`;document.head.appendChild(st);})();
+if(typeof FR_TABS!=='undefined'){const t=FR_TABS.find(x=>x[0]==='more')||FR_TABS[FR_TABS.length-1];if(t&&!t[1].includes('pmrank'))t[1].push('pmrank');}
+
 </script>
 <nav id="bnav" aria-label="Main"></nav>
 </body></html>
