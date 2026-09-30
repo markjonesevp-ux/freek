@@ -7137,6 +7137,97 @@ NEWT.caution=function(ch){let base='';try{base=renderCaution(ch);}catch(e){}cons
 document.addEventListener('click',e=>{if(e.target&&e.target.id==='c7go'){const v=document.getElementById('c7d').value;S.c7d=v;const o=document.getElementById('c7out');if(o&&S.ch)o.innerHTML=c7Check(S.ch,v);}});
 (function(){const st=document.createElement('style');st.textContent=`.c7 .c7w div{margin:2px 0}.c7rl{padding-left:14px}.c7in{display:flex;gap:8px;align-items:center;flex-wrap:wrap;margin:6px 0}.c7in input{font:inherit;padding:6px 8px;border:1px solid var(--line);border-radius:8px;background:var(--card);color:inherit}.c7t td:last-child,.c7t th:last-child{text-align:right;white-space:nowrap}`;document.head.appendChild(st);})();
 
+// ===== v22.0: Integrated prediction — one engine weighs every system (13-factor natal check, KP/Parashari/Nadi/Jaimini, Sudarshan, ashtakavarga, problem engine,
+// 8 timing systems, varshphal, life phase) per life area; every area page now opens with the same verdict so sections never contradict each other =====
+Object.assign(I18N.en,{t_ekikrit:'Integrated prediction',ipT:'Integrated prediction — every system weighed together',ipN:'For each area of life the app checks the birth chart’s promise (13 classical factors, four schools — KP, Parashari, Nadi, Jaimini — Sudarshan chakra, ashtakavarga, the problem engine) and the present time (8 timing systems — dasha by KP and Parashari, Jupiter–Saturn double transit, Jupiter’s ashtakavarga, yearly snapshot, Yogini dasha, Chara dasha, tara — plus the problem engine’s dasha activation, this year’s varshphal and your life phase). ✓ supports, ✗ opposes, – neutral.',
+ ipNowT:'Your present time at a glance',ipBest:'Supported now',ipWeak:'Needs care now',ipPromise:'Birth-chart promise',ipNow:'Present time',ipAgree:'{a} of {n} systems support, {b} oppose',ipNext:'Next favourable period',ipNextBad:'Next caution period',ipBasis:'Basis — system by system',ipOpen:'Full integrated prediction',ipConf:'Where the systems disagree',ipNoConf:'All systems point the same way.',ipDasha:'Running dasha',ipPhase:'Life phase',ipYear:'This year (varshphal)',ipSade:'Saturn',
+ ipP:['Strong','Moderate','Weak'],ipNw:['Favourable','Mixed','Unfavourable'],
+ ipS:{gg:'The chart promises this well and the present time supports it — the right time to make efforts.',gm:'Good promise, but the present time is mixed — things keep moving; take big decisions in the favourable period.',gb:'Good promise, but the present time does not support it — delays or obstacles now are temporary.',
+  mg:'An average promise, but a favourable time now — make full use of it.',mm:'An ordinary situation — results follow effort.',mb:'A time for caution in this area — avoid risks and big commitments now.',
+  bg:'This area is weak in the chart, but the present time supports it — this is the opportunity; take it.',bm:'This area needs struggle — remedies and patience help.',bb:'This area is weak and the present time is also hard — do the remedies and avoid big risks.'},
+ ipC:{n1:'13-factor check (house, lord, karaka, aspects, degree, navamsa, D-chart, nakshatra, KP, ashtakavarga…)',n2:'Four schools (KP, Parashari, Nadi, Jaimini)',n3:'Sudarshan chakra (from lagna, Moon, Sun)',n4:'Sarvashtakavarga',n5:'Problem engine — birth tendency',t1:'Timing systems (dasha, transits, Yogini, Chara, tara…)',t2:'Problem engine — running dasha',t3:'Varshphal (this year)',t4:'Life phase'},
+ ipCS:{n1:'13 factors',n2:'4 schools',n3:'Sudarshan',n4:'Ashtakavarga',n5:'Birth tendency',t1:'Dasha & transit',t2:'Dasha activation',t3:'Varshphal',t4:'Life phase'},
+ ipSN:{gb:'Basically fine, but the present time is sensitive — take care and get checked in time.',mb:'The present time is sensitive in this area — be careful and avoid risks.',bb:'A sensitive area in the chart and the present time is also hard — take full care and do the remedies.',gm:'Basically fine; the present time is mixed — ordinary care is enough.'},
+ ipTN:{vimkp:'Dasha (KP)',vimpara:'Dasha (Parashari)',double:'Jupiter–Saturn double transit',bav:'Jupiter ashtakavarga',snap:'Yearly snapshot',yogini:'Yogini dasha',chara:'Chara dasha',tara:'Tara'},
+ ipA:{career:'Career & job',wealth:'Money & income',marriage:'Marriage & partner',children:'Children',health:'Health',education:'Education',property:'Home, property & vehicle',foreign:'Abroad & long travel',litigation:'Freedom from disputes & court cases',mind:'Peace of mind'}});
+Object.assign(I18N.hi,{t_ekikrit:'एकीकृत फलादेश',ipT:'एकीकृत फलादेश — सभी पद्धतियाँ एक साथ',ipN:'जीवन के हर क्षेत्र के लिए ऐप दो चीज़ें साथ जाँचता है। पहली, जन्म कुंडली का वादा: 13 शास्त्रीय कारक, चार पद्धतियाँ (केपी, पाराशरी, नाड़ी, जैमिनी), सुदर्शन चक्र, अष्टकवर्ग और समस्या इंजन। दूसरी, अभी का समय: 8 समय-पद्धतियाँ (केपी व पाराशरी दशा, गुरु-शनि दोहरा गोचर, गुरु अष्टकवर्ग, वार्षिक स्नैपशॉट, योगिनी दशा, चर दशा, तारा), समस्या इंजन की दशा सक्रियता, इस वर्ष का वर्षफल और आपके जीवन का दौर। ✓ पक्ष में, ✗ विरोध में, – तटस्थ।',
+ ipNowT:'आपका वर्तमान समय — एक नज़र में',ipBest:'अभी साथ दे रहे क्षेत्र',ipWeak:'अभी ध्यान चाहने वाले क्षेत्र',ipPromise:'जन्म कुंडली का वादा',ipNow:'अभी का समय',ipAgree:'{n} में से {a} पद्धतियाँ पक्ष में, {b} विरोध में',ipNext:'अगला अनुकूल समय',ipNextBad:'अगला सावधानी का समय',ipBasis:'आधार — हर पद्धति का निर्णय',ipOpen:'पूरा एकीकृत फलादेश',ipConf:'जहाँ पद्धतियाँ असहमत हैं',ipNoConf:'सभी पद्धतियाँ एक ही दिशा दिखाती हैं।',ipDasha:'चल रही दशा',ipPhase:'जीवन का दौर',ipYear:'यह वर्ष (वर्षफल)',ipSade:'शनि',
+ ipP:['प्रबल','मध्यम','कमज़ोर'],ipNw:['अनुकूल','मिश्रित','प्रतिकूल'],
+ ipS:{gg:'कुंडली में इसका अच्छा वादा है और अभी समय भी साथ दे रहा है — प्रयास का सही समय।',gm:'वादा अच्छा है, पर अभी समय मिला-जुला है — काम चलता रहेगा; बड़े फैसले अनुकूल समय में लें।',gb:'वादा अच्छा है, पर अभी का समय साथ नहीं दे रहा — अभी की देरी या रुकावट अस्थायी है।',
+  mg:'सामान्य वादा, पर अभी अनुकूल समय है — इसका पूरा लाभ उठाएँ।',mm:'सामान्य स्थिति — मेहनत के अनुसार फल।',mb:'इस क्षेत्र में अभी सावधानी का समय — जोखिम और बड़ी प्रतिबद्धताओं से बचें।',
+  bg:'कुंडली में यह क्षेत्र कमज़ोर है, पर अभी का समय सहारा दे रहा है — यही मौका है, इसे पकड़ें।',bm:'यह क्षेत्र संघर्ष वाला है — उपाय और धैर्य से लाभ।',bb:'यह क्षेत्र कमज़ोर है और अभी का समय भी कठिन — उपाय करें, बड़े जोखिम टालें।'},
+ ipC:{n1:'13 कारकों की जाँच (भाव, भावेश, कारक, दृष्टि, अंश, नवांश, D-वर्ग, नक्षत्र, केपी, अष्टकवर्ग…)',n2:'चार पद्धतियाँ (केपी, पाराशरी, नाड़ी, जैमिनी)',n3:'सुदर्शन चक्र (लग्न, चंद्र, सूर्य से)',n4:'सर्वाष्टकवर्ग',n5:'समस्या इंजन — जन्म प्रवृत्ति',t1:'समय-पद्धतियाँ (दशा, गोचर, योगिनी, चर दशा, तारा…)',t2:'समस्या इंजन — चल रही दशा',t3:'वर्षफल (इस वर्ष)',t4:'जीवन का दौर'},
+ ipCS:{n1:'13 कारक',n2:'4 पद्धतियाँ',n3:'सुदर्शन',n4:'अष्टकवर्ग',n5:'जन्म प्रवृत्ति',t1:'दशा-गोचर',t2:'दशा सक्रियता',t3:'वर्षफल',t4:'जीवन दौर'},
+ ipSN:{gb:'मूल रूप से ठीक, पर अभी का समय संवेदनशील है — सावधानी रखें और समय पर जाँच कराएँ।',mb:'इस क्षेत्र में अभी का समय संवेदनशील है — सावधान रहें, जोखिम से बचें।',bb:'कुंडली में यह क्षेत्र संवेदनशील है और अभी का समय भी कठिन — पूरी सावधानी रखें और उपाय करें।',gm:'मूल रूप से ठीक; अभी समय मिला-जुला है — सामान्य सावधानी पर्याप्त।'},
+ ipTN:{vimkp:'दशा (केपी)',vimpara:'दशा (पाराशरी)',double:'गुरु-शनि दोहरा गोचर',bav:'गुरु अष्टकवर्ग',snap:'वार्षिक स्नैपशॉट',yogini:'योगिनी दशा',chara:'चर दशा',tara:'तारा'},
+ ipA:{career:'करियर व नौकरी',wealth:'धन व आय',marriage:'विवाह व जीवनसाथी',children:'संतान',health:'स्वास्थ्य',education:'शिक्षा',property:'घर, संपत्ति व वाहन',foreign:'विदेश व लंबी यात्रा',litigation:'विवाद व कोर्ट-कचहरी से बचाव',mind:'मन की शांति'}});
+// area definitions: engine key, problem-engine keys, main house, page(s) where the card is shown
+const IP_A=[{a:'career',key:'career',sam:['job'],H:10,pg:['career']},{a:'wealth',key:'wealth',sam:['loss','expense'],H:2,pg:['dhan','labh']},{a:'marriage',key:'marriage',sam:['family'],H:7,pg:['family']},{a:'children',key:'children',sam:[],H:5,pg:['family']},
+ {a:'health',key:'healthc',sam:['health'],H:1,pg:['rog','caution']},{a:'education',key:'education',sam:[],H:4,pg:[]},{a:'property',key:'property',sam:[],H:4,pg:[]},{a:'foreign',key:'foreign',sam:[],H:12,pg:[]},{a:'litigation',key:'litigation',sam:[],H:6,pg:[]},{a:'mind',key:null,sam:['mind'],H:4,pg:[]}];
+const ipc=v=>Math.max(-1,Math.min(1,v));
+function ipYearVC(ch,now){const y=jdToDate(now,ch.inp.tz).y;let v=varshphal(ch,y);if(v.jd>now)v=varshphal(ch,y-1);return v;}
+function ipPhaseNow(ch,now){try{const until=now+15*365.25,key='jb'+ch.jd;if(!S.jbc||S.jbc.key!==key)S.jbc={key,ads:jbADs(ch,until)};const a=S.jbc.ads.find(x=>x.st<=now&&x.en>now);return a?{c:jbCat(a.q),a}:null;}catch(e){return null;}}
+function ipArea(ch,A,ctx){const now=ctx.now,C=[],add=(k,v,t,w)=>{if(v===null||v===undefined||isNaN(v))return;C.push({k,v:ipc(v),t,w});};const d=A.key?pDef(A.key):null,neg=!!(d&&d.neg),sgn=neg?-1:1,hi=hiV();
+ // ---- birth-chart promise
+ if(A.key){try{const c=convergePromise(ch,A.key);add('n1',sgn*(c.agree-c.against)/Math.max(1,c.n)*2,hi?`${c.n} में से ${c.agree} कारक पक्ष में, ${c.against} विरोध में`:`${c.agree} of ${c.n} factors for, ${c.against} against`,1.2);C[C.length-1].F=c.F;}catch(e){}
+  try{const m=methodVerdict(ch,A.key),nm=k=>vsT(MNAME[k]);add('n2',sgn*(2*m.prob-1),Object.keys(m.sc).filter(k=>m.sc[k]!==null).map(k=>`${nm(k)} ${Math.round((neg?1-m.sc[k]:m.sc[k])*100)}%`).join(' · '),1.2);}catch(e){}}
+ const sd=ctx.sud[A.H-1];add('n3',(sd.t-1)/1.8,hi?`${HO[A.H]} भाव: लग्न से ${sd.a.toFixed(1)}, चंद्र से ${sd.b.toFixed(1)}, सूर्य से ${sd.c.toFixed(1)}`:`house ${A.H}: from lagna ${sd.a.toFixed(1)}, Moon ${sd.b.toFixed(1)}, Sun ${sd.c.toFixed(1)}`,0.8);
+ const sav=ch.av.sav[(ch.lagna+A.H-1)%12];add('n4',(sav-28)/7,hi?`${HO[A.H]} भाव की राशि में ${sav} बिंदु (औसत 28)`:`${sav} points in the sign of house ${A.H} (average 28)`,0.6);
+ const SP=A.sam.map(k=>SAM_P.find(x=>x.k===k)).filter(Boolean);
+ if(SP.length){const nv=SP.reduce((a,P)=>a+smNatal(ch,P).v,0)/SP.length;add('n5',-nv/1.8,hi?`जन्म से प्रवृत्ति ${nv.toFixed(1)} (अधिक = समस्या की संभावना)`:`birth tendency ${nv.toFixed(1)} (higher = more prone)`,0.8);}
+ // ---- present time
+ if(A.key){try{const da=ctx.da,ct=convergeTiming(ch,A.key,da.md.lord,da.ad.lord,da.pd.lord,now,ctx.tr);const nm=L({en:I18N.en.ipTN,hi:I18N.hi.ipTN});
+  add('t1',sgn*ct.score*1.6,ct.T.map(x=>`${nm[x.k]} ${sgn*x.v>0?'✓':sgn*x.v<0?'✗':'–'}`).join(' · '),1.4);}catch(e){}}
+ if(SP.length){const av=SP.reduce((a,P)=>a+smActive(ch,P,now).a,0)/SP.length;add('t2',-(av-0.6)/1.4,hi?`चल रही दशा से सक्रियता ${av.toFixed(1)} (अधिक = समस्या सक्रिय)`:`activation by the running dasha ${av.toFixed(1)} (higher = problem active)`,1.0);}
+ try{const vh=vpHouse(ctx.vp.vc,A.H);add('t3',vh/1.5,hi?`वर्षफल कुंडली में ${HO[A.H]} भाव का बल ${vh>0?'+':''}${vh.toFixed(1)}`:`house ${A.H} in the annual chart ${vh>0?'+':''}${vh.toFixed(1)}`,0.7);}catch(e){}
+ if(ctx.ph){const pv={g:0.6,m:0,b:-0.6}[ctx.ph.c];add('t4',pv,`${T({g:'jbG',m:'jbM',b:'jbB'}[ctx.ph.c])} (${pn(ctx.ph.a.md)}/${pn(ctx.ph.a.ad)})`,0.5);}
+ const wav=ks=>{const x=C.filter(c=>ks.includes(c.k));const w=x.reduce((a,c)=>a+c.w,0);return w?x.reduce((a,c)=>a+c.v*c.w,0)/w:0;};
+ const pr=wav(['n1','n2','n3','n4','n5']),nw=wav(['t1','t2','t3','t4']),fin=0.45*pr+0.55*nw;
+ const pl=pr>=0.3?0:pr>=-0.12?1:2,nl=nw>=0.32?0:nw>=-0.12?1:2;
+ let nx=null;if(A.key){try{const W=convergeWindows(ch,A.key,now,now+10*365.25,4);nx=W.find(w=>w.end>now&&!(w.start<=now&&nl===0&&!neg))||null;}catch(e){}}
+ const yes=C.filter(c=>c.v>=0.25).length,no=C.filter(c=>c.v<=-0.25).length;
+ return {A,C,pr,nw,fin,pl,nl,s:['g','m','b'][pl]+['g','m','b'][nl],nx,neg,yes,no};}
+function ipCtx(ch){const now=julianNow();const key='ip'+ch.jd+Math.floor(now);if(S.ipc&&S.ipc.key===key)return S.ipc;
+ const tr=transitAt(ch,now,true),ctx={key,now,tr,da:dashaAt(ch,now),sud:ch._sud||(ch._sud=sudarshan(ch)),vp:ipYearVC(ch,now),ph:ipPhaseNow(ch,now)};
+ ctx.res=IP_A.map(A=>{try{return ipArea(ch,A,ctx);}catch(e){console.error(e);return null;}}).filter(Boolean);return S.ipc=ctx;}
+const IP_ICO={career:'💼',wealth:'💰',marriage:'💍',children:'👶',health:'🩺',education:'📚',property:'🏠',foreign:'✈️',litigation:'⚖️',mind:'🧘'};
+function ipMeter(v){const p=Math.round((v+1)*50);return `<span class="ipm"><span style="width:${Math.max(4,p)}%;background:${v>=0.2?'var(--good)':v>=-0.2?'var(--hal)':'var(--kum)'}"></span></span>`;}
+function ipCard(ch,r,full){const hi=hiV(),C=r.C,mk=v=>v>=0.25?'✓':v<=-0.25?'✗':'–',cls=v=>v>=0.25?'pos':v<=-0.25?'neg':'';
+ const cn=L({en:I18N.en.ipC,hi:I18N.hi.ipC}),P=L({en:I18N.en.ipP,hi:I18N.hi.ipP}),N=L({en:I18N.en.ipNw,hi:I18N.hi.ipNw}),SS=L({en:I18N.en.ipS,hi:I18N.hi.ipS});
+ const nx=r.nx?`<p class="note"><b>${T(r.neg?'ipNextBad':'ipNext')}:</b> ${fdate(Math.max(r.nx.start,S.ipc.now))} – ${fdate(r.nx.end)} (${pn(r.nx.md)}/${pn(r.nx.ad)}/${pn(r.nx.pd)} · ${hi?`${r.nx.n} में से ${r.nx.agree} पद्धतियाँ सहमत`:`${r.nx.agree} of ${r.nx.n} systems agree`})</p>`:'';
+ const maj=r.fin>=0?1:-1,conf=C.filter(c=>maj*c.v<=-0.25);
+ const cs=L({en:I18N.en.ipCS,hi:I18N.hi.ipCS}),chips=C.map(c=>`<span class="ipch ${cls(c.v)}" title="${cn[c.k]}">${mk(c.v)} ${cs[c.k]}</span>`).join('');
+ const basis=`<ul class="fx vsfx">${C.map(c=>`<li class="${cls(c.v)}"><b>${mk(c.v)}</b> <b class="ipn">${cn[c.k]}</b><br><span class="note">${c.t}</span></li>`).join('')}</ul>`;
+ return `<section class="blk ipc ${['good','','bad'][r.nl]}"><h3>${IP_ICO[r.A.a]} ${L({en:I18N.en.ipA,hi:I18N.hi.ipA})[r.A.a]}</h3>
+  <div class="iprow"><span>${T('ipPromise')}</span>${ipMeter(r.pr)}<span class="rk ${['strong','mixed','chal'][r.pl]}">${P[r.pl]}</span></div>
+  <div class="iprow"><span>${T('ipNow')}</span>${ipMeter(r.nw)}<span class="rk ${['strong','mixed','chal'][r.nl]}">${N[r.nl]}</span></div>
+  <p class="ipsay">${(r.A.a==='health'||r.A.a==='mind'||r.A.a==='litigation')&&L({en:I18N.en.ipSN,hi:I18N.hi.ipSN})[r.s]||SS[r.s]}</p><p class="note">${T('ipAgree').replace('{a}',r.yes).replace('{n}',C.length).replace('{b}',r.no)}</p><div class="ipchs">${chips}</div>${nx}
+  ${full?`${conf.length?`<p class="note"><b>${T('ipConf')}:</b> ${conf.map(c=>`${cs[c.k]} — ${c.t}`).join('; ')}</p>`:''}${vsDet('📐 '+T('ipBasis'),basis,false)}`:`<button class="btn ghost ipgo" data-go="ekikrit">${T('ipOpen')} ›</button>`}</section>`;}
+function ipSummary(ch,short){const x=ipCtx(ch),hi=hiV(),R=x.res.slice().sort((a,b)=>b.fin-a.fin),best=R.filter(r=>r.nl===0).slice(0,3),weak=R.slice().reverse().filter(r=>r.nl===2).slice(0,3);
+ const AN=L({en:I18N.en.ipA,hi:I18N.hi.ipA});let ss='';try{const s=sadeSati(ch,x.tr);if(s)ss=s[0]==='sadesati'?(hi?`साढ़ेसाती (चरण ${s[1]})`:`Sade Sati (phase ${s[1]})`):(hi?`ढैया (चंद्र से ${s[1]}वाँ शनि)`:`Dhaiya (Saturn ${s[1]}th from Moon)`);}catch(e){}
+ const yr=x.vp?`${hi?'आयु':'age'} ${x.vp.age} · ${hi?'मुंथा':'muntha'} ${hiV()?HO[x.vp.mh]:HOUSE_ORD(x.vp.mh)} ${hi?'भाव':'house'}`:'';
+ return `<section class="blk ipsum"><h3>🧭 ${T('ipNowT')}</h3><ul class="fx vsfx">
+  <li><b>•</b> <b>${T('ipDasha')}:</b> ${pn(x.da.md.lord)} / ${pn(x.da.ad.lord)} / ${pn(x.da.pd.lord)} <span class="note">(${fdate(x.da.ad.start)} – ${fdate(x.da.ad.end)})</span></li>
+  ${x.ph?`<li><b>•</b> <b>${T('ipPhase')}:</b> <span class="rk ${x.ph.c==='g'?'strong':x.ph.c==='b'?'chal':'mixed'}">${T({g:'jbG',m:'jbM',b:'jbB'}[x.ph.c])}</span></li>`:''}
+  ${yr?`<li><b>•</b> <b>${T('ipYear')}:</b> ${yr}</li>`:''}${ss?`<li><b>•</b> <b>${T('ipSade')}:</b> ${ss}</li>`:''}</ul>
+  <div class="ip2"><div><h4>✓ ${T('ipBest')}</h4><p>${best.length?best.map(r=>`${IP_ICO[r.A.a]} ${AN[r.A.a]}`).join('<br>'):'—'}</p></div><div><h4>! ${T('ipWeak')}</h4><p>${weak.length?weak.map(r=>`${IP_ICO[r.A.a]} ${AN[r.A.a]}`).join('<br>'):'—'}</p></div></div>
+  ${short?`<button class="btn ghost ipgo" data-go="ekikrit">${T('ipOpen')} ›</button>`:''}</section>`;}
+function renderEkikrit(ch){const x=ipCtx(ch);return `<div class="pagehead"><h2>${T('t_ekikrit')}</h2></div><section class="blk"><h3>🔗 ${T('ipT')}</h3><p class="note">${T('ipN')}</p></section>${ipSummary(ch,false)}${x.res.map(r=>ipCard(ch,r,true)).join('')}`;}
+NEWT.ekikrit=renderEkikrit;if(!TABS.includes('ekikrit'))TABS.push('ekikrit');
+(function(){const s=SEC18.find(x=>x[0]==='read');if(s&&!s[2][0][1].includes('ekikrit'))s[2][0][1].unshift('ekikrit');IC18.ekikrit='🔗';D18.ekikrit=['Every system weighed together for each area — what the chart promises and what the time brings now','हर क्षेत्र के लिए सभी पद्धतियाँ एक साथ — कुंडली का वादा और अभी का समय'];})();
+if(typeof RB_SKIP!=='undefined'&&!RB_SKIP.includes('ekikrit'))RB_SKIP.push('ekikrit');
+if(typeof FR_TABS!=='undefined'){const t=FR_TABS.find(x=>x[0]==='read');if(t&&!t[1].includes('ekikrit'))t[1].unshift('ekikrit');else if(!t&&FR_TABS[0])FR_TABS[0][1].unshift('ekikrit');}
+// every area page opens with the same integrated verdict
+function ipInsert(h,card){const k=h.indexOf('</div>',h.indexOf('pagehead'));return h.indexOf('pagehead')>=0&&k>=0?h.slice(0,k+6)+card+h.slice(k+6):card+h;}
+IP_A.forEach(A=>A.pg.forEach(t=>{if(!NEWT[t])return;const f=NEWT[t];NEWT[t]=function(ch){const h=f(ch);if(S.frBuilding)return h;try{const r=ipCtx(ch).res.find(x=>x.A.a===A.a);return r?ipInsert(h,ipCard(ch,r,false)):h;}catch(e){console.error(e);return h;}};}));
+['badlav','final','h_home'].forEach(t=>{if(!NEWT[t])return;const f=NEWT[t];NEWT[t]=function(ch){const h=f(ch);if(S.frBuilding)return h;try{return t==='h_home'?ipSummary(ch,true)+h:ipInsert(h,ipSummary(ch,true));}catch(e){console.error(e);return h;}};});
+(function(){const st=document.createElement('style');st.textContent=`.ipc{border-left:5px solid var(--hal)}.ipc.good{border-left-color:var(--good)}.ipc.bad{border-left-color:var(--kum)}
+.iprow{display:grid;grid-template-columns:minmax(90px,38%) 1fr auto;gap:8px;align-items:center;margin:4px 0;font-size:14px}.ipm{display:block;height:8px;border-radius:5px;background:var(--line);overflow:hidden}.ipm span{display:block;height:100%;border-radius:5px}
+.ipsay{font-weight:600;margin:8px 0 4px}.ipchs{display:flex;flex-wrap:wrap;gap:4px;margin:6px 0}.ipch{font-size:12px;padding:2px 7px;border-radius:10px;background:var(--paper);white-space:nowrap}.ipch.pos{color:var(--good)}.ipch.neg{color:var(--kum)}
+.ipn{font-weight:600}.ip2{display:grid;grid-template-columns:1fr 1fr;gap:10px}.ip2 h4{margin:8px 0 4px;font:600 14px var(--sans)}.ip2 p{margin:0;line-height:1.7}.ipgo{margin-top:6px}`;document.head.appendChild(st);})();
+// full PDF report: the integrated page is included once; area pages there skip the repeated card
+if(typeof frBuildAll==='function'){const _fb220=frBuildAll;frBuildAll=function(ch){S.frBuilding=true;try{return _fb220(ch);}finally{S.frBuilding=false;}};}
+
 </script>
 <nav id="bnav" aria-label="Main"></nav>
 </body></html>
