@@ -6889,6 +6889,27 @@ const _v212=renderVarsh;renderVarsh=function(ch){return c212Lift(_v212(ch),'.ntp
 const _r212=renderRishta;renderRishta=function(ch){return c212Lift(_r212(ch),'.rshead');};NEWT.rishta=renderRishta;
 (function(){const st=document.createElement('style');st.textContent=`.c212 .charts{margin-bottom:0}.c212 .rschart{margin:0 auto}`;document.head.appendChild(st);})();
 
+// ===== v21.3: verification upgrades found while checking a real chart — job loss / study break events, KP promise check, finer and CSL-aware birth-time correction =====
+// KP: an event that has happened must be promised by the sub lord of its main cusp (it signifies one of the event houses).
+EVX.push({k:'jobloss',p:[1,5,9,12],n:[2,6,10,11],H:10,kar:[6],age:[18,70],caution:true},{k:'studybreak',p:[3,8,12],n:[4,9,11],H:4,kar:[3,4],age:[12,30],caution:true});
+if(!VEV.includes('jobloss'))VEV.push('jobloss');if(!VEV.includes('studybreak'))VEV.push('studybreak');
+Object.assign(I18N.en,{ec_jobloss:'Job loss / leaving a job',ec_studybreak:'Studies broken / dropout',kpvT:'KP promise check (did the chart promise what happened?)',kpvN:'For an event that has happened, the sub lord of its main house (cusp) should signify the event houses. If it does not, the birth time is probably off by a few minutes — use the correction below.',
+ kpvOk:'{e}: {h} house sub lord {p} signifies {s} — promise shown ✓',kpvNo:'{e}: {h} house sub lord {p} signifies only {s} — does not promise it, yet it happened ✗ (check the birth time)',kpvSum:'{n} of {t} events are promised at this birth time.',rcKP:'Correction now also checks, for every minute, whether the sub lords promise your events.'});
+Object.assign(I18N.hi,{ec_jobloss:'नौकरी छूटना / छोड़ना',ec_studybreak:'पढ़ाई छूटना / रुकावट',kpvT:'केपी वादा जाँच (जो हुआ, क्या कुंडली में उसका वादा था?)',kpvN:'जो घटना हो चुकी है, उसके मुख्य भाव (संधि) का उप-स्वामी उस घटना के भावों का कारक होना चाहिए। अगर नहीं है, तो जन्म समय कुछ मिनट अलग होने की संभावना है — नीचे जन्म समय सुधार का उपयोग करें।',
+ kpvOk:'{e}: {h} भाव का उप-स्वामी {p} भाव {s} का कारक — वादा है ✓',kpvNo:'{e}: {h} भाव का उप-स्वामी {p} केवल भाव {s} का कारक — वादा नहीं दिखता, फिर भी घटना हुई ✗ (जन्म समय जाँचें)',kpvSum:'इस जन्म समय पर {t} में से {n} घटनाओं का वादा दिखता है।',rcKP:'सुधार अब हर मिनट पर यह भी जाँचता है कि उप-स्वामी आपकी घटनाओं का वादा करते हैं या नहीं।'});
+function kpvPromise(ch,k){const ev=EVX.find(e=>e.k===k);if(!ev)return null;const L=kpLords(ch.cusps[ev.H-1]).sl,s=lbSig(ch,L);return {H:ev.H,L,s,ok:ev.p.some(h=>s.includes(h))};}
+// evRank: proper KP lord check for the new event types
+const _evRank213=evRank;evRank=function(ch,k,jd){const r=_evRank213(ch,k,jd);if(!r||!['jobloss','studybreak'].includes(k))return r;const ev=EVX.find(e=>e.k===k);
+ r.kpOk=[r.da.md.lord,r.da.ad.lord,r.da.pd.lord].filter(L=>ev.p.some(h=>sigThru(ch,L).includes(h))).length;r.syTop=false;return r;};
+// rectify: 2-minute steps and a KP promise term per event
+const _rect213=rectify;rectify=function(p,events,range,step){const out=_rect213(p,events,range,Math.min(step||4,2));
+ out.forEach(o=>{try{const ch=buildChart(o.q);let n=0;events.forEach(e=>{const pr=kpvPromise(ch,e.k);if(pr&&pr.ok)n++;});o.kpn=n;o.s=o.s+0.35*(n/Math.max(1,events.length))-0.2*((events.length-n)/Math.max(1,events.length));}catch(e){}});return out;};
+// verify tab: KP promise section
+if(NEWT.verify){const _vf213=NEWT.verify;NEWT.verify=function(ch){let a='';try{const ev=getPev(ch);if(ev.length){const ks=[...new Set(ev.map(e=>e.k))];let n=0;
+ const li=ks.map(k=>{const pr=kpvPromise(ch,k);if(!pr)return '';if(pr.ok)n++;return `<li class="${pr.ok?'pos':'neg'}"><b>${pr.ok?'✓':'✗'}</b> ${T(pr.ok?'kpvOk':'kpvNo').replace('{e}',T('ec_'+k)).replace('{h}',hiV()?HO[pr.H]:HOUSE_ORD(pr.H)).replace('{p}',pn(pr.L)).replace('{s}',pr.s.join(', '))}</li>`;}).join('');
+ a=`<section class="blk"><h3>🔑 ${T('kpvT')}</h3><p class="note">${T('kpvN')}</p><ul class="fx vsfx">${li}</ul><p class="rblife l${n===ks.length?2:n>=ks.length/2?1:0}">${T('kpvSum').replace('{n}',n).replace('{t}',ks.length)}</p><p class="note">${T('rcKP')}</p></section>`;}}catch(e){console.error(e);}
+ const h=_vf213(ch);const k=h.indexOf('<section');return k>=0?h.slice(0,k)+a+h.slice(k):a+h;};}
+
 </script>
 <nav id="bnav" aria-label="Main"></nav>
 </body></html>
