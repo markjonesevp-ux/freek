@@ -6976,6 +6976,59 @@ const _ca4W215=ca4Windows;ca4Windows=function(sm,key,thr,plk,hsk){const w=_ca4W2
 const _ca4Hint215=ca4Hint;ca4Hint=function(ch,w,type){let h=_ca4Hint215(ch,w,type);if(type==='a'&&w.sg&&w.sg.size){const b=[...w.sg].slice(0,2).map(s=>vsT(ROG_BODY[s]).split(',').slice(0,2).join(',')).join('; ');
  h=h.replace(/(<div><b>[^<]*<\/b>)([^<]*)(<\/div>)(?=[^]*?<div><b>)/,(m)=>m);h=h.replace('<div class="ca4h">',`<div class="ca4h"><div><b>${hiV()?'चोट का संभावित स्थान':'Likely injury area'}:</b> ${b}</div>`);}return h;};
 
+// ===== v21.6: Jeevan ke bade badlav — life phases (good / mixed / tough) from birth to +15 years, turning points, money and father themes, verification =====
+Object.assign(I18N.en,{t_badlav:'Big changes in life',jbT:'Big changes in life — good and tough phases',jbN:'Each antardasha is judged by how strongly it activates the six problem areas (job, home, mind, loss, expenses, health) against the chart\'s strength; neighbouring periods of the same kind are joined into phases. Green = good phase, yellow = mixed, red = tough. The dashed line is today.',
+ jbPh:'Phases of your life',jbTP:'Turning points',jbG:'Good phase',jbM:'Mixed phase',jbB:'Tough phase',jbNow:'running now',jbWhat:'Main themes',jbGood:'Supports',jbFa:'Father-related concern or change',jbAge:'age {a}',
+ jbMD:'Mahadasha changes: {a} → {b}',jbUp:'Life improves clearly from here',jbDown:'A tougher stretch begins',jbSS1:'Sade Sati begins (Saturn 12th from Moon)',jbSS3:'Sade Sati ends',jbA8:'Ashtama Shani (Saturn 8th from Moon) begins',jbSR:'Saturn returns to its birth sign — a life reset around age 29–30 / 58–60',jbJR:'Jupiter returns to its birth sign — growth and new learning',jbRM:'Rahu over your Moon — restlessness, sudden changes, new directions',
+ jbAsk:'Did this match your life?',jbFut:'The coming years',jbSrc:'Method: Vimshottari antardashas scored with the Samasya engine, Saturn/Jupiter/Rahu cycles from the Moon, father from the 9th house. Tendencies, not certainties.'});
+Object.assign(I18N.hi,{t_badlav:'जीवन के बड़े बदलाव',jbT:'जीवन के बड़े बदलाव — अच्छे और कठिन दौर',jbN:'हर अंतर्दशा को इस आधार पर आँका गया है कि वह छह समस्या क्षेत्रों (नौकरी, घर, मन, हानि, खर्च, स्वास्थ्य) को कितना सक्रिय करती है, कुंडली के बल के सामने; एक जैसे पास-पास के काल जोड़कर दौर बनाए गए हैं। हरा = अच्छा दौर, पीला = मिश्रित, लाल = कठिन। बिंदीदार रेखा = आज।',
+ jbPh:'आपके जीवन के दौर',jbTP:'जीवन के मोड़',jbG:'अच्छा दौर',jbM:'मिश्रित दौर',jbB:'कठिन दौर',jbNow:'अभी चल रहा',jbWhat:'मुख्य विषय',jbGood:'सहयोग',jbFa:'पिता से जुड़ी चिंता या बदलाव',jbAge:'आयु {a}',
+ jbMD:'महादशा बदलती है: {a} → {b}',jbUp:'यहाँ से जीवन में स्पष्ट सुधार',jbDown:'कठिन दौर शुरू',jbSS1:'साढ़ेसाती शुरू (चंद्र से 12वें शनि)',jbSS3:'साढ़ेसाती समाप्त',jbA8:'अष्टम शनि (चंद्र से 8वें) शुरू',jbSR:'शनि जन्म राशि में लौटता है — लगभग 29–30 / 58–60 वर्ष पर जीवन का नया आरंभ',jbJR:'गुरु जन्म राशि में लौटता है — उन्नति और नई सीख',jbRM:'राहु आपके चंद्र पर — बेचैनी, अचानक बदलाव, नई दिशा',
+ jbAsk:'क्या यह आपके जीवन से मेल खाता है?',jbFut:'आने वाले वर्ष',jbSrc:'पद्धति: समस्या इंजन से आँकी गई विंशोत्तरी अंतर्दशाएँ, चंद्र से शनि/गुरु/राहु चक्र, 9वें भाव से पिता। ये प्रवृत्तियाँ हैं, निश्चितताएँ नहीं।'});
+function jbADs(ch,until){const out=[];let jd=ch.jd+1;const cache=new Map(),nat={};SAM_P.forEach(P=>nat[P.k]=smNatal(ch,P).v);
+ for(let k=0;k<80;k++){const d=dashaAt(ch,jd);if(!d)break;const st=Math.max(d.ad.start,ch.jd),en=d.ad.end;if(st>until)break;const pts=[st+(en-st)*0.2,(st+en)/2,st+(en-st)*0.8];const per={};
+  SAM_P.forEach(P=>{per[P.k]=pts.reduce((a,j)=>a+smActive(ch,P,j,cache).a-SM_NW*nat[P.k],0)/pts.length;});const q=Object.values(per).reduce((a,x)=>a+x,0)/SAM_P.length;
+  out.push({st,en,md:d.md.lord,ad:d.ad.lord,q,per});jd=en+1;}
+ return out;}
+function jbCat(q){return q<=0.55?'g':q>=1.45?'b':'m';}
+function jbPhases(ads){const ph=[];ads.forEach(a=>{const c=jbCat(a.q),l=ph[ph.length-1];if(l&&l.c===c){l.en=a.en;l.ads.push(a);}else ph.push({c,st:a.st,en:a.en,ads:[a]});});return ph;}
+function jbTurns(ch,ads,until){const P=ch.planets,out=[],ms=P[1].sign;
+ for(let k=1;k<ads.length;k++){if(ads[k].md!==ads[k-1].md)out.push({jd:ads[k].st,t:T('jbMD').replace('{a}',pn(ads[k-1].md)).replace('{b}',pn(ads[k].md)),k:'md'});
+  const d=ads[k].q-ads[k-1].q;if(d<=-1.0)out.push({jd:ads[k].st,t:T('jbUp'),k:'up'});else if(d>=1.0)out.push({jd:ads[k].st,t:T('jbDown'),k:'down'});}
+ let prev=null;for(let j=ch.jd+30;j<=until;j+=30){const tr=transitAt(ch,j,true),s=tr[6].sign,ju=tr[4].sign,ra=tr[7].sign;
+  if(prev){if(s!==prev.s){const fm=((s-ms+12)%12)+1;if(fm===12)out.push({jd:j,t:T('jbSS1'),k:'ss'});if(fm===3&&((prev.s-ms+12)%12)+1===2)out.push({jd:j,t:T('jbSS3'),k:'ssend'});if(fm===8)out.push({jd:j,t:T('jbA8'),k:'a8'});if(s===P[6].sign&&j-ch.jd>20*365.25)out.push({jd:j,t:T('jbSR'),k:'sr'});}
+   if(ju!==prev.ju&&ju===P[4].sign&&j-ch.jd>8*365.25)out.push({jd:j,t:T('jbJR'),k:'jr'});if(ra!==prev.ra&&ra===ms)out.push({jd:j,t:T('jbRM'),k:'rm'});}
+  prev={s,ju,ra};}
+ // de-duplicate retrograde re-entries (Saturn ~4 yrs, Jupiter ~2.5 yrs)
+ const res=[];out.sort((a,b)=>a.jd-b.jd).forEach(x=>{const W={ss:1500,ssend:1500,a8:1500,sr:1500,jr:900}[x.k]||400;if(!res.some(y=>y.k===x.k&&Math.abs(y.jd-x.jd)<W))res.push(x);});return res;}
+function jbBars(ch,ads,until){const by=jdToDate(ch.jd,ch.inp.tz).y,ys=new Map();ads.forEach(a=>{for(let j=a.st;j<Math.min(a.en,until);j+=45){const y=jdToDate(j,ch.inp.tz).y;const o=ys.get(y)||{y,s:0,n:0};o.s+=a.q;o.n++;ys.set(y,o);}});
+ const arr=[...ys.values()].sort((a,b)=>a.y-b.y).map(o=>({y:o.y,q:o.s/o.n})),n=arr.length,bw=Math.max(3,Math.min(9,Math.floor(330/Math.max(n,1)))),W=n*bw,H=50,cy=new Date().getFullYear();
+ let s=`<svg viewBox="0 0 ${W+22} ${H+14}" width="100%" style="max-width:${W+32}px" role="img">`;
+ arr.forEach((o,k)=>{const v=Math.max(0.25,Math.min(3,2.2-o.q)),h=v/3*H,c=jbCat(o.q)==='g'?'var(--good)':jbCat(o.q)==='b'?'var(--kum)':'var(--hal)';s+=`<rect x="${k*bw+0.5}" y="${H-h}" width="${bw-1}" height="${h}" rx="1" fill="${c}" opacity="${o.y>cy?0.75:1}"><title>${o.y}</title></rect>`;
+  if((o.y-by)%10===0)s+=`<text x="${k*bw}" y="${H+11}" font-size="8" fill="currentColor">${o.y}</text>`;if(o.y===cy)s+=`<line x1="${k*bw+bw/2}" x2="${k*bw+bw/2}" y1="0" y2="${H}" stroke="currentColor" stroke-dasharray="2,2" opacity=".6"/>`;});return s+'</svg>';}
+function renderBadlav(ch){const now=julianNow(),until=now+15*365.25,key='jb'+ch.jd;if(!S.jbc||S.jbc.key!==key)S.jbc={key,ads:jbADs(ch,until)};const ads=S.jbc.ads,ph=jbPhases(ads),by=jdToDate(ch.jd,ch.inp.tz).y;
+ let fa=[];try{fa=rsTimeline(ch,rsRead(ch,RS[0])).filter(x=>x.v>=1.5);}catch(e){}
+ const lab={g:'jbG',m:'jbM',b:'jbB'},cls={g:'pos',m:'',b:'neg'},ico={g:'✓',m:'•',b:'!'};
+ const phLi=p=>{const cur=p.st<=now&&p.en>=now,past=p.en<now;const per={};p.ads.forEach(a=>Object.keys(a.per).forEach(k=>per[k]=(per[k]||0)+a.per[k]/p.ads.length));
+  const top=Object.entries(per).sort((a,b)=>b[1]-a[1]).slice(0,2).filter(x=>x[1]>1.2).map(([k])=>vsT(PST_SH[k]||SAM_P.find(x=>x.k===k).n));
+  const good=p.c==='g'?[...new Set(p.ads.flatMap(a=>lbSig(ch,a.ad).filter(h=>[2,5,9,10,11].includes(h))))].slice(0,3).map(hsG):[];
+  const fOv=fa.some(x=>x.st<p.en&&x.en>p.st);const lords=[...new Set(p.ads.map(a=>`${pn(a.md)}/${pn(a.ad)}`))];
+  return `<li class="${cls[p.c]}${cur?' vpcur':''}"><b>${ico[p.c]}</b> <span class="pstyr">${jdToDate(p.st,ch.inp.tz).y} – ${jdToDate(p.en,ch.inp.tz).y}</span> <span class="rk ${p.c==='g'?'strong':p.c==='b'?'chal':'mixed'}">${T(lab[p.c])}</span>${cur?` <span class="rk fav">${T('jbNow')}</span>`:''} <span class="note">(${T('jbAge').replace('{a}',`${jdToDate(p.st,ch.inp.tz).y-by}–${jdToDate(p.en,ch.inp.tz).y-by}`)} · ${lords.slice(0,3).join(', ')}${lords.length>3?'…':''})</span>`
+   +(top.length&&p.c!=='g'?`<br><span class="note"><b>${T('jbWhat')}:</b> ${top.join(', ')}</span>`:'')+(good.length?`<br><span class="note"><b>${T('jbGood')}:</b> ${good.join(', ')}</span>`:'')+(fOv&&p.c!=='g'?`<br><span class="note">👤 ${T('jbFa')}</span>`:'')
+   +(past&&p.en-p.st>200?' '+pstAskBtns(ch,'jb:'+p.c+':'+Math.round(p.st)):'')+`</li>`;};
+ const pastPh=ph.filter(p=>p.st<now),futPh=ph.filter(p=>p.st>=now);
+ const turns=jbTurns(ch,ads,until);
+ return `<div class="pagehead"><h2>${T('t_badlav')}</h2></div><section class="blk ntp"><h3>🧭 ${T('jbT')}</h3><p class="note">${T('jbN')}</p>${jbBars(ch,ads,until)}</section>`
+  +`<section class="blk"><h3>📜 ${T('jbPh')}</h3><ul class="fx vsfx pstl">${pastPh.map(phLi).join('')}</ul>${pstScoreHTML(ch)}<h4>🔭 ${T('jbFut')}</h4><ul class="fx vsfx">${futPh.map(phLi).join('')||'<li>—</li>'}</ul></section>`
+  +`<section class="blk"><h3>🔀 ${T('jbTP')}</h3><ul class="fx vsfx">${turns.map(x=>`<li class="${x.k==='up'||x.k==='jr'||x.k==='ssend'?'pos':x.k==='down'||x.k==='a8'||x.k==='ss'?'neg':''}${x.jd<now?'':' jbfut'}"><b>${x.jd<now?'•':'→'}</b> <span class="pstyr">${fdate(x.jd)}</span> <span class="note">(${T('jbAge').replace('{a}',jdToDate(x.jd,ch.inp.tz).y-by)})</span> — ${x.t}</li>`).join('')}</ul></section><p class="note">${T('jbSrc')}</p>`;}
+NEWT.badlav=renderBadlav;if(!TABS.includes('badlav'))TABS.push('badlav');
+(function(){const s=SEC18.find(x=>x[0]==='time');if(s&&!s[2][0][1].includes('badlav'))s[2][0][1].unshift('badlav');IC18.badlav='🧭';D18.badlav=['Good and tough phases from birth, turning points, money and father','जन्म से अच्छे-कठिन दौर, जीवन के मोड़, धन और पिता'];})();
+if(typeof RB_SKIP!=='undefined'&&!RB_SKIP.includes('badlav'))RB_SKIP.push('badlav');
+if(typeof FR_TABS!=='undefined'){const t=FR_TABS.find(x=>x[0]==='time');if(t&&!t[1].includes('badlav'))t[1].unshift('badlav');}
+(function(){const st=document.createElement('style');st.textContent=`.jbfut{opacity:.92}`;document.head.appendChild(st);})();
+// fix: job loss / study break (v21.3) had no timing definition → snapshot crashed for young charts
+Object.assign(PDEF,{jobloss:[10,[5,9,12],[6],10,1],studybreak:[4,[3,8,12],[3,4],24,1]});
+
 </script>
 <nav id="bnav" aria-label="Main"></nav>
 </body></html>
