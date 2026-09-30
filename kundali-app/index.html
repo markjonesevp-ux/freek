@@ -6842,6 +6842,43 @@ if(NEWT.pandit){const _pd21=NEWT.pandit;NEWT.pandit=function(ch){let h=_pd21(ch)
  const fix=(re,m)=>{h=h.replace(re,seg=>{Object.keys(m).forEach(k=>{seg=seg.split(l==='en'?N[k].toLowerCase():N[k]).join(m[k]);});return seg;});};
  fix(l==='hi'?/सबसे मज़बूत क्षेत्र:[^।<]*/:/Strongest areas:[^.<]*/,P21[l].s);fix(l==='hi'?/सावधानी वाले क्षेत्र:[^।<]*/:/Areas needing care:[^.<]*/,P21[l].w);}catch(e){}return h;};}
 
+// ===== v21.1: relatives — the v20.0 point list back in view, plus a health timeline for each relative (from the native's dasha) =====
+Object.assign(I18N.en,{r21Sum:'At a glance',r21HT:'Health timeline of {r}',r21HN:'Year by year from your birth, judged by your dasha activating their houses of illness (6th and 8th from their house) and hospital (12th), against their own house and 11th. Red = health needs care, green = good.',
+ r21HPast:'Past health-care periods (ask the family to verify)',r21HFut:'Coming health-care periods',r21HNone:'No strong health-care period.',r21HCard:'Health care time',r21Karaka:' (natural karaka {p} running — stronger)'});
+Object.assign(I18N.hi,{r21Sum:'संक्षिप्त विवरण',r21HT:'{r} की स्वास्थ्य समयरेखा',r21HN:'आपके जन्म से वर्ष-दर-वर्ष: आपकी दशा जब उनके रोग भाव (उनके भाव से 6वाँ, 8वाँ) और अस्पताल भाव (12वाँ) को सक्रिय करती है, और उनका अपना भाव व 11वाँ कमज़ोर पड़ता है। लाल = स्वास्थ्य पर ध्यान, हरा = अच्छा।',
+ r21HPast:'बीते स्वास्थ्य-सावधानी काल (परिवार से पूछकर जाँचें)',r21HFut:'आने वाले स्वास्थ्य-सावधानी काल',r21HNone:'कोई प्रबल स्वास्थ्य-सावधानी काल नहीं।',r21HCard:'स्वास्थ्य सावधानी का समय',r21Karaka:' (नैसर्गिक कारक {p} की दशा — प्रभाव अधिक)'});
+// health activation per antardasha for a relative
+function r21Health(ch,r,rd){const R=r[1],bad=[rsNat(R,6),rsNat(R,8),rsNat(R,12)],good=[R,rsNat(R,11)],now=julianNow(),out=[];let jd=ch.jd+1;
+ for(let q=0;q<160;q++){const d=dashaAt(ch,jd);if(!d)break;const sa=lbSig(ch,d.ad.lord),sm=lbSig(ch,d.md.lord);
+  let v=bad.filter(h=>sa.includes(h)).length+0.5*bad.filter(h=>sm.includes(h)).length-0.7*good.filter(h=>sa.includes(h)).length;
+  const kar=d.ad.lord===rd.kr||d.md.lord===rd.kr;if(kar&&v>0)v*=1.3;if(smPlanet(ch,rd.kr).v<-1&&kar)v+=0.4;
+  out.push({st:Math.max(d.ad.start,ch.jd),en:d.ad.end,md:d.md.lord,ad:d.ad.lord,v,kar});jd=d.ad.end+1;if(jd>now+12*365.25)break;}
+ return out;}
+function r21Years(ch,tl){const by=jdToDate(ch.jd,ch.inp.tz).y,now=julianNow(),ys=new Map();
+ tl.forEach(x=>{for(let jd=x.st;jd<x.en;jd+=60){const y=jdToDate(jd,ch.inp.tz).y;const o=ys.get(y)||{y,age:y-by,a:-9};o.a=Math.max(o.a,x.v);ys.set(y,o);}});
+ return [...ys.values()].sort((a,b)=>a.y-b.y).filter(o=>o.y<=jdToDate(now,ch.inp.tz).y+10);}
+function r21Bars(ys){const n=ys.length,bw=Math.max(3,Math.min(9,Math.floor(330/Math.max(n,1)))),W=n*bw,H=46,cy=new Date().getFullYear();let s=`<svg viewBox="0 0 ${W+22} ${H+14}" width="100%" style="max-width:${W+32}px" role="img">`;
+ ys.forEach((o,k)=>{const v=Math.max(0.2,Math.min(4.2,o.a+0.8)),h=v/4.2*H,c=o.a>=2.8?'var(--kum)':o.a>=1.8?'var(--hal)':'var(--good)';s+=`<rect x="${k*bw+0.5}" y="${H-h}" width="${bw-1}" height="${h}" rx="1" fill="${c}" opacity="${o.y>cy?0.75:1}"><title>${o.y}</title></rect>`;
+  if(o.age%10===0)s+=`<text x="${k*bw}" y="${H+11}" font-size="8" fill="currentColor">${o.y}</text>`;if(o.y===cy)s+=`<line x1="${k*bw+bw/2}" x2="${k*bw+bw/2}" y1="0" y2="${H}" stroke="currentColor" stroke-dasharray="2,2" opacity=".5"/>`;});return s+'</svg>';}
+function r21HealthBlock(ch,r,rd){const tl=r21Health(ch,r,rd),now=julianNow(),mn=['spouse','child1','child2','fil','mil'].includes(r[0])?ch.jd+21*365.25:ch.jd,nm=vsT(r[5]);
+ const per=x=>`<span class="pstyr">${fdate(Math.max(x.st,x.en<now?x.st:now))} – ${fdate(x.en)}</span> <span class="note">(${pn(x.md)}/${pn(x.ad)})${x.kar?T('r21Karaka').replace('{p}',pn(rd.kr)):''}</span>`;
+ const mg=a=>{const o=[];a.forEach(x=>{const l=o[o.length-1];if(l&&Math.abs(l.en-x.st)<2){l.en=x.en;l.v=Math.max(l.v,x.v);l.kar=l.kar||x.kar;}else o.push({...x});});return o;};
+ const past=mg(tl.filter(x=>x.en<now&&x.st>=mn&&x.v>=2.8)).sort((a,b)=>b.v-a.v).slice(0,4).sort((a,b)=>a.st-b.st),fut=mg(tl.filter(x=>x.en>=now&&x.v>=2.8)).slice(0,3);
+ return `<section class="blk"><h3>🩺 ${T('r21HT').replace('{r}',nm)}</h3><p class="note">${T('r21HN')}</p>${r21Bars(r21Years(ch,tl))}`
+  +`<h4>${T('r21HPast')}</h4>${past.length?`<ul class="fx vsfx pstl">${past.map(x=>`<li><b>•</b> ${per(x)} ${pstAskBtns(ch,'rh:'+r[0]+':'+Math.round(x.st))}</li>`).join('')}</ul>`:`<p>${T('r21HNone')}</p>`}`
+  +`<h4>${T('r21HFut')}</h4>${fut.length?`<ul class="fx vsfx">${fut.map(x=>`<li class="neg"><b>!</b> ${per(x)}</li>`).join('')}</ul>`:`<p>${T('r21HNone')}</p>`}</section>`;}
+// rishta page: point list out of the collapsed block, health timeline after the story
+const _rsh21=renderRishta;renderRishta=function(ch){const h=_rsh21(ch);try{const r=RS.find(x=>x[0]===S.rsk)||RS[0],rd=rsRead(ch,r),t=document.createElement('template');t.innerHTML=h;
+ const ul=t.content.querySelector('.fmbasis ul.fx');const story=t.content.querySelector('.fmstory');
+ if(ul&&story){const sec=document.createElement('section');sec.className='blk';sec.innerHTML=`<h3>📋 ${T('r21Sum')}</h3>`;sec.appendChild(ul);story.after(sec);sec.insertAdjacentHTML('afterend',r21HealthBlock(ch,r,rd));}
+ return t.innerHTML;}catch(e){console.error(e);return h;}};
+NEWT.rishta=renderRishta;
+// family cards: next health-care period
+if(NEWT.family){const _fam211=NEWT.family;NEWT.family=function(ch){const h=_fam211(ch);try{const t=document.createElement('template');t.innerHTML=h;const now=julianNow();
+ t.content.querySelectorAll('.fmcard').forEach(c=>{const b=c.querySelector('[data-rsgo]');const r=b&&RS.find(x=>x[0]===b.dataset.rsgo);if(!r)return;const rd=rsRead(ch,r);
+  const nx=r21Health(ch,r,rd).find(x=>x.en>=now&&x.v>=2.8);const f=c.querySelector('.fmh');if(f)f.insertAdjacentHTML('beforeend',`<br><b>${T('r21HCard')}:</b> ${nx?`${fdate(Math.max(nx.st,now))} – ${fdate(nx.en)} (${pn(nx.md)}/${pn(nx.ad)})`:T('r21HNone')}`);});
+ return t.innerHTML;}catch(e){return h;}};}
+
 </script>
 <nav id="bnav" aria-label="Main"></nav>
 </body></html>
