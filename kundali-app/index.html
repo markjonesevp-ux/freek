@@ -6540,6 +6540,89 @@ const _renderRishtaC2=renderRishta;renderRishta=function(ch){const h=_renderRish
   if(u)u.outerHTML=li;b.insertAdjacentHTML('afterbegin',`<p class="note">${T('c2Note')}</p>`);}return t.innerHTML;}catch(e){return h;}};
 NEWT.rishta=renderRishta;
 
+// ===== v20.4: Navtara phaladesh — natal planets by tara (with lagna-karaka check), bad-tara lords and their mahadashas, slow transits with same-pada boost, helpful/caution people, remedies =====
+// Rules: 9 taras counted from the Janma nakshatra (Moon); 3/5/7 (Vipat, Pratyari, Vadha) are adverse, 2/4/6/8/9 good; special stars 10 Karma, 16 Sanghatika,
+// 18 Samudayika, 19 Adhana, 23 Vainashika, 25 Manasa, 26 Desha, 27 Abhisheka; the navtara order follows the Vimshottari sequence, so the 3rd/5th/7th
+// mahadashas from birth are the Vipat/Pratyari/Vadha dashas; a transit through the same pada (navamsa tattva) as the natal Moon acts strongest; Kshema-tara people guard health and happiness.
+Object.assign(I18N.en,{ntpT:'Navtara reading — in plain words',ntpIntro:'Your birth star (Moon\'s nakshatra) starts a cycle of 9 taras that repeats three times across the 27 nakshatras. A planet sitting in a good tara gives its results easily during its dasha; in Vipat (3), Pratyari (5) or Vadha (7) it gives them with obstacles. Whether the planet is a karaka (a helpful planet) for your lagna changes how this feels in life.',
+ ntpPl:'Your planets by tara',ntpKar:'karaka for your lagna',ntpNonKar:'not a karaka for your lagna',ntpRules:'Rules: {h}',ntpNext:'Next period of this planet',ntpNone:'—',
+ ntpKB:'A helpful planet stuck in a difficult tara: it still gives its good results, but late, after struggle, or with something lost on the way. Do not give up on its matters — keep effort steady and do its remedy.',
+ ntpNB:'A difficult planet in a difficult tara: during its period be careful with health, money and disputes in the matters it rules. Avoid big risks in its dasha/antardasha.',
+ ntpKG:'A helpful planet in a good tara: its period brings clear progress in the matters it rules — use it for important steps.',
+ ntpNG:'A difficult planet in a good tara: the tara softens its harm — problems come but are manageable.',
+ ntpNeutral:'Janma tara: results depend on the planet itself; the first cycle is ordinary, the 10th and 19th stars bring some early obstacles.',
+ ntpLords:'Difficult taras and your mahadashas',ntpLordsN:'Because the tara order follows the Vimshottari sequence, the 3rd, 5th and 7th mahadashas from birth belong to the Vipat, Pratyari and Vadha lords.',
+ ntpMD:'{n} mahadasha ({t}): {p}, {a} – {b} (age {x}–{y})',ntpMDk:' — this planet is a karaka for your lagna, so the period mixes good results with tests; do not wear its gem without an astrologer\'s check.',ntpPast:'(past)',ntpLord:'Lord of {t} tara: {p} — {k}. Its antardasha also brings the {t} tara\'s effect; next: {n}.',ntpLordK:'a karaka for your lagna: good results come, but with tests and delays',ntpLordN:'not a karaka for your lagna: be extra careful in its periods',ntpNow:'(running now)',
+ ntpTr:'Slow planets now',ntpPada:'same pada as your Moon — effect is much stronger',ntpTrG:'good for you now',ntpTrB:'be careful now',ntpTrJ:'Jupiter here protects you',
+ ntpPeople:'People by their birth star',ntpPeopleN:'People whose birth star falls in these taras from yours tend to help or trouble you. Kshema-tara people guard your health and happiness — treat them well.',
+ ntpHelp:'Helpful',ntpCare:'Deal carefully',ntpSaved:'From your saved kundalis',
+ ntpUpay:'Remedies for planets in difficult taras',ntpDeity:'worship the nakshatra deity {d}',ntpDaan:'donate {x} on its day',ntpDays:'On days when the Moon is in your Vipat, Pratyari or Vadha tara (red rows in the calendar below), avoid starting big work, travel or surgery by choice.',
+ ntpTables:'Detailed tables (tara chart, dasha lords, 30-day calendar)',ntpSrc:'Based on the navtara rules of the classics as explained in the uploaded notes; readings and remedies written for this app.',
+ ntpSp:{1:'Janma (birth) star — your body and mind react directly',10:'Karma star — work and profession',16:'Sanghatika star — can break things down to rebuild',18:'Samudayika star — support from society',19:'Adhana star — health, mind and childbirth',23:'Vainashika star — strongly adverse, guard carefully',25:'Manasa star — mental pressure, family matters',26:'Desha star — status and position',27:'Abhisheka star — honour and rise'},
+ ntpOrd:['1st','2nd','3rd','4th','5th','6th','7th','8th','9th']});
+Object.assign(I18N.hi,{ntpT:'नवतारा फलादेश — सरल भाषा में',ntpIntro:'आपका जन्म नक्षत्र (चंद्र का नक्षत्र) 9 ताराओं का चक्र शुरू करता है, जो 27 नक्षत्रों में तीन बार दोहराता है। शुभ तारा में बैठा ग्रह अपनी दशा में फल आसानी से देता है; विपत् (3), प्रत्यरि (5) या वध (7) तारा में बाधाओं के साथ। ग्रह आपके लग्न का कारक (सहायक ग्रह) है या नहीं — इससे जीवन में इसका अनुभव बदलता है।',
+ ntpPl:'तारा अनुसार आपके ग्रह',ntpKar:'आपके लग्न का कारक',ntpNonKar:'आपके लग्न का कारक नहीं',ntpRules:'इसके विषय: {h}',ntpNext:'इस ग्रह का अगला समय',ntpNone:'—',
+ ntpKB:'सहायक ग्रह कठिन तारा में: यह अपने शुभ फल देता है, पर देर से, संघर्ष के बाद, या रास्ते में कुछ खोकर। इसके विषयों में हिम्मत न हारें — लगातार प्रयास करें और इसका उपाय करें।',
+ ntpNB:'कठिन ग्रह कठिन तारा में: इसकी अवधि में इसके विषयों से जुड़े स्वास्थ्य, धन और विवाद में सावधान रहें। इसकी दशा/अंतर्दशा में बड़े जोखिम से बचें।',
+ ntpKG:'सहायक ग्रह शुभ तारा में: इसकी अवधि में इसके विषयों में स्पष्ट उन्नति — महत्वपूर्ण कदम इसी समय उठाएँ।',
+ ntpNG:'कठिन ग्रह शुभ तारा में: तारा इसका नुकसान कम कर देती है — परेशानी आती है पर सँभल जाती है।',
+ ntpNeutral:'जन्म तारा: फल ग्रह के अपने स्वभाव पर निर्भर; पहला चक्र सामान्य, 10वाँ और 19वाँ नक्षत्र शुरुआती बाधा देते हैं।',
+ ntpLords:'कठिन ताराएँ और आपकी महादशाएँ',ntpLordsN:'तारा का क्रम विंशोत्तरी क्रम से चलता है, इसलिए जन्म से तीसरी, पाँचवीं और सातवीं महादशा विपत्, प्रत्यरि और वध तारा के स्वामियों की होती है।',
+ ntpMD:'{n} महादशा ({t}): {p}, {a} – {b} (आयु {x}–{y})',ntpMDk:' — यह ग्रह आपके लग्न का कारक है, इसलिए यह समय शुभ फल के साथ परीक्षा भी लाता है; ज्योतिषी की जाँच के बिना इसका रत्न न पहनें।',ntpPast:'(बीत गई)',ntpLord:'{t} तारा के स्वामी: {p} — {k}। इसकी अंतर्दशा में भी {t} तारा का असर रहता है; अगली: {n}।',ntpLordK:'आपके लग्न का कारक: शुभ फल मिलते हैं, पर परीक्षा और देरी के साथ',ntpLordN:'आपके लग्न का कारक नहीं: इसकी अवधि में विशेष सावधानी रखें',ntpNow:'(अभी चल रही)',
+ ntpTr:'अभी धीमे ग्रह',ntpPada:'आपके चंद्र वाले चरण में — प्रभाव कई गुना',ntpTrG:'अभी आपके लिए शुभ',ntpTrB:'अभी सावधान रहें',ntpTrJ:'यहाँ गुरु आपकी रक्षा करता है',
+ ntpPeople:'जन्म नक्षत्र से लोग',ntpPeopleN:'जिन लोगों का जन्म नक्षत्र आपके नक्षत्र से इन ताराओं में पड़ता है, वे आपकी मदद करते हैं या परेशानी देते हैं। क्षेम तारा वाले लोग आपके स्वास्थ्य और सुख के रक्षक हैं — उनका सम्मान करें।',
+ ntpHelp:'सहायक',ntpCare:'सावधानी से व्यवहार',ntpSaved:'आपकी सहेजी कुंडलियों में से',
+ ntpUpay:'कठिन तारा वाले ग्रहों के उपाय',ntpDeity:'नक्षत्र देवता {d} की पूजा',ntpDaan:'इसके वार को {x} का दान',ntpDays:'जिन दिनों चंद्र आपकी विपत्, प्रत्यरि या वध तारा में हो (नीचे कैलेंडर में लाल पंक्तियाँ), उस दिन बड़ा काम शुरू करने, यात्रा या अपनी इच्छा से ऑपरेशन से बचें।',
+ ntpTables:'विस्तृत तालिकाएँ (तारा चक्र, दशा स्वामी, 30 दिन का कैलेंडर)',ntpSrc:'भेजे गए नोट्स में बताए गए शास्त्रीय नवतारा नियमों पर आधारित; फल और उपाय इस ऐप के लिए लिखे गए।',
+ ntpSp:{1:'जन्म नक्षत्र — शरीर और मन पर सीधा असर',10:'कर्म नक्षत्र — काम और पेशा',16:'सांघातिक नक्षत्र — तोड़कर फिर से बनवाता है',18:'सामुदायिक नक्षत्र — समाज से सहयोग',19:'आधान नक्षत्र — स्वास्थ्य, मन और संतान',23:'वैनाशिक नक्षत्र — बहुत प्रतिकूल, विशेष सावधानी',25:'मानस नक्षत्र — मानसिक दबाव, कुल-परिवार के विषय',26:'देश नक्षत्र — पद और प्रतिष्ठा',27:'अभिषेक नक्षत्र — सम्मान और उन्नति'},
+ ntpOrd:['पहली','दूसरी','तीसरी','चौथी','पाँचवीं','छठी','सातवीं','आठवीं','नौवीं']});
+// What a planet in each tara brings during its period
+const NTP_T=[
+ ['Results come as the planet\'s own nature; health and mind are directly touched.','फल ग्रह के अपने स्वभाव से; स्वास्थ्य और मन पर सीधा असर।'],
+ ['Money, savings and comforts grow in its period.','इसकी अवधि में धन, बचत और सुख-सुविधा बढ़ती है।'],
+ ['Sudden obstacles, losses or setbacks in its period, especially in the matters it rules.','इसकी अवधि में अचानक बाधा, हानि या झटके — विशेषकर इसके विषयों में।'],
+ ['Well-being, peace and good events; family life is comfortable.','कुशलता, शांति और शुभ घटनाएँ; पारिवारिक जीवन सुखी।'],
+ ['Opposition, hidden enemies or someone close working against you; plans get blocked.','विरोध, छिपे शत्रु या कोई करीबी पीछे से विरोध करे; योजनाएँ अटकती हैं।'],
+ ['Hard work succeeds; desires are fulfilled with effort and the right helper.','मेहनत सफल होती है; प्रयास और सही सहयोगी से इच्छाएँ पूरी।'],
+ ['The toughest tara: big setbacks, health scares or serious losses in its period; guard its matters closely.','सबसे कठिन तारा: इसकी अवधि में बड़े झटके, स्वास्थ्य की चिंता या भारी हानि संभव; इसके विषयों की विशेष रक्षा करें।'],
+ ['Friends and well-wishers help; freedom from worry.','मित्र और शुभचिंतक मदद करते हैं; चिंता से मुक्ति।'],
+ ['The best tara: close people help in every matter; things go smoothly.','सबसे श्रेष्ठ तारा: करीबी लोग हर काम में मदद करते हैं; काम आसानी से होते हैं।']];
+const NTP_MAL=[2,6,7,8];
+function ntpNak(lon){return Math.floor(norm(lon)/(360/27));}
+function ntpPada(lon){return Math.floor((norm(lon)%(360/27))/(360/108))+1;}
+function ntpD(jn,n){return ((n-jn+27)%27)+1;}
+function ntpIsKar(ch,i){if(i>6)return false;const fn=funcNature(ch,i);return i===lordOf(ch,1)||fn==='yk'||fn==='fb';}
+function ntpNextPeriod(ch,i){const now=julianNow();let jd=now;for(let k=0;k<60;k++){const d=dashaAt(ch,jd);if(!d)return null;if(d.ad.lord===i&&d.ad.end>now)return d;jd=d.ad.end+1;}return null;}
+function ntpMDs(ch){const out=[];let jd=ch.jd+0.5;for(let k=0;k<9;k++){const d=dashaAt(ch,jd);if(!d)break;out.push({n:k,L:d.md.lord,st:Math.max(d.md.start,ch.jd),en:d.md.end});jd=d.md.end+1;}return out;}
+function renderNtp(ch){const P=ch.planets,jn=P[1].nak,mp=P[1].pada,hi=hiV(),now=julianNow(),by=jdToDate(ch.jd,ch.inp.tz).y,age=jd=>jdToDate(jd,ch.inp.tz).y-by;
+ const tq=t=>TARA_Q[t]>0?'good':TARA_Q[t]<0?'bad':'mid',tn=t=>L(TARA)[t];
+ let h=`<section class="blk ntp"><h3>✨ ${T('ntpT')}</h3><p class="note">${T('ntpIntro')}</p><p><b>${hi?'जन्म नक्षत्र':'Birth star'}:</b> ${L(NK)[jn]} (${hi?'चरण':'pada'} ${mp})</p></section>`;
+ // 1) natal planets
+ const pl=[0,1,2,3,4,5,6,7,8].map(i=>{const d=ntpD(jn,P[i].nak),t=(d-1)%9;return {i,d,t,k:ntpIsKar(ch,i)};}).sort((a,b)=>TARA_Q[a.t]-TARA_Q[b.t]);
+ h+=`<section class="blk"><h3>🪐 ${T('ntpPl')}</h3>`+pl.map(x=>{const q=tq(x.t),rules=housesRuled(ch,x.i).map(n=>L(HOUSE_S)[n-1]);
+  const mod=x.t===0?T('ntpNeutral'):TARA_Q[x.t]<0?T(x.k?'ntpKB':'ntpNB'):T(x.k?'ntpKG':'ntpNG');const sp=T('ntpSp')[x.d];const nx=ntpNextPeriod(ch,x.i);
+  const body=`<p>${vsT(NTP_T[x.t])} ${mod}</p>${sp?`<p class="note">★ ${x.d}: ${sp}</p>`:''}${rules.length?`<p class="note">${T('ntpRules').replace('{h}',rules.join(', '))}</p>`:''}${nx?`<p class="note">${T('ntpNext')}: ${pn(nx.md.lord)}/${pn(nx.ad.lord)} · ${fdate(Math.max(nx.ad.start,now))} – ${fdate(nx.ad.end)}</p>`:''}`;
+  return vsDet(`<span class="vsp">${pn(x.i)}</span><span class="note">${L(NK)[P[x.i].nak]} · ${x.d} · ${x.k?T('ntpKar'):T('ntpNonKar')}</span><span class="vsr ${q==='bad'?'b':q==='good'?'g':''}">${tn(x.t)}</span>`,body,TARA_Q[x.t]<0&&x.k);}).join('')+`</section>`;
+ // 2) bad-tara lords and their mahadashas
+ const mds=ntpMDs(ch);h+=`<section class="blk"><h3>⏳ ${T('ntpLords')}</h3><ul class="fx vsfx">${[2,4,6].map(t=>{const Lt=DASHA_ORDER[(jn+t)%9],nx=ntpNextPeriod(ch,Lt);return `<li class="${ntpIsKar(ch,Lt)?'':'neg'}"><b>${ntpIsKar(ch,Lt)?'★':'!'}</b> ${T('ntpLord').replace(/\{t\}/g,tn(t)).replace('{p}',pn(Lt)).replace('{k}',T(ntpIsKar(ch,Lt)?'ntpLordK':'ntpLordN')).replace('{n}',nx?`${pn(nx.md.lord)}/${pn(nx.ad.lord)} ${fdate(Math.max(nx.ad.start,now))} – ${fdate(nx.ad.end)}`:'—')}</li>`;}).join('')}</ul><p class="note">${T('ntpLordsN')}</p><ul class="fx vsfx">`+[2,4,6].map(t=>{const m=mds[t];if(!m)return '';const st=m.en<now?T('ntpPast'):m.st<=now?T('ntpNow'):'';
+  return `<li class="${m.st<=now&&m.en>=now?'neg':''}"><b>!</b> ${T('ntpMD').replace('{n}',T('ntpOrd')[t]).replace('{t}',tn(t)).replace('{p}',pn(m.L)).replace('{a}',fdate(m.st)).replace('{b}',fdate(m.en)).replace('{x}',age(m.st)).replace('{y}',age(m.en))} ${st}${ntpIsKar(ch,m.L)?T('ntpMDk'):''}</li>`;}).join('')+`</ul></section>`;
+ // 3) slow planets now, with same-pada boost
+ const tr=transitAt(ch,now,true);h+=`<section class="blk"><h3>🌍 ${T('ntpTr')}</h3><ul class="fx vsfx">`+[6,4,7,8,2].map(i=>{const lon=tr[i].lon,d=ntpD(jn,ntpNak(lon)),t=(d-1)%9,pd=ntpPada(lon)===mp,bad=TARA_Q[t]<0;
+  const msg=i===4?(bad?T('ntpTrJ'):T('ntpTrG')):NTP_MAL.includes(i)?(bad?T('ntpTrB'):TARA_Q[t]>0?T('ntpTrG'):''):'';
+  return `<li class="${bad&&i!==4?'neg':TARA_Q[t]>0?'pos':''}"><b>${bad&&i!==4?'!':'•'}</b> <span class="vsp">${pn(i)}</span> — ${L(NK)[ntpNak(lon)]} · <b>${tn(t)}</b>${msg?` — ${msg}`:''}${pd?` <span class="rk ${bad&&i!==4?'chal':'strong'}">${T('ntpPada')}</span>`:''}</li>`;}).join('')+`</ul></section>`;
+ // 4) people by birth star
+ const grp=ts=>ts.map(t=>`<b>${tn(t)}:</b> ${[0,9,18].map(c=>L(NK)[(jn+t+c)%27]).join(', ')}`).join('<br>');
+ let saved='';try{const pr=getProfiles().filter(p=>!(p.y===ch.inp.y&&p.m===ch.inp.m&&p.d===ch.inp.d&&p.h===ch.inp.h&&p.mi===ch.inp.mi)).slice(0,20);
+  const rows=pr.map(p=>{const c=buildChart({...p,city:p.city||p.place||'x'}),d=ntpD(jn,c.planets[1].nak),t=(d-1)%9;return `<li class="${TARA_Q[t]<0?'neg':TARA_Q[t]>0?'pos':''}"><b>${TARA_Q[t]<0?'!':'•'}</b> ${esc(p.name||'—')} — ${L(NK)[c.planets[1].nak]} · <b>${tn(t)}</b></li>`;});
+  if(rows.length)saved=`<h4>${T('ntpSaved')}</h4><ul class="fx vsfx">${rows.join('')}</ul>`;}catch(e){}
+ h+=`<section class="blk"><h3>🤝 ${T('ntpPeople')}</h3><p class="note">${T('ntpPeopleN')}</p><p class="rblife l2"><b>${T('ntpHelp')}</b><br>${grp([3,1,5,7,8])}</p><p class="rblife l0"><b>${T('ntpCare')}</b><br>${grp([2,4,6])}</p>${saved}</section>`;
+ // 5) remedies
+ const badPl=pl.filter(x=>TARA_Q[x.t]<0);h+=`<section class="blk"><h3>🪔 ${T('ntpUpay')}</h3>${badPl.length?`<ul class="fx vsfx">${badPl.map(x=>{let u={};try{u=UPC(x.i);}catch(e){}const dn=TARA_DAAN[x.t];
+  return `<li><b>•</b> <span class="vsp">${pn(x.i)} (${tn(x.t)}):</span> ${u.day?`${u.day} · ${u.mantra} · `:''}${T('ntpDeity').replace('{d}',L(NAK_DEV)[P[x.i].nak])}${dn?` · ${T('ntpDaan').replace('{x}',vsT(dn))}`:''}</li>`;}).join('')}</ul>`:''}<p>${T('ntpDays')}</p></section>`;
+ return h;}
+if(NEWT.navtara){const _ntOld=NEWT.navtara;NEWT.navtara=function(ch){let a='';try{a=renderNtp(ch);}catch(e){console.error(e);}return a+`<section class="blk">${vsDet('📊 '+T('ntpTables'),_ntOld(ch),false)}</section><p class="note">${T('ntpSrc')}</p>`;};}
+(function(){const st=document.createElement('style');st.textContent=`.ntp{border-left:5px solid var(--hal)}.vsr.g{background:var(--goodbg);color:var(--good)}`;document.head.appendChild(st);})();
+
 </script>
 <nav id="bnav" aria-label="Main"></nav>
 </body></html>
