@@ -6419,7 +6419,7 @@ function fmParts(ch,r,rd){const P=ch.planets,R=r[1],ls=(ch.lagna+R-1)%12,LR=lord
 function fmStoryHTML(ch,r,rd){const f=fmParts(ch,r,rd),row=(ic,k,t,c)=>`<div class="fmrow ${c||''}"><h4>${ic} ${T(k)}</h4><p>${t}</p></div>`;
  return `<section class="blk fmstory">${row('🧑','fmWho',f.who)}${row('🧭','fmLife',f.life)}${row('🔗','fmRole',f.role)}${row('🤝','fmBond',f.bond,['good','','care'][f.bi])}${row('🩺','fmWell',f.well)}</section>`;}
 // "You & your family": plain-language cards, old technical text in a collapsed block
-if(NEWT.family){const _famOld=renderFamily;NEWT.family=function(ch){let h='';try{h=parBox(T('fmSelf'),parSelf(ch));}catch(e){}
+window._famPrev=NEWT.family;if(NEWT.family){const _famOld=renderFamily;NEWT.family=function(ch){let h='';try{h=parBox(T('fmSelf'),parSelf(ch));}catch(e){}
  h+=`<h3 class="v18h">${T('fmFamT')}</h3><p class="note v18n">${T('fmFamN')}</p>`;
  RS.forEach(r=>{const rd=rsRead(ch,r),f=fmParts(ch,r,rd),first=f.who.split(/(?<=[।.])\s/)[0];const old=REL.find(x=>x[0]===r[0]);let tech='';try{if(old)tech=parRelative(ch,old);}catch(e){}
   h+=`<section class="blk fmcard"><h3>${vsT(r[5])} <span class="rslv l${rd.lv}" title="${T('rsOverall')}">${T('rsOverall')}: ${T('rsLv')[rd.lv]}</span></h3><p>${first} ${f.life}</p><p>${f.role} ${f.bond}</p>`
@@ -6691,7 +6691,7 @@ function renderGcPlain(ch){const now=S.trJD||julianNow(),tr=transitAt(ch,now,tru
  const rows=[6,4,7,8,2,0,5,3].map(i=>{const t=tr[i],kar=ntpIsKar(ch,i),good=!!t.good,fl=t.fl,d=ntpD(jn,ntpNak(t.lon)),ta=(d-1)%9,pd=ntpPada(t.lon)===mp;
   let sav=null;try{sav=ch.av.sav[t.sign];}catch(e){}return {i,t,kar,good,fl,ta,pd,sav};});
  let h=`<section class="blk ntp"><h3>🌍 ${T('gcT')}</h3><p class="note">${T('gcIntro')}</p>`;
- const best=rows.filter(r=>r.good&&[6,4,7,8].includes(r.i)).map(r=>`${pn(r.i)} → ${L(HOUSE_S)[r.fl-1]}`),care=rows.filter(r=>!r.good&&[6,4,7,8,2].includes(r.i)).map(r=>`${pn(r.i)} → ${L(HOUSE_S)[r.fl-1]}`);
+ const best=rows.filter(r=>r.good&&[6,4,7,8].includes(r.i)).map(r=>`${pn(r.i)} → ${hsG(r.fl)}`),care=rows.filter(r=>!r.good&&[6,4,7,8,2].includes(r.i)).map(r=>`${pn(r.i)} → ${hsB(r.fl)}`);
  h+=`<p class="rblife l2"><b>${T('gcBest')}:</b> ${best.join(', ')||T('gcNone')}</p><p class="rblife l0"><b>${T('gcCare')}:</b> ${care.join(', ')||T('gcNone')}</p></section>`;
  let ss=null;try{ss=sadeSati(ch,tr);}catch(e){}const sk=!ss?'gcSSno':ss[0]==='sadesati'?'gcSS'+ss[1]:ss[1]===4?'gcDh4':'gcDh8';
  h+=`<section class="blk"><h3>🪐 ${T('gcSS')}</h3><p class="rblife ${ss?'l0':'l2'}">${T(sk)}</p></section>`;
@@ -6776,8 +6776,8 @@ function renderVarshPlain(ch){const y=S.vyear,v=varshphal(ch,y),vc=v.vc,now=juli
  if(g||bq)h+=`<p class="note">${T('vpTj').replace('{g}',g).replace('{b}',bq)}</p>`;
  let dd='';try{const a=dashaAt(ch,v.jd),b=dashaAt(ch,end-1);dd=`${pn(a.md.lord)}/${pn(a.ad.lord)}${b&&(b.ad.lord!==a.ad.lord||b.md.lord!==a.md.lord)?` → ${pn(b.md.lord)}/${pn(b.ad.lord)} (${fdate(b.ad.start)})`:''}`;}catch(e){}
  if(dd)h+=`<p class="note">${T('vpDasha').replace('{d}',dd)}</p>`;h+=`</section>`;
- h+=`<section class="blk"><h3>✅ ${T('vpBest')}</h3><ul class="fx vsfx">${best.map(x=>`<li class="pos"><b>✓</b> <span class="vsp">${L(HOUSE_S)[x.h-1]}:</span> ${vsT(GC_H[x.h-1][0])}</li>`).join('')||'<li>—</li>'}</ul>`
-  +`<h3>⚠️ ${T('vpCare')}</h3><ul class="fx vsfx">${care.map(x=>`<li class="neg"><b>!</b> <span class="vsp">${L(HOUSE_S)[x.h-1]}:</span> ${vsT(GC_H[x.h-1][1])}</li>`).join('')||'<li>—</li>'}</ul></section>`;
+ h+=`<section class="blk"><h3>✅ ${T('vpBest')}</h3><ul class="fx vsfx">${best.map(x=>`<li class="pos"><b>✓</b> <span class="vsp">${hsG(x.h)}:</span> ${vsT(GC_H[x.h-1][0])}</li>`).join('')||'<li>—</li>'}</ul>`
+  +`<h3>⚠️ ${T('vpCare')}</h3><ul class="fx vsfx">${care.map(x=>`<li class="neg"><b>!</b> <span class="vsp">${hsB(x.h)}:</span> ${vsT(GC_H[x.h-1][1])}</li>`).join('')||'<li>—</li>'}</ul></section>`;
  const vq=i=>{const p=vc.planets[i],mal=[2,6,7,8,0].includes(i);let q=vpPl(vc,i)*0.6+vpHouse(vc,p.house)*0.6;if(mal&&[3,6,11].includes(p.house))q+=0.8;else if(mal&&[1,4,5,7,8,9,12].includes(p.house))q-=0.7;return q;};
  const rows=v.mudda.map(m=>{const p=vc.planets[m.lord],good=vq(m.lord)>=0,cur=now>=m.start&&now<m.end;
   return `<li class="${good?'pos':'neg'}${cur?' vpcur':''}"><b>${good?'✓':'!'}</b> <span class="vsp">${fdate(m.start)} – ${fdate(m.end)} · ${pn(m.lord)}</span>${cur?` <span class="rk strong">${T('vpNow')}</span>`:''}<br>${L(HOUSE_S)[p.house-1]}: ${vsT(GC_H[p.house-1][good?0:1])}</li>`;});
@@ -6791,6 +6791,56 @@ const _renderVarshP=renderVarsh;renderVarsh=function(ch){const old=_renderVarshP
 if(typeof RB_SKIP!=='undefined'&&!RB_SKIP.includes('varsh'))RB_SKIP.push('varsh');
 document.addEventListener('change',e=>{if(e.target&&e.target.id==='vy'&&S.ch&&S.tab==='varsh'){S.vyear=+e.target.value;renderAll();}});
 (function(){const st=document.createElement('style');st.textContent=`.vpcur{background:var(--warnbg);border-radius:8px;padding:6px 8px!important}`;document.head.appendChild(st);})();
+
+// ===== v21.0: meaningful house words; family cards with the earlier description, remedies and a timeline; navtara opens with today =====
+// 1) House labels: whole-area names instead of single loaded words, plus "strength" / "weakness" phrasings
+(function(){const en=['Health & self','Money & family','Courage & effort','Home & comfort','Children & studies','Job, illness & debts','Marriage & partnership','Longevity & sudden events','Luck & dharma','Career & status','Income & gains','Expenses, abroad & sleep'],
+ hi=['स्वास्थ्य व व्यक्तित्व','धन व परिवार','साहस व प्रयास','घर व सुख','संतान व शिक्षा','नौकरी, रोग व कर्ज़','विवाह व साझेदारी','आयु व अचानक घटनाएँ','भाग्य व धर्म','करियर व प्रतिष्ठा','आय व लाभ','खर्च, विदेश व नींद'];
+ HOUSE_S.en.splice(0,12,...en);HOUSE_S.hi.splice(0,12,...hi);})();
+const HS_GOOD={en:['Good health and confidence','Savings and a happy family','Courage and success through effort','A happy home and property','Intelligence, studies and joy from children','Victory over rivals, illness and debts','A good marriage and partnerships','Power to recover from crises','Luck and support of elders','Rise in career','Good income and gains','Gains from abroad and peaceful sleep'],
+ hi:['अच्छा स्वास्थ्य व आत्मविश्वास','बचत व पारिवारिक सुख','साहस व प्रयास में सफलता','घर-संपत्ति का सुख','बुद्धि, शिक्षा व संतान सुख','शत्रु, रोग व कर्ज़ पर विजय','अच्छा वैवाहिक जीवन व साझेदारी','संकट से उबरने की शक्ति','भाग्य व बड़ों का साथ','करियर में उन्नति','अच्छी आय व लाभ','विदेश से लाभ व अच्छी नींद']};
+const HS_BAD={en:['Low health or confidence','Money not staying, family strain','Blocks in effort','Unrest at home','Worry about studies or children','Illness, debts and disputes','Strain in marriage or partnership','Sudden obstacles','Luck feels blocked','Obstacles in career','Blocks in income','Rising expenses and poor sleep'],
+ hi:['स्वास्थ्य/आत्मविश्वास में कमी','धन न टिकना, परिवार में तनाव','प्रयास में रुकावट','घर में अशांति','पढ़ाई/संतान की चिंता','रोग, कर्ज़ व विवाद','विवाह/साझेदारी में तनाव','अचानक बाधाएँ','भाग्य में रुकावट','करियर में रुकावट','आय में रुकावट','बढ़ते खर्च व कम नींद']};
+function hsG(h){return L(HS_GOOD)[h-1];}function hsB(h){return L(HS_BAD)[h-1];}
+// home: strengths / weaknesses in logical words
+const _home21=NEWT.h_home;NEWT.h_home=function(ch){const h=_home21(ch);try{const sud=sudarshan(ch),st=sud.slice().sort((a,b)=>b.t-a.t).slice(0,3).map(x=>hsG(x.h)),wk=sud.slice().sort((a,b)=>a.t-b.t).slice(0,2).map(x=>hsB(x.h));
+ const t=document.createElement('template');t.innerHTML=h;t.content.querySelectorAll('section.scard h3').forEach(x=>{const p=x.nextElementSibling;if(!p)return;if(x.textContent.includes('💪'))p.textContent=st.join(', ');else if(x.textContent.includes('⚠️')&&x.textContent.includes(T('sWeak')))p.textContent=wk.join(', ');});return t.innerHTML;}catch(e){return h;}};
+// 2) Family cards: new plain words + the earlier description and remedies + timeline
+Object.assign(I18N.en,{f21Old:'Astrological description and remedies',f21Time:'Timing (from your dasha)',f21Next:'Coming',f21Past:'Past difficult period (verify)',f21G:'good for them',f21B:'take care of them'});
+Object.assign(I18N.hi,{f21Old:'ज्योतिषीय विवरण और उपाय',f21Time:'समय (आपकी दशा से)',f21Next:'आगे',f21Past:'बीता कठिन काल (जाँचें)',f21G:'उनके लिए शुभ',f21B:'उनका ध्यान रखें'});
+function f21Timeline(ch,r,rd){const tl=rsTimeline(ch,rd),now=julianNow(),mn=['spouse','child1','child2','fil','mil'].includes(r[0])?ch.jd+21*365.25:ch.jd;
+ const fut=tl.filter(x=>x.en>=now&&Math.abs(x.v)>=1.2).slice(0,2),past=tl.filter(x=>x.en<now&&x.st>=mn&&x.v>=1.5).sort((a,b)=>b.st-a.st)[0];
+ const li=x=>`<span class="${x.v<0?'f21g':'f21b'}">${fdate(Math.max(x.st,now))} – ${fdate(x.en)} (${pn(x.md)}/${pn(x.ad)}) — ${T(x.v<0?'f21G':'f21B')}</span>`;
+ return `<p class="f21t"><b>⏳ ${T('f21Time')}:</b> ${fut.length?`${T('f21Next')}: ${fut.map(li).join('; ')}`:''}${past?`<br><span class="note">${T('f21Past')}: ${fdate(past.st)} – ${fdate(past.en)} (${pn(past.md)}/${pn(past.ad)})</span>`:''}</p>`;}
+if(NEWT.family){const _fam21=NEWT.family;NEWT.family=function(ch){const h=_fam21(ch);try{
+ let oldSecs=[];try{const o=document.createElement('div');o.innerHTML=window._famPrev?window._famPrev(ch):renderFamily(ch);oldSecs=[...o.querySelectorAll('section.blk')].slice(1);}catch(e){}
+ const t=document.createElement('template');t.innerHTML=h;
+ t.content.querySelectorAll('.fmcard').forEach(c=>{const b=c.querySelector('[data-rsgo]');const r=b&&RS.find(x=>x[0]===b.dataset.rsgo);if(!r)return;const rd=rsRead(ch,r);
+  const bz=c.querySelector('details');if(bz)bz.remove();
+  const oi=REL.findIndex(x=>x[0]===r[0]);let old='';if(oi>=0&&oldSecs[oi]){const s=oldSecs[oi].cloneNode(true);const h3=s.querySelector('h3');if(h3)h3.remove();old=s.innerHTML;}
+  else{try{const u=UPC(rd.kr);old=`<p>${vsT(RS_ACT[r[0]])}</p><p class="note">${pn(rd.kr)}: ${u.day} · ${u.mantra}${u.daan?` · ${u.daan}`:''}</p>`;}catch(e){}}
+  const tl=f21Timeline(ch,r,rd);const ob=old?`<div class="f21old"><div class="f21h">📜 ${T('f21Old')}</div>${old}</div>`:'';
+  if(b&&b.parentElement)b.parentElement.insertAdjacentHTML('beforebegin',tl+ob);});return t.innerHTML;}catch(e){console.error(e);return h;}};}
+// 3) Navtara: today first
+Object.assign(I18N.en,{nt21T:'Today — {d}',nt21Moon:'Moon in {n} → your tara: {t}',nt21Good:'A supportive day: start important work, meetings and travel.',nt21Bad:'A careful day: avoid starting big work, travel or surgery by choice; keep routine.',nt21Mid:'An ordinary day: routine work goes fine.',nt21Dl:'Your dasha lords\' taras',nt21Week:'Next 7 days'});
+Object.assign(I18N.hi,{nt21T:'आज — {d}',nt21Moon:'चंद्र {n} नक्षत्र में → आपकी तारा: {t}',nt21Good:'सहायक दिन: महत्वपूर्ण काम, मुलाकात और यात्रा शुरू करें।',nt21Bad:'सावधानी का दिन: बड़ा काम, यात्रा या अपनी इच्छा से ऑपरेशन शुरू न करें; दिनचर्या रखें।',nt21Mid:'सामान्य दिन: रोज़ के काम ठीक चलते हैं।',nt21Dl:'आपके दशा स्वामियों की तारा',nt21Week:'अगले 7 दिन'});
+function nt21Today(ch){const now=julianNow(),nv=navtaraChakra(ch,now),t=nv.moonT,q=TARA_Q[t],tr=transitAt(ch,now,true),mn=ntpNak(tr[1].lon);
+ const chip=x=>`<span class="rk ${TARA_Q[x]>0?'fav':TARA_Q[x]<0?'chal':'mixed'}">${L(TARA)[x]}</span>`;
+ const dl=(nv.dl||[]).map(d=>`${T(d.k)}: <b>${pn(d.L)}</b> ${chip(d.natal)}`).join(' · ');
+ let wk='';try{wk=moonTaraCalendar(ch,now,7).slice(0,8).map(c=>`<li class="${TARA_Q[c.t]<0?'neg':TARA_Q[c.t]>0?'pos':''}"><b>${TARA_Q[c.t]<0?'!':'•'}</b> <span class="vsp">${fdt(c.start)}</span> — ${L(NK)[c.nak]} ${chip(c.t)}</li>`).join('');}catch(e){}
+ return `<section class="blk nt21 ${q>0?'good':q<0?'bad':''}"><h3>📅 ${T('nt21T').replace('{d}',fdate(now))}</h3><p class="big3">${T('nt21Moon').replace('{n}',L(NK)[mn]).replace('{t}',chip(t))}</p>
+  <p>${L(TARA_T)[t]}</p><p class="rblife l${q>0?2:q<0?0:1}">${T(q>0?'nt21Good':q<0?'nt21Bad':'nt21Mid')}</p>${dl?`<p class="note"><b>${T('nt21Dl')}:</b> ${dl}</p>`:''}${wk?`<h4>${T('nt21Week')}</h4><ul class="fx vsfx">${wk}</ul>`:''}</section>`;}
+if(NEWT.navtara){const _nt21=NEWT.navtara;NEWT.navtara=function(ch){let a='';try{a=nt21Today(ch);}catch(e){console.error(e);}return a+_nt21(ch);};}
+(function(){const st=document.createElement('style');st.textContent=`.f21t{line-height:1.7}.f21g{color:var(--good)}.f21b{color:var(--kum)}.f21old{background:var(--paper);border-radius:10px;padding:8px 12px;margin:8px 0}.f21old .f21h{font:600 14px var(--sans);color:var(--mut);margin-bottom:4px}.f21old p{margin:4px 0}
+.nt21{border-left:5px solid var(--hal)}.nt21.good{border-left-color:var(--good)}.nt21.bad{border-left-color:var(--kum)}.nt21 h4{margin:12px 0 4px;font:600 15px var(--serif)}`;document.head.appendChild(st);})();
+
+// Pandit summary: 6th/8th/12th areas worded by context (strength vs caution)
+PSEC_N.hi.enemies='नौकरी-सेवा, प्रतियोगिता, रोग व ऋण';PSEC_N.en.enemies='Service, competition, health & debts';
+const P21={hi:{s:{enemies:'शत्रु, रोग व कर्ज़ पर विजय',hidden:'संकट से उबरने की शक्ति',expenses:'विदेश से लाभ व आध्यात्मिक शांति'},w:{enemies:'रोग, कर्ज़ व विवाद',hidden:'अचानक बाधाएँ',expenses:'बढ़ते खर्च'}},
+ en:{s:{enemies:'victory over rivals, illness and debts',hidden:'power to recover from crises',expenses:'gains from abroad and inner peace'},w:{enemies:'illness, debts and disputes',hidden:'sudden obstacles',expenses:'rising expenses'}}};
+if(NEWT.pandit){const _pd21=NEWT.pandit;NEWT.pandit=function(ch){let h=_pd21(ch);try{const l=S.lang==='hi'?'hi':'en',N=PSEC_N[l];
+ const fix=(re,m)=>{h=h.replace(re,seg=>{Object.keys(m).forEach(k=>{seg=seg.split(l==='en'?N[k].toLowerCase():N[k]).join(m[k]);});return seg;});};
+ fix(l==='hi'?/सबसे मज़बूत क्षेत्र:[^।<]*/:/Strongest areas:[^.<]*/,P21[l].s);fix(l==='hi'?/सावधानी वाले क्षेत्र:[^।<]*/:/Areas needing care:[^.<]*/,P21[l].w);}catch(e){}return h;};}
 
 </script>
 <nav id="bnav" aria-label="Main"></nav>
