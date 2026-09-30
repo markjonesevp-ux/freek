@@ -7029,6 +7029,114 @@ if(typeof FR_TABS!=='undefined'){const t=FR_TABS.find(x=>x[0]==='time');if(t&&!t
 // fix: job loss / study break (v21.3) had no timing definition → snapshot crashed for young charts
 Object.assign(PDEF,{jobloss:[10,[5,9,12],[6],10,1],studybreak:[4,[3,8,12],[3,4],24,1]});
 
+// ===== v21.7: Accident caution rebuilt for clarity — one method, every period shows WHY (dasha + transit reasons with points), a rule table, and a "check any date" box =====
+// Classical basis: a mishap needs BOTH a dasha of a planet that signifies injury for this chart (Mars, Saturn, Rahu, Ketu, 6th/8th lord, 22nd-drekkana (khara) lord,
+// 64th-navamsa lord from the Moon, planets in the 8th, KP significator of 6/8/12) AND a malefic transit trigger at that time (malefics over lagna/8th/Moon,
+// Rahu-Ketu over natal Mars/Saturn, Mars-Saturn/Rahu contact in the sky, malefics in the 4th for vehicles).
+Object.assign(I18N.en,{c7How:'How this is worked out',c7HowN:'A period is marked only when two things happen together: (1) the running dasha (main, sub or sub-sub period) is of a planet that signifies injury in YOUR chart, and (2) at the same time a malefic transit triggers it. Each factor has points; the period’s strength is the total. A dasha alone or a transit alone is not enough.',
+ c7Dl:'Dasha factors (which planets can bring injury in your chart)',c7Tr:'Transit factors (what triggers it)',c7Pts:'points',c7Min:'A period is marked when: {d}, transit ≥ {t}, and total ≥ {s} (for your chart).',
+ c7Nat:'Planets that can bring injury in your chart',c7NatN:'Their main, sub and sub-sub periods are when the transit triggers below matter.',c7Why:'Why',c7Str:'Strength',c7Dasha:'Dasha',c7Trn:'Transit',
+ c7Past:'Past caution periods — did something happen? (tap yes / no)',c7More:'Weaker past periods',c7Fut:'Coming caution periods (next 10 years)',c7None:'No period meets the rule.',c7Chk:'Check a date',c7ChkN:'Enter the date of an accident or injury that happened. You will see exactly which factors were active that day.',c7Go:'Check',
+ c7Res:'On {d}: dasha {a} + transit {b} = {s} points',c7Hit:'This date falls in a marked period ✓',c7Miss:'This date is not in a marked period — the factors below were active, but not enough together.',c7Near:'Nearest marked period: {w}',c7Kind:'Likely kind',c7Body:'Body area',c7Do:'Care',
+ c7r_mal:'{p} is a natural malefic (injury, cuts, falls)',c7r_l6:'{p} rules the 6th house (injury, disputes)',c7r_l8:'{p} rules the 8th house (sudden events)',c7r_kh:'{p} is the 22nd-drekkana (khara) lord — classical lord of danger',c7r_64:'{p} is the 64th-navamsa lord from the Moon — classical lord of danger',c7r_h8:'{p} sits in the 8th house',c7r_kp:'{p} signifies houses {h} (KP)',
+ c7t_8:'{p} transiting the 8th house from lagna',c7t_1:'{p} transiting the lagna',c7t_m:'{p} over / 8th from the natal Moon',c7t_nm:'{p} over natal {q}',c7t_cj:'{p} together with {q} in the sky ({s})',c7t_as:'{p} aspects {q} in the sky',c7t_4:'{p} in the 4th house (vehicles, home)',c7t_al:'{p} aspects the lagna',c7t_am:'{p} aspects the natal Moon',c7t_st:'Mars turning (stationary) in the {h} house — its effect peaks',c7Pct:'Marked = the top {p}% of your life by these points. Strength 10/10 = the very highest.',
+ c7lv:['main period','sub period','sub-sub period']});
+Object.assign(I18N.hi,{c7How:'यह फलादेश किस आधार पर है',c7HowN:'कोई काल तभी चिह्नित होता है जब दो बातें एक साथ हों: (1) चल रही दशा (महादशा, अंतर्दशा या प्रत्यंतर) ऐसे ग्रह की हो जो आपकी कुंडली में चोट का कारक है, और (2) उसी समय कोई पाप ग्रह गोचर में उसे सक्रिय करे। हर कारक के अंक हैं; काल की प्रबलता कुल अंकों से है। अकेली दशा या अकेला गोचर पर्याप्त नहीं।',
+ c7Dl:'दशा के कारक (आपकी कुंडली में कौन-से ग्रह चोट दे सकते हैं)',c7Tr:'गोचर के कारक (जो उसे सक्रिय करते हैं)',c7Pts:'अंक',c7Min:'काल तब चिह्नित होता है जब: {d}, गोचर ≥ {t}, और कुल ≥ {s} (आपकी कुंडली के लिए)।',
+ c7Nat:'आपकी कुंडली में चोट देने वाले ग्रह',c7NatN:'इनकी महादशा, अंतर्दशा या प्रत्यंतर में ही नीचे के गोचर प्रभावी होते हैं।',c7Why:'क्यों',c7Str:'प्रबलता',c7Dasha:'दशा',c7Trn:'गोचर',
+ c7Past:'बीते सावधानी काल — क्या कुछ हुआ था? (हाँ / नहीं दबाएँ)',c7More:'हल्के बीते काल',c7Fut:'आने वाले सावधानी काल (अगले 10 वर्ष)',c7None:'कोई काल नियम पर खरा नहीं उतरता।',c7Chk:'किसी तारीख की जाँच',c7ChkN:'जिस दिन दुर्घटना या चोट हुई थी, वह तारीख डालें। उस दिन कौन-कौन से कारक सक्रिय थे, यह साफ़ दिखेगा।',c7Go:'जाँचें',
+ c7Res:'{d} को: दशा {a} + गोचर {b} = {s} अंक',c7Hit:'यह तारीख चिह्नित काल में आती है ✓',c7Miss:'यह तारीख चिह्नित काल में नहीं आती — नीचे के कारक सक्रिय थे, पर मिलकर पर्याप्त नहीं।',c7Near:'सबसे पास का चिह्नित काल: {w}',c7Kind:'संभावित प्रकार',c7Body:'शरीर का भाग',c7Do:'सावधानी',
+ c7r_mal:'{p} नैसर्गिक पाप ग्रह (चोट, कट, गिरना)',c7r_l6:'{p} 6वें भाव का स्वामी (चोट, विवाद)',c7r_l8:'{p} 8वें भाव का स्वामी (अचानक घटना)',c7r_kh:'{p} 22वें द्रेष्काण (खर) का स्वामी — शास्त्रीय संकट कारक',c7r_64:'{p} चंद्र से 64वें नवांश का स्वामी — शास्त्रीय संकट कारक',c7r_h8:'{p} 8वें भाव में',c7r_kp:'{p} भाव {h} का कारक (केपी)',
+ c7t_8:'{p} लग्न से 8वें भाव में गोचर',c7t_1:'{p} लग्न पर गोचर',c7t_m:'{p} जन्म चंद्र पर / चंद्र से 8वें',c7t_nm:'{p} जन्म के {q} पर',c7t_cj:'{p} आकाश में {q} के साथ ({s})',c7t_as:'{p} की आकाश में {q} पर दृष्टि',c7t_4:'{p} 4थे भाव में (वाहन, घर)',c7t_al:'{p} की लग्न पर दृष्टि',c7t_am:'{p} की जन्म चंद्र पर दृष्टि',c7t_st:'मंगल {h} भाव में स्तंभित (वक्री/मार्गी हो रहा) — प्रभाव चरम पर',c7Pct:'चिह्नित = इन अंकों के आधार पर आपके जीवन का सबसे ऊपर का {p}% समय। प्रबलता 10/10 = सबसे अधिक।',
+ c7lv:['महादशा','अंतर्दशा','प्रत्यंतर']});
+const C7={D:1.0,T:1.0,S:2.6,P:0.10,LW:[0.5,1,0.7]};
+// danger roles of each planet for this chart → dasha points
+function c7Roles(ch){if(ch._c7r)return ch._c7r;const P=ch.planets,L6=lordOf(ch,6),L8=lordOf(ch,8);
+ const dk=Math.floor((ch.asc%30)/10),s8=(ch.lagna+7)%12,kh=SIGN_LORD[(s8+[0,4,8][dk])%12];
+ const m64=SIGN_LORD[(varga(P[1].lon,9)+3)%12];
+ const R=[...Array(9)].map((_,i)=>{const r=[];let v=0;const sg=lbSig(ch,i),du=[6,8,12].filter(h=>sg.includes(h));
+  if([2,6,7,8].includes(i)){r.push(['mal']);v+=0.5;}if(i===L6){r.push(['l6']);v+=0.5;}if(i===L8){r.push(['l8']);v+=0.5;}
+  if(i===kh){r.push(['kh']);v+=0.4;}if(i===m64){r.push(['64']);v+=0.4;}if(P[i].house===8){r.push(['h8']);v+=0.3;}if(du.length>=2){r.push(['kp',du.join(', ')]);v+=0.4;}
+  return {v:Math.min(1.4,v),r};});
+ return ch._c7r=R;}
+function c7RoleTxt(i,r){return T('c7r_'+r[0]).replace('{p}',pn(i)).replace('{h}',r[1]||'');}
+// transit triggers at jd → [{k,p,t,pl,sg}]
+function c7Trans(ch,tr){const P=ch.planets,ms=P[1].sign,out=[],add=(k,p,t,pl,sg)=>out.push({k,p,t,pl,sg});const nm=[2,6,7,8];
+ const mp={2:[0.6,0.5],6:[0.6,0.5],7:[0.5,0.4],8:[0.5,0.4]};
+ nm.forEach(i=>{const t=tr[i];if(t.fl===8)add('8'+i,mp[i][0],T('c7t_8').replace('{p}',pn(i)),i,t.sign);else if(t.fl===1)add('1'+i,mp[i][1],T('c7t_1').replace('{p}',pn(i)),i,t.sign);
+  const fm=(t.sign-ms+12)%12;if((fm===0||fm===7)&&!(t.fl===8&&fm===0))add('m'+i,0.4,T('c7t_m').replace('{p}',pn(i)),i,t.sign);
+  if(t.fl===4)add('4'+i,0.3,T('c7t_4').replace('{p}',pn(i)),i,t.sign);});
+ [7,8].forEach(i=>[2,6].forEach(k=>{if(tr[i].sign===P[k].sign)add('n'+i+k,0.7,T('c7t_nm').replace('{p}',pn(i)).replace('{q}',pn(k)),i,tr[i].sign);}));
+ [7,8,6].forEach(k=>{if(tr[2].sign===P[k].sign)add('n2'+k,0.4,T('c7t_nm').replace('{p}',pn(2)).replace('{q}',pn(k)),2,tr[2].sign);});
+ if(tr[6].sign===P[2].sign)add('n62',0.5,T('c7t_nm').replace('{p}',pn(6)).replace('{q}',pn(2)),6,tr[6].sign);
+ [6,7,8].forEach(k=>{if(tr[2].sign===tr[k].sign)add('c2'+k,0.6,T('c7t_cj').replace('{p}',pn(2)).replace('{q}',pn(k)).replace('{s}',sn(tr[2].sign)),2,tr[2].sign);});
+ const d=(tr[2].sign-tr[6].sign+12)%12;if(d!==0&&([2,6,9].includes(d)))add('as62',0.4,T('c7t_as').replace('{p}',pn(6)).replace('{q}',pn(2)),6,tr[2].sign);
+ else if(d!==0&&[3,6,7].includes((tr[6].sign-tr[2].sign+12)%12))add('as26',0.4,T('c7t_as').replace('{p}',pn(2)).replace('{q}',pn(6)),2,tr[6].sign);
+ const asp=(i,fr)=>{const d=((fr-tr[i].sign+12)%12)+1;return (i===2&&[4,7,8].includes(d))||(i===6&&[3,7,10].includes(d));};
+ [2,6].forEach(i=>{if(tr[i].fl!==1&&asp(i,ch.lagna))add('a'+i,0.3,T('c7t_al').replace('{p}',pn(i)),i,ch.lagna);if(tr[i].sign!==ms&&asp(i,ms))add('am'+i,0.3,T('c7t_am').replace('{p}',pn(i)),i,ms);});
+ return out;}
+function c7At(ch,j,da,tr){const R=c7Roles(ch);da=da||dashaAt(ch,j);if(!da)return null;tr=tr||transitAt(ch,j,true);
+ const lv=[da.md.lord,da.ad.lord,da.pd.lord],dr=[];let D=0;lv.forEach((L,k)=>{const v=R[L].v*C7.LW[k];if(v>0){D+=v;dr.push({k,L,v});}});
+ const tt=c7Trans(ch,tr);const key=Math.max(R[lv[1]].v,R[lv[2]].v)>=0.8;return {jd:j,D,T:0,s:0,dr,tt,da,key,ml:tr[2].lon,mh:tr[2].fl,on:false};}
+function c7Fin(x){let Tt=x.tt.reduce((a,t)=>a+t.p,0);x.T=Math.min(Tt,2.8);x.s=x.D+x.T;return x;}
+function c7Scan(ch,from,to){const out=[];for(let j=from;j<=to;j+=7){const x=c7At(ch,j);if(x)out.push(x);}
+ const dv=(a,b)=>((b-a+540)%360)-180;out.forEach((x,k)=>{const n=out[k+1],p=out[k-1];x.rs=n?Math.sign(dv(x.ml,n.ml)):0;});
+ out.forEach((x,k)=>{const n=out[k+1],p=out[k-1];if((n&&n.rs&&x.rs&&n.rs!==x.rs)||(p&&p.rs&&x.rs&&p.rs!==x.rs))x.tt.push({k:'st',p:0.5,t:T('c7t_st').replace('{h}',hiV()?HO[x.mh]:HOUSE_ORD(x.mh)),pl:2,sg:(ch.lagna+x.mh-1)%12});c7Fin(x);});
+ const now=julianNow(),pool=out.filter(x=>x.jd<now&&x.key&&x.T>=C7.T).map(x=>x.s).sort((a,b)=>a-b),all=out.filter(x=>x.jd<now).length;
+ // threshold: top C7.P of the whole past life (among samples that meet the dasha + transit conditions)
+ let thr=pool.length?pool[Math.max(0,pool.length-Math.round(all*C7.P))]:99;C7.S=Math.max(2.2,+thr.toFixed(2));C7.top=pool.slice(-Math.round(all*C7.P));
+ out.forEach(x=>{x.on=x.key&&x.T>=C7.T&&x.s>=C7.S;});return out;}
+function c7Windows(sm){const w=[];sm.forEach(x=>{if(!x.on)return;const l=w[w.length-1];if(l&&x.jd-l.end<=35){l.end=x.jd+7;if(x.s>l.s){l.s=x.s;l.pk=x;}x.tt.forEach(t=>{if(!l.tt.has(t.k)||l.tt.get(t.k).p<t.p)l.tt.set(t.k,t);});x.dr.forEach(d=>l.dl.add(d.L));}
+  else w.push({start:x.jd,end:x.jd+7,s:x.s,pk:x,tt:new Map(x.tt.map(t=>[t.k,t])),dl:new Set(x.dr.map(d=>d.L))});});return w;}
+function c7Str(s){const t=C7.top||[];if(!t.length)return 5;const r=t.filter(v=>v<=s).length/t.length;return Math.max(1,Math.min(10,Math.ceil(r*10)));}
+function c7Why(ch,w,full){const pk=w.pk,R=c7Roles(ch);
+ const lvN={en:I18N.en.c7lv,hi:I18N.hi.c7lv},dl=pk.dr.map(d=>`${L(lvN)[d.k]} <b>${pn(d.L)}</b> (+${d.v.toFixed(1)})`).join(' · ');
+ const ts=[...w.tt.values()].sort((a,b)=>b.p-a.p),top=ts[0];
+ const kind=top?vsT(CA4_ACC[top.pl]):'',body=top?vsT(ROG_BODY[top.sg]).split(',').slice(0,2).join(','):'',care=top?vsT(CA4_DO[top.pl]):'';
+ return `<div class="ca4h c7w"><div><b>${T('c7Why')}:</b></div><div>🔸 ${T('c7Dasha')}: ${dl}</div><div class="note c7rl">${[...new Set(pk.dr.map(d=>d.L))].map(L=>`${pn(L)} — ${R[L].r.map(r=>c7RoleTxt(L,r).replace(pn(L)+' ','')).join('; ')}`).join('<br>')}</div>`
+  +`<div>🔸 ${T('c7Trn')}: ${ts.slice(0,full?9:4).map(t=>`${t.t} (+${t.p})`).join('; ')}</div>`
+  +(kind?`<div><b>${T('c7Kind')}:</b> ${kind}</div><div><b>${T('c7Body')}:</b> ${body}</div>`:'')+(care&&full?`<div class="note"><b>${T('c7Do')}:</b> ${care}</div>`:'')+`</div>`;}
+function c7Rules(){const hi=hiV(),r=(a,b)=>`<tr><td>${a}</td><td>${b}</td></tr>`,P=x=>pn(x);
+ const dt=[[hi?'मंगल, शनि, राहु, केतु (नैसर्गिक पाप)':'Mars, Saturn, Rahu, Ketu (natural malefics)',0.5],[hi?'6वें भाव का स्वामी':'6th lord',0.5],[hi?'8वें भाव का स्वामी':'8th lord',0.5],[hi?'22वें द्रेष्काण (खर) का स्वामी':'22nd drekkana (khara) lord',0.4],[hi?'चंद्र से 64वें नवांश का स्वामी':'64th navamsa lord from Moon',0.4],[hi?'8वें भाव में स्थित ग्रह':'Planet in the 8th',0.3],[hi?'केपी: 6, 8, 12 में से 2+ का कारक':'KP: signifies 2+ of 6, 8, 12',0.4]];
+ const tt=[[hi?'मंगल / शनि लग्न से 8वें':'Mars / Saturn in 8th from lagna',0.6],[hi?'राहु / केतु लग्न से 8वें':'Rahu / Ketu in 8th from lagna',0.5],[hi?'मंगल / शनि लग्न पर':'Mars / Saturn over lagna',0.5],[hi?'राहु / केतु लग्न पर':'Rahu / Ketu over lagna',0.4],[hi?'पाप ग्रह जन्म चंद्र पर या चंद्र से 8वें':'Malefic over the Moon or 8th from it',0.4],
+  [hi?'राहु / केतु जन्म के मंगल या शनि पर':'Rahu / Ketu over natal Mars or Saturn',0.7],[hi?'शनि जन्म के मंगल पर':'Saturn over natal Mars',0.5],[hi?'मंगल जन्म के राहु, केतु या शनि पर':'Mars over natal Rahu, Ketu or Saturn',0.4],[hi?'आकाश में मंगल + शनि/राहु/केतु साथ':'Mars with Saturn/Rahu/Ketu in the sky',0.6],[hi?'आकाश में मंगल–शनि दृष्टि':'Mars–Saturn aspect in the sky',0.4],[hi?'पाप ग्रह 4थे भाव में (वाहन)':'Malefic in the 4th (vehicles)',0.3],[hi?'मंगल / शनि की लग्न या चंद्र पर दृष्टि':'Mars / Saturn aspect on lagna or Moon',0.3],[hi?'मंगल स्तंभित (वक्री/मार्गी होते समय)':'Mars stationary (turning retrograde/direct)',0.5]];
+ const tb=a=>`<div class="tw"><table class="c7t"><tr><th></th><th>${T('c7Pts')}</th></tr>${a.map(x=>r(x[0],'+'+x[1])).join('')}</table></div>`;
+ return `<h4>${T('c7Dl')}</h4><p class="note">${hi?'दशा स्तर का भार: महादशा ×0.5, अंतर्दशा ×1, प्रत्यंतर ×0.7':'Level weight: main ×0.5, sub ×1, sub-sub ×0.7'}</p>${tb(dt)}<h4>${T('c7Tr')}</h4>${tb(tt)}<p class="note">${T('c7Min').replace('{d}',hiV()?'अंतर्दशा या प्रत्यंतर स्वामी चोट का कारक':'sub or sub-sub lord is an injury planet').replace('{t}',C7.T).replace('{s}',C7.S)} ${T('c7Pct').replace('{p}',Math.round(C7.P*100))}</p>`;}
+function c7Natal(ch){const R=c7Roles(ch),ord=[...Array(9).keys()].filter(i=>R[i].v>=0.8).sort((a,b)=>R[b].v-R[a].v);
+ return `<section class="blk"><h3>🧿 ${T('c7Nat')}</h3><p class="note">${T('c7NatN')}</p><ul class="fx vsfx">${ord.map(i=>`<li class="${R[i].v>=1.2?'neg':''}"><b>${pn(i)}</b> <span class="rk ${R[i].v>=1.2?'chal':'mixed'}">${R[i].v.toFixed(1)}</span> <span class="note">${R[i].r.map(r=>c7RoleTxt(i,r).replace(pn(i)+' ','')).join('; ')}</span></li>`).join('')}</ul>${vsDet('📐 '+T('c7How'),`<p>${T('c7HowN')}</p>`+c7Rules(),false)}</section>`;}
+function c7Bars(ch,sm){const by=jdToDate(ch.jd,ch.inp.tz).y,ys=new Map();sm.forEach(x=>{const y=jdToDate(x.jd,ch.inp.tz).y;const o=ys.get(y)||{y,a:0,on:0};if(x.on){o.on++;o.a=Math.max(o.a,x.s);}ys.set(y,o);});
+ const arr=[...ys.values()].sort((a,b)=>a.y-b.y),n=arr.length,bw=Math.max(3,Math.min(9,Math.floor(320/Math.max(n,1)))),W=n*bw,H=40,cy=new Date().getFullYear();
+ let s=`<svg viewBox="0 0 ${W+22} ${H+14}" width="100%" style="max-width:${W+32}px" role="img">`;
+ arr.forEach((o,k)=>{const x=k*bw,st=o.on?c7Str(o.a):0,h=o.on?Math.max(6,st/10*H):3,c=st>=7?'var(--kum)':st>=1?'var(--hal)':'var(--good)';s+=`<rect x="${x+0.3}" y="${H-h}" width="${bw-0.8}" height="${h}" rx="1" fill="${c}" opacity="${o.on?1:0.4}"><title>${o.y}${o.on?' · '+st+'/10':''}</title></rect>`;
+  if((o.y-by)%10===0)s+=`<text x="${x}" y="${H+11}" font-size="8" fill="currentColor">${o.y}</text>`;if(o.y===cy)s+=`<line x1="${x+bw/2}" x2="${x+bw/2}" y1="0" y2="${H}" stroke="currentColor" stroke-dasharray="2,2" opacity=".6"/>`;});return s+'</svg>';}
+function c7Check(ch,dstr){const m=/^(\d{4})-(\d{2})-(\d{2})$/.exec(dstr||'');if(!m)return '';const jd=julian(+m[1],+m[2],+m[3],12-ch.inp.tz);let x=c7At(ch,jd);if(!x)return '';const sm0=S.c7.sm.slice().sort((a,b)=>Math.abs(a.jd-jd)-Math.abs(b.jd-jd))[0];if(sm0&&sm0.tt.some(t=>t.k==='st')&&Math.abs(sm0.jd-jd)<=7)x.tt.push(sm0.tt.find(t=>t.k==='st'));c7Fin(x);
+ const sm=S.c7.sm,ws=S.c7.w;let hit=null;hit=ws.find(w=>jd>=w.start-10&&jd<=w.end+10);
+ const near=hit?null:ws.slice().sort((a,b)=>Math.abs((a.start+a.end)/2-jd)-Math.abs((b.start+b.end)/2-jd))[0];
+ const lvN={en:I18N.en.c7lv,hi:I18N.hi.c7lv};
+ return `<p class="rblife l${hit?2:0}"><b>${T('c7Res').replace('{d}',fdate(jd)).replace('{a}',x.D.toFixed(1)).replace('{b}',x.T.toFixed(1)).replace('{s}',x.s.toFixed(1))}</b><br>${hit?T('c7Hit')+` (${fdate(hit.start)} – ${fdate(hit.end)}, ${T('c7Str')} ${c7Str(hit.s)}/10)`:T('c7Miss')}</p>`
+  +`<ul class="fx vsfx">${[pn(x.da.md.lord),pn(x.da.ad.lord),pn(x.da.pd.lord)].map((p,k)=>{const Lp=[x.da.md.lord,x.da.ad.lord,x.da.pd.lord][k],R=c7Roles(ch)[Lp];return `<li class="${R.v?'neg':''}"><b>${R.v?'!':'•'}</b> ${L(lvN)[k]} ${p}: ${R.r.length?R.r.map(r=>c7RoleTxt(Lp,r).replace(pn(Lp)+' ','')).join('; ')+` (+${(R.v*C7.LW[k]).toFixed(1)})`:(hiV()?'चोट का कारक नहीं':'not an injury significator')}</li>`;}).join('')}
+   ${x.tt.map(t=>`<li class="neg"><b>!</b> ${t.t} (+${t.p})</li>`).join('')||`<li><b>•</b> ${hiV()?'कोई पाप गोचर ट्रिगर नहीं':'No malefic transit trigger'}</li>`}</ul>${near?`<p class="note">${T('c7Near').replace('{w}',`${fdate(near.start)} – ${fdate(near.end)}`)}</p>`:''}`;}
+function c7Block(ch){const now=julianNow(),from=ch.jd+3*365.25,to=now+10*365.25,key='c7'+ch.jd+Math.floor(now);if(!S.c7||S.c7.key!==key){const sm=c7Scan(ch,from,to);S.c7={key,sm,w:c7Windows(sm),S:C7.S,top:C7.top};}else{C7.S=S.c7.S;C7.top=S.c7.top;}
+ const {sm,w}=S.c7,by=jdToDate(ch.jd,ch.inp.tz).y,past=w.filter(x=>x.end<now),fut=w.filter(x=>x.end>=now);
+ const pastTop=past.slice().sort((a,b)=>b.s-a.s).slice(0,12).sort((a,b)=>a.start-b.start),rest=past.filter(x=>!pastTop.includes(x));
+ const li=(x,pf,full)=>`<li class="${pf?'':'neg'}"><b>⚠️</b> <span class="pstyr">${fdate(Math.max(x.start,pf?x.start:now))} – ${fdate(x.end)}</span> <span class="rk ${c7Str(x.s)>=7?'chal':'mixed'}">${T('c7Str')} ${c7Str(x.s)}/10</span> <span class="note">(${T('ca4Age').replace('{a}',jdToDate(x.start,ch.inp.tz).y-by)} · ${pn(x.pk.da.md.lord)}/${pn(x.pk.da.ad.lord)}/${pn(x.pk.da.pd.lord)})</span>${pf?' '+pstAskBtns(ch,'c7:'+Math.round(x.start)):''}${c7Why(ch,x,full)}</li>`;
+ return `<section class="blk ca4 c7"><h3>📈 ${hiV()?'दुर्घटना / चोट समयरेखा (जन्म से अगले 10 वर्ष)':'Accident / injury timeline (birth to next 10 years)'}</h3><p class="note">${hiV()?'हर खंभा एक वर्ष है; ऊँचाई = उस वर्ष के सबसे प्रबल काल की प्रबलता (10 में से)। बिंदीदार रेखा = आज।':'Each bar is a year; height = strength of that year’s strongest period (out of 10). Dashed line = today.'}</p>${c7Bars(ch,sm)}`
+  +`<h4>🔎 ${T('c7Chk')}</h4><p class="note">${T('c7ChkN')}</p><div class="c7in"><input type="date" id="c7d" value="${S.c7d||''}"> <button class="btn" id="c7go">${T('c7Go')}</button></div><div id="c7out">${S.c7d?c7Check(ch,S.c7d):''}</div>`
+  +`<h4>${T('c7Past')}</h4>${pastTop.length?`<ul class="fx vsfx pstl">${pastTop.map(x=>li(x,true,false)).join('')}</ul>`:`<p>${T('c7None')}</p>`}`
+  +(rest.length?vsDet(`${T('c7More')} (${rest.length})`,`<ul class="fx vsfx pstl">${rest.map(x=>li(x,true,false)).join('')}</ul>`,false):'')
+  +`<h4>${T('c7Fut')}</h4>${fut.length?`<ul class="fx vsfx">${fut.slice(0,8).map(x=>li(x,false,true)).join('')}</ul>`:`<p>${T('c7None')}</p>`}${pstScoreHTML(ch)}</section>`;}
+// health caution keeps the v21.4 health row, as its own simple block
+function c7Health(ch){const now=julianNow(),from=ch.jd+3*365.25,to=now+10*365.25,key='ca4'+ch.jd+Math.floor(now);if(!S.ca4||S.ca4.key!==key)S.ca4={key,sm:ca4Scan(ch,from,to)};
+ const Hh=ca4Windows(S.ca4.sm,'h',3.0,'hp','hh').filter(w=>w.end-w.start>=30),past=Hh.filter(w=>w.end<now),fut=Hh.filter(w=>w.end>=now).slice(0,5);
+ const li=(w,pf)=>`<li class="${pf?'':'neg'}"><b>🩺</b> <span class="pstyr">${fdate(Math.max(w.start,pf?w.start:now))} – ${fdate(w.end)}</span> <span class="note">(${pn(w.da.md.lord)}/${pn(w.da.ad.lord)})</span>${pf?' '+pstAskBtns(ch,'c7h:'+Math.round(w.start)):''}${ca4Hint(ch,w,'h')}</li>`;
+ return `<section class="blk ca4"><h3>🩺 ${hiV()?'स्वास्थ्य सावधानी काल':'Health caution periods'}</h3><p class="note">${hiV()?'आधार: दशा स्वामी जब रोग भाव (6, 8, 12) और लग्न की कमज़ोरी को सक्रिय करें (रोग विचार वाला ही इंजन)। पूरी जानकारी “रोग विचार” पेज पर।':'Basis: dasha lords activating the illness houses (6, 8, 12) against lagna strength (same engine as the Disease page, which has full detail).'}</p>`
+  +`${past.length?`<ul class="fx vsfx pstl">${past.map(w=>li(w,true)).join('')}</ul>`:''}${fut.length?`<ul class="fx vsfx">${fut.map(w=>li(w,false)).join('')}</ul>`:`<p>${T('c7None')}</p>`}</section>`;}
+NEWT.caution=function(ch){let base='';try{base=renderCaution(ch);}catch(e){}const t=document.createElement('template');t.innerHTML=base;const secs=[...t.content.querySelectorAll('section')];const guide=secs.length?secs[secs.length-1].outerHTML:'';const head=t.content.querySelector('.pagehead');
+ let a='',b='',c='';try{b=c7Block(ch);a=c7Natal(ch);}catch(e){console.error(e);}try{c=c7Health(ch);}catch(e){console.error(e);}
+ return (head?head.outerHTML:'')+a+b+c+guide;};
+document.addEventListener('click',e=>{if(e.target&&e.target.id==='c7go'){const v=document.getElementById('c7d').value;S.c7d=v;const o=document.getElementById('c7out');if(o&&S.ch)o.innerHTML=c7Check(S.ch,v);}});
+(function(){const st=document.createElement('style');st.textContent=`.c7 .c7w div{margin:2px 0}.c7rl{padding-left:14px}.c7in{display:flex;gap:8px;align-items:center;flex-wrap:wrap;margin:6px 0}.c7in input{font:inherit;padding:6px 8px;border:1px solid var(--line);border-radius:8px;background:var(--card);color:inherit}.c7t td:last-child,.c7t th:last-child{text-align:right;white-space:nowrap}`;document.head.appendChild(st);})();
+
 </script>
 <nav id="bnav" aria-label="Main"></nav>
 </body></html>
