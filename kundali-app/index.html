@@ -6879,6 +6879,16 @@ if(NEWT.family){const _fam211=NEWT.family;NEWT.family=function(ch){const h=_fam2
   const nx=r21Health(ch,r,rd).find(x=>x.en>=now&&x.v>=2.8);const f=c.querySelector('.fmh');if(f)f.insertAdjacentHTML('beforeend',`<br><b>${T('r21HCard')}:</b> ${nx?`${fdate(Math.max(nx.st,now))} – ${fdate(nx.en)} (${pn(nx.md)}/${pn(nx.ad)})`:T('r21HNone')}`);});
  return t.innerHTML;}catch(e){return h;}};}
 
+// ===== v21.2: charts that had slipped into collapsed blocks are shown again (navtara wheel, gochar chart, varsh chart, relative's turned chart) =====
+function c212Lift(html,afterSel){try{const t=document.createElement('template');t.innerHTML=html;const d=[...t.content.querySelectorAll('details')].find(x=>x.querySelector('svg'));if(!d)return html;
+ const ch=d.querySelector('.charts')||d.querySelector('figure.chart')?.parentElement;if(!ch||ch.closest('details')!==d)return html;const sec=document.createElement('section');sec.className='blk c212';sec.appendChild(ch);
+ const anchor=afterSel?t.content.querySelector(afterSel):null;if(anchor)anchor.after(sec);else{const top=d.closest('section')||d;top.before(sec);}return t.innerHTML;}catch(e){return html;}}
+if(NEWT.navtara){const _n212=NEWT.navtara;NEWT.navtara=function(ch){return c212Lift(_n212(ch),'.nt21');};}
+if(NEWT.tr){const _t212=NEWT.tr;NEWT.tr=function(ch){return c212Lift(_t212(ch),'.ntp');};}
+const _v212=renderVarsh;renderVarsh=function(ch){return c212Lift(_v212(ch),'.ntp');};
+const _r212=renderRishta;renderRishta=function(ch){return c212Lift(_r212(ch),'.rshead');};NEWT.rishta=renderRishta;
+(function(){const st=document.createElement('style');st.textContent=`.c212 .charts{margin-bottom:0}.c212 .rschart{margin:0 auto}`;document.head.appendChild(st);})();
+
 </script>
 <nav id="bnav" aria-label="Main"></nav>
 </body></html>
