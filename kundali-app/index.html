@@ -10661,6 +10661,49 @@ const _c7Chk253=c7Check;c7Check=function(ch,ds){let h=_c7Chk253(ch,ds);try{const
 document.addEventListener('click',e=>{if(e.target&&e.target.id==='c7go'){const t=document.getElementById('c7tm');S.c7tm=t?t.value:'';}},true);
 (function(){const st=document.createElement('style');st.textContent=`.evd table td,.evd table th{padding:3px 6px;vertical-align:top}.evd tr.neg td:first-child{border-left:3px solid var(--bad,#c33)}.c7in label{display:flex;gap:6px;align-items:center}`;document.head.appendChild(st);})();
 
+// ===== v25.2: accident engine learns from recorded events (two models), aftermath of an event (mind and money) =====
+// Model A (v21.7): danger roles of the dasha lords + transit triggers, gated on an injury lord in AD/PD.
+// Model B: K.N. Rao school disease/injury dasha score (Charak) × 0.5 + the same transit triggers, no gate.
+// Both mark the top 10% of the past life. With recorded accidents the model that marks more of them is used for this chart.
+C7.mode='A';
+const _c7At253b=c7At;c7At=function(ch,j,da,tr){const x=_c7At253b(ch,j,da,tr);if(!x)return x;if(C7.mode==='B'){x.kd=krDis(ch,x.da.md.lord,x.da.ad.lord,x.da.pd.lord);x.key=true;}return x;};
+const _c7Fin253b=c7Fin;c7Fin=function(x){_c7Fin253b(x);if(C7.mode==='B'&&x.kd!=null){x.D=0.5*x.kd;x.s=x.D+x.T;}return x;};
+function c7Evs(ch){return getPev(ch).filter(e=>e.k==='accident').map(e=>{const m=/^(\d{4})-(\d{2})-(\d{2})/.exec(e.d||'');return m?julian(+m[1],+m[2],+m[3],12-ch.inp.tz):null;}).filter(j=>j&&j>ch.jd+3*365.25&&j<julianNow());}
+function c7Pick(ch){const ev=c7Evs(ch),now=julianNow(),key='pk'+ch.jd+Math.floor(now)+ev.map(Math.round).join(',');if(S.c7pk&&S.c7pk.key===key)return S.c7pk;
+ const r={key,n:ev.length,mode:'A',h:{A:0,B:0}};if(ev.length){const m0=C7.mode;['A','B'].forEach(m=>{C7.mode=m;const sm=c7Scan(ch,ch.jd+3*365.25,now),w=c7Windows(sm);r.h[m]=ev.filter(j=>w.some(x=>j>=x.start-10&&j<=x.end+10)).length;});C7.mode=m0;if(r.h.B>r.h.A)r.mode='B';}
+ return S.c7pk=r;}
+function c7Use(ch){const p=c7Pick(ch);if(C7.mode!==p.mode||(S.c7&&(S.c7.mode||'A')!==p.mode)){C7.mode=p.mode;S.c7=null;}return p;}
+function edC7(ch){c7Use(ch);const now=julianNow(),from=ch.jd+3*365.25,to=now+10*365.25,key='c7'+ch.jd+Math.floor(now);
+ if(!S.c7||S.c7.key!==key){const sm=c7Scan(ch,from,to);S.c7={key,sm,w:c7Windows(sm),S:C7.S,top:C7.top,mode:C7.mode};}return S.c7;}
+const _c7B253b=c7Block;c7Block=function(ch){const p=c7Use(ch);let h=_c7B253b(ch);if(S.c7)S.c7.mode=C7.mode;
+ const hi=hiV(),nm={A:C('मॉडल A — दशा स्वामियों की चोट-भूमिका + गोचर','Model A — injury roles of the dasha lords + transits'),B:C('मॉडल B — के.एन. राव (चरक) रोग/चोट दशा अंक + गोचर','Model B — K.N. Rao (Charak) disease/injury dasha score + transits')};
+ const txt=p.n?C(`आपकी ${p.n} दर्ज दुर्घटनाओं में से मॉडल A ने ${p.h.A}, मॉडल B ने ${p.h.B} पकड़ीं — इस कुंडली के लिए <b>${nm[p.mode]}</b> उपयोग हो रहा है। दोनों मॉडल जीवन का लगभग 10% समय ही चिह्नित करते हैं, इसलिए संयोग से हर घटना के पकड़े जाने की संभावना लगभग 10% है। कम घटनाओं पर यह चुनाव कच्चा है।`,`Of your ${p.n} recorded accidents model A caught ${p.h.A} and model B ${p.h.B} — <b>${nm[p.mode]}</b> is used for this chart. Both mark only about 10% of life, so by chance each event would be caught about 10% of the time. With few events this choice is tentative.`)
+  :C(`अभी ${nm.A} उपयोग हो रहा है। “सत्यापन” टैब में अपनी दुर्घटनाएँ/चोटें “दुर्घटना / चोट” के रूप में दर्ज करें — इंजन तब दोनों मॉडल आपकी घटनाओं पर परखकर बेहतर वाला चुनेगा।`,`Now using ${nm.A}. Record your accidents/injuries in the Verification tab as “Accident / injury” — the engine then tests both models on them and picks the better one.`);
+ return h.replace(/(<section class="blk ca4 c7"><h3>[^<]*<\/h3>)/,`$1<p class="note">⚙️ ${txt}</p>`);};
+// ---- aftermath: what the following months bring (mind and money)
+function edSpan(ch,jd,i,sg){let a=jd,b=jd;const st=5;for(let k=0;k<200;k++){const t=transitAt(ch,a-st,true)[i];if(t.sign!==sg)break;a-=st;}for(let k=0;k<200;k++){const t=transitAt(ch,b+st,true)[i];if(t.sign!==sg)break;b+=st;}return [a,b];}
+function edAfter(ch,jd){const d=dasha5At(ch,jd);if(!d)return '';const P=ch.planets,tr=transitAt(ch,jd,true),hi=hiV(),ms=P[1].sign,L=h=>lordOf(ch,h);
+ const mind=[],money=[];const sp=(i,sg)=>{const [a,b]=edSpan(ch,jd,i,sg);return `${fdate(a)} – ${fdate(b)}`;};
+ [6,7,8].forEach(i=>{if(tr[i].sign===ms)mind.push(C(`${pn(i)} आपकी जन्म-राशि (चंद्र) पर (${sp(i,ms)}) — मन पर ग्रहण जैसा प्रभाव, बेचैनी, भ्रम`,`${pn(i)} over your natal Moon sign (${sp(i,ms)}) — an eclipse-like effect on the mind: restlessness, confusion`));});
+ const sf=tr[6].fm;if([12,1,2].includes(sf))mind.push(C(`साढ़ेसाती (शनि चंद्र से ${sf}वें) — ${sp(6,tr[6].sign)}`,`Sade sati (Saturn ${sf} from the Moon) — ${sp(6,tr[6].sign)}`));else if([4,8].includes(sf))mind.push(C(`शनि की ढैया (चंद्र से ${sf}वें) — ${sp(6,tr[6].sign)}`,`Saturn's dhaiya (${sf} from the Moon) — ${sp(6,tr[6].sign)}`));
+ if(tr[4].fm===8)mind.push(C(`गुरु चंद्र से 8वें — ${sp(4,tr[4].sign)}`,`Jupiter 8th from the Moon — ${sp(4,tr[4].sign)}`));
+ [6,7,8].forEach(i=>{if(tr[i].sign===P[1].sign)return;if([7,8].includes(i)&&(tr[i].sign-ms+12)%12===6)mind.push(C(`${pn(i)} जन्म-चंद्र से 7वें, चंद्र पर दृष्टि`,`${pn(i)} 7th from the natal Moon, opposing it`));});
+ {const f4=[6,7,8].filter(i=>tr[i].fl===4);if(f4.length)mind.push(C(`गोचर में ${f4.map(pn).join(', ')} लग्न से 4थे (सुख-शांति का भाव)`,`transit ${f4.map(pn).join(', ')} in the 4th from lagna (house of peace)`));}
+ [2,6,7,8].forEach(i=>{if(tr[i].fl===2)money.push(C(`${pn(i)} लग्न से 2रे भाव (धन) में (${sp(i,tr[i].sign)})`,`${pn(i)} in the 2nd house (wealth) from lagna (${sp(i,tr[i].sign)})`));else if(tr[i].fm===2&&i!==2)money.push(C(`${pn(i)} चंद्र से 2रे (धन) में`,`${pn(i)} 2nd from the Moon (wealth)`));});
+ const lv=[['ad',C('अंतर्दशा','antardasha')],['pd',C('प्रत्यंतर','pratyantar')],['sd',C('सूक्ष्म','sukshma')]];
+ lv.forEach(([k,n])=>{const X=d[k].lord;if(X===L(12))money.push(C(`${n} स्वामी ${pn(X)} — 12वें (व्यय) भाव का स्वामी`,`${n} lord ${pn(X)} rules the 12th (expenses)`));
+  if(X===L(2)&&[6,8,12].includes(P[X].house))money.push(C(`${n} स्वामी ${pn(X)} — धनेश, ${P[X].house}वें भाव में`,`${n} lord ${pn(X)} — 2nd lord placed in house ${P[X].house}`));
+  if(X===L(2)&&![6,8,12].includes(P[X].house))money.push(C(`${n} स्वामी ${pn(X)} — धनेश (धन पर सीधा प्रभाव)`,`${n} lord ${pn(X)} — the 2nd lord (direct effect on money)`));});
+ // following pratyantars (next ~6 months)
+ let ad=null;ch.dasha.mds.forEach(md=>md.ads.forEach(a=>{if(a.start<=jd+1&&a.end>jd+1)ad=a;}));
+ const nx=[];if(ad){let cur=ad;for(let g=0;g<2&&nx.length<4;g++){pratyantar(cur).forEach(p=>{if(p.end>jd&&p.start<jd+200&&nx.length<4)nx.push({a:cur.lord,p});});let nA=null;ch.dasha.mds.forEach(md=>md.ads.forEach(a=>{if(a.start<=cur.end+1&&a.end>cur.end+1)nA=a;}));if(!nA)break;cur=nA;}}
+ const nl=nx.map(({a,p})=>{const k=a+'_'+p.lord,r=BK_PDPH[k];if(!r)return '';const t=hi?(clOn()&&BK_PDPH_CL[k]||r[1]):(BK_PDPH_EN[k]||r[1]);return `<li class="${r[0]==='-'?'neg':r[0]==='+'?'pos':''}"><b>${pn(a)}/${pn(p.lord)}</b> <span class="pstyr">${fdate(Math.max(p.start,jd))} – ${fdate(p.end)}</span> — ${clRestore(clTxt(t))}</li>`;}).join('');
+ return `<h4>🕰️ ${C('घटना के बाद के महीने','The months after the event')}</h4>
+  <p><b>🧠 ${C('मन की शांति','Peace of mind')}</b></p>${mind.length?`<ul class="fx vsfx">${mind.map(t=>`<li class="neg"><b>!</b> ${t}</li>`).join('')}</ul>`:`<p class="note">${C('मन पर कोई बड़ा गोचर दबाव नहीं।','No major transit pressure on the mind.')}</p>`}
+  <p><b>💰 ${C('धन','Money')}</b></p>${money.length?`<ul class="fx vsfx">${money.map(t=>`<li class="neg"><b>!</b> ${t}</li>`).join('')}</ul>`:`<p class="note">${C('धन पर कोई बड़ा दबाव नहीं।','No major pressure on money.')}</p>`}
+  ${nl?`<p><b>📜 ${C('आगे के प्रत्यंतर (पुस्तक अध्याय 17)','Following pratyantars (book ch. 17)')}</b></p><ul class="fx vsfx">${nl}</ul>`:''}`;}
+const _evDeep253b=evDeep;evDeep=function(ch,jd){let h=_evDeep253b(ch,jd);if(!h)return h;try{const a=edAfter(ch,jd);const k=h.indexOf('<h4>👨‍👩‍👧');h=k>=0?h.slice(0,k)+a+h.slice(k):h.replace('</section>',a+'</section>');}catch(e){console.error(e);}return h;};
+
 </script>
 <nav id="bnav" aria-label="Main"></nav>
 </body></html>
