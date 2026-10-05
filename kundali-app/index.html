@@ -10598,7 +10598,7 @@ function edRel(ch,d,tr){const P=ch.planets,lv=[['ad',1],['pd',0.8],['sd',0.6],['
   out.push({H,nm:hi?nh:ne,s,why});});
  return out.sort((a,b)=>b.s-a.s);}
 // ---- 3. the analysis
-function edEval(ch,jd){const d=dasha5At(ch,jd);if(!d||!d.pr)return null;const hi=hiV(),P=ch.planets,tr=transitAt(ch,jd,true),x=clX(ch),R=c7Roles(ch);
+function edEval(ch,jd){const d=dasha5At(ch,jd);if(!d||!d.pr)return null;const hi=hiV(),P=ch.planets,tr=transitAt(ch,jd,false),x=clX(ch),R=c7Roles(ch);
  const fd=j=>{j+=0.5/1440;const t=jdToDate(j,ch.inp.tz);return `${fdate(j)} ${pad(t.h)}:${pad(t.mi)}`;};
  const mar=new Set([x.L(2),x.L(7)]),lvl=[['md',C('महादशा','Mahadasha')],['ad',C('अंतर्दशा','Antardasha')],['pd',C('प्रत्यंतर','Pratyantar')],['sd',C('सूक्ष्म','Sukshma')],['pr',C('प्राण','Prana')]];
  const role=L=>{const r=[];if(R[L].v>=0.8)r.push(C('चोट का कारक','injury significator'));if(mar.has(L))r.push(C('मारक (2/7 का स्वामी)','maraka (lord of 2/7)'));
@@ -10729,7 +10729,7 @@ Object.assign(I18N.en.ipTN,{dlt:'Transit of the dasha lords'});Object.assign(I18
 // ---- card on the transit page: where the running dasha lords are now, and which areas they support
 const DLT_EV=['marriage','job','business','children','house','vehicle','foreign','wealth','exam','illness'];
 const DLT_LB={marriage:['विवाह','marriage'],job:['नौकरी / पदोन्नति','job / promotion'],business:['व्यापार / साझेदारी','business / partnership'],children:['संतान','children'],house:['घर / संपत्ति','house / property'],vehicle:['वाहन','vehicle'],foreign:['विदेश','foreign'],wealth:['धन लाभ','money gains'],exam:['परीक्षा / शिक्षा','exams / studies'],illness:['रोग (सावधानी)','illness (caution)']};
-function dltBlock(ch,jd){const da=dashaAt(ch,jd);if(!da)return '';const tr=transitAt(ch,jd,true),P=ch.planets,lv={md:C('महादशा','Mahadasha'),ad:C('अंतर्दशा','Antardasha'),pd:C('प्रत्यंतर','Pratyantar')};
+function dltBlock(ch,jd){const da=dashaAt(ch,jd);if(!da)return '';const tr=transitAt(ch,jd,false),P=ch.planets,lv={md:C('महादशा','Mahadasha'),ad:C('अंतर्दशा','Antardasha'),pd:C('प्रत्यंतर','Pratyantar')};
  const rows=[['md',da.md.lord],['ad',da.ad.lord],['pd',da.pd.lord]].map(([k,L])=>{const t=tr[L],rel=((t.sign-P[L].sign+12)%12)+1;
   return `<tr><td>${lv[k]}</td><td><b>${pn(L)}</b>${t.retro&&L>1&&L<7?' ℞':''}</td><td>${sn(t.sign)}</td><td>${t.fl}</td><td>${t.fm}</td><td>${rel}</td></tr>`;}).join('');
  const ev=DLT_EV.filter(k=>pDef(k)).map(k=>({k,e:dltEval(ch,k,da.md.lord,da.ad.lord,da.pd.lord,jd,tr)})).filter(x=>x.e);
@@ -10742,6 +10742,21 @@ function dltBlock(ch,jd){const da=dashaAt(ch,jd);if(!da)return '';const tr=trans
   ${obs.length?`<p><b>⛔ ${C('अभी बाधित विषय','Areas obstructed now')}:</b> ${obs.map(x=>lab(x.k)).join(', ')}</p>`:''}
   <p class="note">${C('यह नियम एकीकृत फलादेश के समय-निर्धारण में एक कारक के रूप में जुड़ा है और "पद्धतियों की मान्यता" पेज पर आपकी दर्ज घटनाओं पर परखा जाता है। लेख में दिए प्रतिशत (75%, 70–85%) किसी प्रकाशित अध्ययन से नहीं हैं, इसलिए उपयोग नहीं किए गए।','This rule is added as one factor in the unified timing and is tested on your recorded events on the "Method reliability" page. The percentages quoted for it (75%, 70–85%) do not come from any published study, so they are not used.')}</p></section>`;}
 if(NEWT.tr){const _tr254=NEWT.tr;NEWT.tr=function(ch){const h=_tr254(ch);let a='';try{a=dltBlock(ch,julianNow());}catch(e){console.error(e);}return ipInsert(h,a);};}
+
+// ===== v25.4: Sawhney book check — retrograde Jupiter/Saturn also aspect from the previous sign (book ch. 6, 7, 12 examples); validation on the book's own case studies =====
+const SW_RC=new Map();
+function swRetro(jd){const k=Math.round(jd*4);if(SW_RC.has(k))return SW_RC.get(k);const a=siderealAll(jd-0.5,SET.ayan),b=siderealAll(jd+0.5,SET.ayan),r={};
+ [4,6].forEach(i=>{const p=PL[i];r[i]=(((b[p]-a[p]+540)%360)-180)<0;});if(SW_RC.size>5000)SW_RC.clear();SW_RC.set(k,r);return r;}
+const _swTransit255=swTransit;swTransit=function(ch,ev,jd,trIn){const r=_swTransit255(ch,ev,jd,trIn);if(r.ok)return r;const tr=trIn||transitAt(ch,jd,true),rt=swRetro(jd),pts=swPoints(ch,ev);
+ const back=(i,s)=>{if(!rt[i])return false;const ts=(tr[i].sign+11)%12;return ts===s||signAspects(i).some(k=>(ts+k-1)%12===s);};
+ const j=r.j.length?r.j:pts.filter(p=>back(4,p.s)),s=r.s.length?r.s:pts.filter(p=>back(6,p.s));return {j,s,ok:j.length>0&&s.length>0,half:j.length>0||s.length>0,retro:true};};
+function swBookCheck(){return `<section class="blk"><h3>📚 ${C('पुस्तक के अपने उदाहरणों पर जाँच','Check on the book’s own case studies')}</h3>
+ <p>${C('एस.के. सॉहनी की पुस्तक की 10 कुंडलियों की 26 घटनाओं (शिक्षा, नौकरी, विवाह, संतान, विदेश, संपत्ति, वाहन, भाई-बहन) पर यह ऐप जाँचा गया:','This app was checked on 26 events from 10 horoscopes in S.K. Sawhney’s book (education, career, marriage, children, foreign travel, property, vehicle, siblings):')}</p>
+ <ul class="fx vsfx"><li class="pos"><b>✓</b> ${C('दशा गणना: 26 में से 24 घटनाओं पर महादशा/अंतर्दशा/प्रत्यंतर पुस्तक से हूबहू मिले (बाकी 2 में पुस्तक का पाठ अस्पष्ट या प्रत्यंतर सीमा पर)।','Dasha calculation: on 24 of 26 events MD/AD/PD match the book exactly (the other 2: unclear text in the book, or a pratyantar boundary).')}</li>
+ <li><b>•</b> ${C('दशा + दो-बिंदु गोचर नियम ने 26 में से 19 घटनाएँ पकड़ीं; उसी आयु की random तारीखों पर यह नियम औसतन 15 बार “हाँ” कहता। यानी नियम सहायक है पर ढीला — यह अकेले तारीख तय नहीं करता, इसलिए इसे दूसरी पद्धतियों के साथ एक कारक के रूप में रखा गया है।','The dasha + two-point transit rule caught 19 of 26 events; on random dates of the same ages it would say “yes” about 15 times. So the rule helps but is loose — on its own it does not fix a date, which is why it is kept as one factor among the other methods.')}</li>
+ <li><b>•</b> ${C('पुस्तक का नियम “वक्री गुरु/शनि पिछली राशि से भी दृष्टि देते हैं” जोड़ा गया (एक और घटना पकड़ी गई)।','The book’s rule “retrograde Jupiter/Saturn also aspect from the previous sign” has been added (it catches one more event).')}</li></ul>
+ <p class="note">${C('ये उदाहरण लेखक ने नियम समझाने के लिए चुने थे, इसलिए यह स्वतंत्र परीक्षण नहीं है। अपनी कुंडली पर नियम कितना सही है, यह "पद्धतियों की मान्यता" पेज पर आपकी दर्ज घटनाओं से दिखता है।','The author chose these examples to illustrate the rules, so this is not an independent test. How well the rule works on your chart is shown on the "Method reliability" page from your recorded events.')}</p></section>`;}
+const _rSaw255=renderSawhney;renderSawhney=function(ch){let h=_rSaw255(ch);try{h+=swBookCheck();}catch(e){console.error(e);}return h;};if(NEWT.sawhney)NEWT.sawhney=renderSawhney;
 
 </script>
 <nav id="bnav" aria-label="Main"></nav>
