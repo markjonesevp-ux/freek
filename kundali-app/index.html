@@ -10561,6 +10561,106 @@ Object.assign(I18N.en,{t_knrao:'Research techniques (K.N. Rao school)',t_trikona
 if(NEWT.career){const _cr252=NEWT.career;NEWT.career=function(ch){const h=_cr252(ch);let a='';try{const s=krService(ch),t=krTech(ch);a=`<section class="blk"><h3>💼 ${C('नौकरी या व्यवसाय, तकनीकी या नहीं (शोध नियम)','Service or business, technical or not (research rules)')}</h3><p><span class="rk ${s.v>=1.5?'strong':s.v<=-1.5?'chal':'mixed'}">${s.verdict}</span></p><p><span class="rk mixed">${t.verdict}</span></p><p class="note">${C('विस्तार: फलादेश → शोध तकनीकें।','Details: Reading → Research techniques.')}</p></section>`;}catch(e){console.error(e);}return ipInsert(h,a);};}
 if(NEWT.caution){const _ca252=NEWT.caution;NEWT.caution=function(ch){const h=_ca252(ch);let a='';try{const now=julianNow(),d=dashaAt(ch,now);if(d){const s=krDis(ch,d.md.lord,d.ad.lord,null);a=`<section class="blk"><h3>🩺 ${C('रोग-आरंभ जोखिम — चल रही दशा (डॉ. चरक विधि)','Disease-onset risk — running dasha (Dr. Charak method)')}</h3><p><b>${pn(d.md.lord)} / ${pn(d.ad.lord)}</b>: <span class="rk ${s>=2.6?'chal':s>=1.8?'mixed':'strong'}">${s>=2.6?C('अधिक','higher'):s>=1.8?C('मध्यम','moderate'):C('कम','low')}</span> (${s.toFixed(1)}; ${C('लगभग 15% अंतर्दशाएँ 2.6 से ऊपर होती हैं','about 15% of sub-periods score above 2.6')})</p><p class="note">${C('विस्तार: फलादेश → शोध तकनीकें → रोग का आरंभ।','Details: Reading → Research techniques → Onset of disease.')}</p></section>`;}}catch(e){console.error(e);}return h+a;};}
 
+// ===== v25.1: event analysis by date + time (all methods side by side, family members involved) and an "accident / injury" kind in verification =====
+// ---- 1. new verification event kind: accident / injury (KP: 8 accident, 6 injury, 12 hospital; karakas Mars, Saturn)
+EVX.push({k:'accident',p:[6,8,12],n:[1,5,11],H:8,kar:[2,6],age:[0,120],caution:true});
+if(!VEV.includes('accident'))VEV.push('accident');
+Object.assign(PDEF,{accident:[8,[6,12,1],[2,6],30,1]});
+Object.assign(I18N.en,{ec_accident:'Accident / injury',edT:'Event analysis (date + time)',edN:'Enter the date and, if known, the time of an event that happened (or a date you want to check). Every method is shown side by side: the five dasha levels with their junctions, sukshma and prana results, transits, the accident and disease scores, maraka, and which family members the chart shows as involved.',edTm:'Time (optional)'});
+Object.assign(I18N.hi,{ec_accident:'दुर्घटना / चोट',edT:'घटना विश्लेषण (दिनांक + समय)',edN:'जो घटना हो चुकी है उसकी तारीख और (पता हो तो) समय डालें — या कोई तारीख जो जाँचनी हो। हर पद्धति साथ-साथ दिखती है: पाँचों दशा स्तर व उनकी संधि, सूक्ष्म व प्राण फल, गोचर, दुर्घटना व रोग अंक, मारक, और कुंडली के अनुसार परिवार का कौन सदस्य जुड़ा दिखता है।',edTm:'समय (वैकल्पिक)'});
+const _evRank253=evRank;evRank=function(ch,k,jd){const r=_evRank253(ch,k,jd);if(!r||k!=='accident')return r;const ev=EVX.find(e=>e.k===k);
+ r.kpOk=[r.da.md.lord,r.da.ad.lord,r.da.pd.lord].filter(L=>ev.p.some(h=>sigThru(ch,L).includes(h))).length;r.syTop=false;return r;};
+// ---- 2. helpers
+function edC7(ch){const now=julianNow(),from=ch.jd+3*365.25,to=now+10*365.25,key='c7'+ch.jd+Math.floor(now);
+ if(!S.c7||S.c7.key!==key){const sm=c7Scan(ch,from,to);S.c7={key,sm,w:c7Windows(sm),S:C7.S,top:C7.top};}return S.c7;}
+function edPct(ch,s){const now=julianNow(),a=edC7(ch).sm.filter(x=>x.jd<now).map(x=>x.s);return a.length?Math.round(a.filter(v=>v<=s).length/a.length*100):null;}
+// dasha junctions (sandhi) near jd: the end of one period and start of the next
+function edSandhi(ch,jd){const out=[],tol={md:120,ad:20,pd:3};
+ ch.dasha.mds.forEach((md,i)=>{const nx=ch.dasha.mds[i+1];if(nx&&Math.abs(md.end-jd)<=tol.md)out.push({lv:'md',a:md.lord,b:nx.lord,t:md.end});
+  md.ads.forEach((ad,j)=>{const nA=md.ads[j+1]||(nx&&nx.ads[0]);if(nA&&Math.abs(ad.end-jd)<=tol.ad)out.push({lv:'ad',a:ad.lord,b:nA.lord,t:ad.end});
+   if(Math.abs(ad.end-jd)<=40||(ad.start<=jd&&ad.end>=jd)){const ps=pratyantar(ad);ps.forEach((pd,k)=>{if(Math.abs(pd.end-jd)<=tol.pd){const n=ps[k+1];out.push({lv:'pd',a:pd.lord,b:n?n.lord:null,t:pd.end});}});}});});
+ return out;}
+// family members: their house (from lagna) and karaka; activation by the running lords and by transits
+const ED_REL=[[1,null,'स्वयं (जातक)','yourself'],[9,0,'पिता','father'],[4,1,'माता','mother'],[7,5,'जीवनसाथी','spouse'],[3,2,'छोटे भाई-बहन','younger siblings'],[11,4,'बड़े भाई-बहन','elder siblings'],[5,4,'संतान','children']];
+function edRel(ch,d,tr){const P=ch.planets,lv=[['ad',1],['pd',0.8],['sd',0.6],['pr',0.5]],mal=[0,2,6,7,8],hi=hiV(),out=[];
+ const hs=h=>((h-1)%12+12)%12+1,sgOf=h=>(ch.lagna+h-1)%12;
+ ED_REL.forEach(([H,K,nh,ne])=>{let s=0;const why=[];const LH=lordOf(ch,H),H8=hs(H+7),L8=lordOf(ch,H8),mk=[lordOf(ch,hs(H+1)),lordOf(ch,hs(H+6))];
+  lv.forEach(([k,w])=>{const L=d[k]&&d[k].lord;if(L==null)return;const lvn=k==='ad'?C('अंतर्दशा','antardasha'):k==='pd'?C('प्रत्यंतर','pratyantar'):k==='sd'?C('सूक्ष्म','sukshma'):C('प्राण','prana');
+   if(L===LH){s+=w;why.push(C(`${lvn} स्वामी ${pn(L)} — ${H}वें भाव का स्वामी`,`${lvn} lord ${pn(L)} rules house ${H}`));}
+   if(K!=null&&L===K){s+=w;why.push(C(`${lvn} स्वामी ${pn(L)} — इस संबंध का कारक`,`${lvn} lord ${pn(L)} is the karaka`));}
+   if(L===L8&&L!==LH){s+=w*0.6;why.push(C(`${lvn} स्वामी ${pn(L)} — ${H}वें से 8वें (उसकी आयु) भाव का स्वामी`,`${lvn} lord ${pn(L)} rules the 8th from house ${H} (its longevity)`));}
+   if(mk.includes(L)&&L!==LH&&L!==L8){s+=w*0.4;why.push(C(`${lvn} स्वामी ${pn(L)} — ${H}वें से मारक (2/7)`,`${lvn} lord ${pn(L)} is a maraka counted from house ${H}`));}});
+  const mt=mal.filter(i=>tr[i].sign===sgOf(H)||tr[i].sign===sgOf(H8));if(mt.length){const v=Math.min(0.6,mt.length*0.3);s+=v;why.push(C(`गोचर में ${mt.map(pn).join(', ')} — ${H}वें या उससे 8वें भाव पर`,`transit ${mt.map(pn).join(', ')} on house ${H} or the 8th from it`));}
+  if(K!=null){const t=tr[K],dg=dignity(K,t.sign);const afl=[2,6,7,8].filter(i=>i!==K&&tr[i].sign===t.sign);
+   if(dg==='debil'){s+=0.4;why.push(C(`कारक ${pn(K)} गोचर में नीच (${sn(t.sign)})`,`karaka ${pn(K)} debilitated in transit (${sn(t.sign)})`));}
+   if(afl.length){s+=0.3;why.push(C(`कारक ${pn(K)} के साथ गोचर में ${afl.map(pn).join(', ')}`,`karaka ${pn(K)} joined in transit by ${afl.map(pn).join(', ')}`));}
+   if(t.sign===ch.lagna&&H!==1){s+=0.2;why.push(C(`कारक ${pn(K)} गोचर में आपके लग्न पर — घटना आपके साथ जुड़ी`,`karaka ${pn(K)} transiting your lagna — tied to you`));}}
+  out.push({H,nm:hi?nh:ne,s,why});});
+ return out.sort((a,b)=>b.s-a.s);}
+// ---- 3. the analysis
+function edEval(ch,jd){const d=dasha5At(ch,jd);if(!d||!d.pr)return null;const hi=hiV(),P=ch.planets,tr=transitAt(ch,jd,true),x=clX(ch),R=c7Roles(ch);
+ const fd=j=>{j+=0.5/1440;const t=jdToDate(j,ch.inp.tz);return `${fdate(j)} ${pad(t.h)}:${pad(t.mi)}`;};
+ const mar=new Set([x.L(2),x.L(7)]),lvl=[['md',C('महादशा','Mahadasha')],['ad',C('अंतर्दशा','Antardasha')],['pd',C('प्रत्यंतर','Pratyantar')],['sd',C('सूक्ष्म','Sukshma')],['pr',C('प्राण','Prana')]];
+ const role=L=>{const r=[];if(R[L].v>=0.8)r.push(C('चोट का कारक','injury significator'));if(mar.has(L))r.push(C('मारक (2/7 का स्वामी)','maraka (lord of 2/7)'));
+  if(L<7){const hs=housesRuled(ch,L);r.push(C(`${hs.join(', ')} भाव का स्वामी`,`lord of ${hs.join(', ')}`));}else r.push(C(`${P[L].house}वें भाव में`,`in house ${P[L].house}`));return r.join(' · ');};
+ const rows=lvl.map(([k,n])=>{const p=d[k],bad=R[p.lord].v>=0.8||mar.has(p.lord);return `<tr class="${bad?'neg':''}"><td>${n}</td><td><b>${pn(p.lord)}</b></td><td class="note">${fd(p.start)} – ${fd(p.end)}</td><td class="note">${role(p.lord)}</td></tr>`;}).join('');
+ const chk=[];const add=(ok,t)=>chk.push([ok,t]);
+ // sandhi
+ const sa=edSandhi(ch,jd),lvN={md:C('महादशा','mahadasha'),ad:C('अंतर्दशा','antardasha'),pd:C('प्रत्यंतर','pratyantar')};
+ if(sa.length)add(1,C('दशा संधि: ','Dasha junction: ')+sa.map(s=>C(`${pn(s.a)} ${lvN[s.lv]} ${fd(s.t)} को समाप्त${s.b!=null?`, ${pn(s.b)} आरंभ`:''}`,`${pn(s.a)} ${lvN[s.lv]} ends ${fd(s.t)}${s.b!=null?`, ${pn(s.b)} begins`:''}`)).join('; ')+C(' — संधि काल को शास्त्र अस्थिर व संवेदनशील मानते हैं।',' — texts treat a junction as unstable and sensitive.'));
+ else add(0,C('कोई दशा संधि पास नहीं','No dasha junction nearby'));
+ // accident engine
+ const c=c7At(ch,jd);if(c){const s0=edC7(ch).sm.slice().sort((a,b)=>Math.abs(a.jd-jd)-Math.abs(b.jd-jd))[0];if(s0&&Math.abs(s0.jd-jd)<=7){const st=s0.tt.find(t=>t.k==='st');if(st)c.tt.push(st);}c7Fin(c);const pc=edPct(ch,c.s),thr=edC7(ch).S;add(c.key&&c.T>=C7.T&&c.s>=thr?1:pc>=75?0.5:0,C(`दुर्घटना इंजन: अंक ${c.s.toFixed(1)} (दशा ${c.D.toFixed(1)} + गोचर ${c.T.toFixed(1)}), सीमा ${thr} — आपके जीवन के ${pc}% समय से ऊँचा`,`Accident engine: score ${c.s.toFixed(1)} (dasha ${c.D.toFixed(1)} + transit ${c.T.toFixed(1)}), threshold ${thr} — higher than ${pc}% of your life`)+(c.tt.length?`<br><span class="note">${c.tt.map(t=>t.t).join(' · ')}</span>`:''));}
+ // Charak (K.N. Rao school disease score)
+ const kd=krDis(ch,d.md.lord,d.ad.lord,d.pd.lord);add(kd>=2.88?1:kd>=2.41?0.5:0,C(`रोग/चोट अंक (चरक, के.एन. राव पद्धति): ${kd.toFixed(2)} — `,`Disease/injury score (Charak, K.N. Rao school): ${kd.toFixed(2)} — `)+(kd>=2.88?C('बहुत ऊँचा (शीर्ष 10%)','very high (top 10%)'):kd>=2.41?C('ऊँचा (शीर्ष 25%)','high (top 25%)'):kd>=1.83?C('मध्यम','moderate'):C('सामान्य','normal')));
+ // maraka
+ const mk=['ad','pd','sd','pr'].filter(k=>mar.has(d[k].lord));add(mk.length?1:0,mk.length?C(`मारक ग्रह ${[...new Set(mk.map(k=>pn(d[k].lord)))].join(', ')} चल रही दशा (${mk.map(k=>lvN[k]||(k==='sd'?'सूक्ष्म':'प्राण')).join(', ')}) में`,`Maraka ${[...new Set(mk.map(k=>pn(d[k].lord)))].join(', ')} running (${mk.map(k=>lvN[k]||(k==='sd'?'sukshma':'prana')).join(', ')})`):C('कोई मारक ग्रह दशा में नहीं','No maraka running'));
+ // satyacharya
+ const sq=[d.ad.lord,d.pd.lord].map(L=>[L,satyaQ(ch,L).s]),sb=sq.filter(v=>v[1]<0);add(sb.length===2?1:sb.length?0.5:0,C('सत्याचार्य दशा-फल: ','Satyacharya period quality: ')+sq.map(([L,v])=>`${pn(L)} ${v>0?'+':''}${v.toFixed(1)}`).join(', '));
+ // moon tara
+ const ta=taraOf(ch,tr[1].lon);add(TARA_Q[ta]<0?1:0,C(`चंद्र गोचर तारा: ${TARA.hi[ta]}`,`Moon's transit tara: ${TARA.en[ta]}`)+(TARA_Q[ta]<0?C(' (अशुभ)',' (adverse)'):C(' (शुभ)',' (favourable)')));
+ // sukshma and prana texts
+ const S1=BK_SDPH[d.pd.lord+'_'+d.sd.lord],P1=BK_PRPH[d.sd.lord+'_'+d.pr.lord],A1=BK_PDPH[d.ad.lord+'_'+d.pd.lord];
+ const ph=(r,t)=>r?`<li class="${r[0]==='-'?'neg':r[0]==='+'?'pos':''}"><b>${t}</b> — ${clTxt(hi?r[1]:r[2])}</li>`:'';
+ const pdT=A1?`<li class="${A1[0]==='-'?'neg':A1[0]==='+'?'pos':''}"><b>${C('प्रत्यंतर','Pratyantar')} ${pn(d.ad.lord)}/${pn(d.pd.lord)}</b> — ${clRestore(clTxt(hi?(clOn()&&BK_PDPH_CL[d.ad.lord+'_'+d.pd.lord]||A1[1]):(BK_PDPH_EN[d.ad.lord+'_'+d.pd.lord]||A1[1])))}</li>`:'';
+ const phs=pdT+ph(S1,`${C('सूक्ष्म','Sukshma')} ${pn(d.pd.lord)}/${pn(d.sd.lord)}`)+ph(P1,`${C('प्राण','Prana')} ${pn(d.sd.lord)}/${pn(d.pr.lord)}`);
+ const nb=[S1,P1].filter(r=>r&&r[0]==='-').length;add(nb===2?1:nb?0.5:0,C(`सूक्ष्म/प्राण फल: ${nb===2?'दोनों अशुभ':nb?'एक अशुभ':'अशुभ नहीं'} (नीचे देखें)`,`Sukshma/prana results: ${nb===2?'both adverse':nb?'one adverse':'not adverse'} (see below)`));
+ return {d,tr,chk,phs,rows,fd,hi,P};}
+// baseline: the same checks on dates spread over your past life (how often would a random day look this bad?)
+function edBase(ch){const now=julianNow(),key='edb'+ch.jd+Math.floor(now/30);if(S.edb&&S.edb.key===key)return S.edb;const a=[];const from=ch.jd+3*365.25,n=160,st=(now-from)/n;
+ for(let k=0;k<n;k++){const j=from+st*(k+0.37);const e=edEval(ch,j);if(e)a.push(e.chk.filter(c=>c[0]>=1).length);}return S.edb={key,a};}
+function evDeep(ch,jd){const E=edEval(ch,jd);if(!E)return '';const {d,tr,chk,phs,rows,fd,hi,P}=E;
+ // transits
+ const trR=[...Array(9).keys()].map(i=>{const t=tr[i],dg=i<9?dignity(i,t.sign):'',bad=[0,2,6,7,8].includes(i)&&[1,4,7,8,12].includes(t.fl);
+  return `<tr class="${bad?'neg':''}"><td>${pn(i)}</td><td>${sn(t.sign)} ${(t.lon%30).toFixed(0)}°${t.retro?' ℞':''}${dg==='debil'?C(' (नीच)',' (debil.)'):dg==='exalted'?C(' (उच्च)',' (exalt.)'):''}</td><td>${t.fl}</td><td>${t.fm}</td></tr>`;}).join('');
+ const rel=edRel(ch,d,tr),relH=rel.filter(r=>r.s>=0.6).slice(0,4);
+ const sup=chk.filter(c=>c[0]>=1).length,half=chk.filter(c=>c[0]===0.5).length;
+ let bl='';try{const B=edBase(ch).a;if(B.length){const ge=Math.round(B.filter(v=>v>=sup).length/B.length*100),av=(B.reduce((x,y)=>x+y,0)/B.length).toFixed(1);
+  bl=C(`तुलना: आपके जीवन की ${B.length} random तारीखों पर औसतन ${av} जाँचें ऐसा कहती हैं; ${ge}% तारीखों पर ${sup} या अधिक।`,`For comparison: on ${B.length} random dates of your life on average ${av} checks say so; ${ge}% of dates reach ${sup} or more.`);}}catch(e){console.error(e);}
+ return `<section class="blk evd"><h3>🧭 ${T('edT')}: ${fd(jd)}</h3>
+  <p class="rblife l${sup>=4?2:sup>=2?1:0}"><b>${C(`${chk.length} जाँचों में से ${sup} कठिन समय का स्पष्ट संकेत देती हैं${half?`, ${half} आंशिक`:''}।`,`${sup} of ${chk.length} checks clearly mark a difficult time${half?`, ${half} partly`:''}.`)}</b>${bl?`<br><span class="note">${bl}</span>`:''}</p>
+  <ul class="fx vsfx">${chk.map(([o,t])=>`<li class="${o>=1?'neg':o?'':'pos'}"><b>${o>=1?'!':o?'~':'•'}</b> ${t}</li>`).join('')}</ul>
+  <h4>${C('पाँचों दशा स्तर','All five dasha levels')}</h4><table class="tbl"><tbody>${rows}</tbody></table>
+  ${phs?`<h4>${C('शास्त्रीय फल (पुस्तक अध्याय 17–19)','Classical results (book ch. 17–19)')}</h4><ul class="fx vsfx">${phs}</ul>`:''}
+  <h4>${C('उस समय का गोचर','Transits at that moment')}</h4><table class="tbl"><thead><tr><th>${C('ग्रह','Planet')}</th><th>${C('राशि','Sign')}</th><th>${C('लग्न से','From lagna')}</th><th>${C('चंद्र से','From Moon')}</th></tr></thead><tbody>${trR}</tbody></table>
+  <h4>👨‍👩‍👧 ${C('परिवार में कौन जुड़ा दिखता है','Which family members the chart shows as involved')}</h4>
+  ${relH.length?`<ul class="fx vsfx">${relH.map(r=>`<li class="neg"><b>${r.nm}</b> <span class="note">(${C('अंक','score')} ${r.s.toFixed(1)})</span><br><span class="note">${r.why.join(' · ')}</span></li>`).join('')}</ul>`:`<p>${C('किसी संबंधी का भाव स्पष्ट रूप से सक्रिय नहीं।','No relative’s house is clearly activated.')}</p>`}
+  <p class="note">${C('भाव गिनती "भावात् भावम्": पिता 9वाँ, माता 4था, जीवनसाथी 7वाँ, छोटे भाई-बहन 3रा, बड़े 11वाँ, संतान 5वाँ; उनकी आयु उनके भाव से 8वाँ, मारक उससे 2रा व 7वाँ। यह केवल जुड़ाव दिखाता है, परिणाम की गंभीरता नहीं।','Houses counted "bhavat bhavam": father 9th, mother 4th, spouse 7th, younger siblings 3rd, elder 11th, children 5th; their longevity is the 8th from that house, their marakas the 2nd and 7th from it. This shows involvement only, not how serious the outcome is.')}</p>
+  <p class="note">${C('एक घटना से कोई पद्धति सिद्ध नहीं होती। इसे “सत्यापन” टैब में “दुर्घटना / चोट” के रूप में दर्ज करें — तब हर पद्धति आपकी सभी घटनाओं पर परखी जाती है और जो आपके लिए अधिक सही बैठे उसे अधिक वज़न मिलता है।','One event does not prove a method. Record it in the Verification tab as “Accident / injury” — every method is then tested on all your events and the ones that fit you better get more weight.')}</p></section>`;}
+// ---- 4. recorded accidents vs the engine (shown on the caution page)
+function edMine(ch){const ev=getPev(ch).filter(e=>e.k==='accident'||e.k==='healthc');if(!ev.length)return '';
+ const li=ev.map(e=>{const m=/^(\d{4})-(\d{2})-(\d{2})/.exec(e.d||'');if(!m)return '';const jd=julian(+m[1],+m[2],+m[3],12-ch.inp.tz);const c=c7At(ch,jd);if(!c)return '';const s0=edC7(ch).sm.slice().sort((a,b)=>Math.abs(a.jd-jd)-Math.abs(b.jd-jd))[0];if(s0&&Math.abs(s0.jd-jd)<=7){const st=s0.tt.find(t=>t.k==='st');if(st)c.tt.push(st);}c7Fin(c);const pc=edPct(ch,c.s),on=(edC7(ch).w||[]).some(w=>jd>=w.start-10&&jd<=w.end+10);
+  return `<li class="${on?'pos':''}"><b>${on?'✓':'✗'}</b> ${fdate(jd)} — ${T('ec_'+e.k)}: ${C(`अंक ${c.s.toFixed(1)}, आपके जीवन के ${pc}% समय से ऊँचा — ${on?'चिह्नित काल में':'चिह्नित नहीं'}`,`score ${c.s.toFixed(1)}, higher than ${pc}% of your life — ${on?'inside a marked period':'not marked'}`)}</li>`;}).join('');
+ return li?`<h4>📌 ${C('आपकी दर्ज घटनाएँ बनाम यह इंजन','Your recorded events vs this engine')}</h4><ul class="fx vsfx">${li}</ul>`:'';}
+const _c7B253=c7Block;c7Block=function(ch){let h=_c7B253(ch);
+ h=h.replace('<button class="btn" id="c7go">',`<label class="note">${T('edTm')} <input type="time" id="c7tm" value="${S.c7tm||''}"></label> <button class="btn" id="c7go">`);
+ try{const m=edMine(ch);if(m)h=h.replace(`<h4>${T('c7Past')}</h4>`,m+`<h4>${T('c7Past')}</h4>`);}catch(e){console.error(e);}
+ return h;};
+function edJd(ch,ds,ts){const m=/^(\d{4})-(\d{2})-(\d{2})$/.exec(ds||'');if(!m)return null;const t=/^(\d{1,2}):(\d{2})/.exec(ts||'');return julian(+m[1],+m[2],+m[3],(t?+t[1]+t[2]/60:12)-ch.inp.tz);}
+const _c7Chk253=c7Check;c7Check=function(ch,ds){let h=_c7Chk253(ch,ds);try{const j=edJd(ch,ds,S.c7tm);if(j&&j>ch.jd)h+=evDeep(ch,j);}catch(e){console.error(e);}return h;};
+document.addEventListener('click',e=>{if(e.target&&e.target.id==='c7go'){const t=document.getElementById('c7tm');S.c7tm=t?t.value:'';}},true);
+(function(){const st=document.createElement('style');st.textContent=`.evd table td,.evd table th{padding:3px 6px;vertical-align:top}.evd tr.neg td:first-child{border-left:3px solid var(--bad,#c33)}.c7in label{display:flex;gap:6px;align-items:center}`;document.head.appendChild(st);})();
+
 </script>
 <nav id="bnav" aria-label="Main"></nav>
 </body></html>
