@@ -10649,8 +10649,8 @@ function evDeep(ch,jd){const E=edEval(ch,jd);if(!E)return '';const {d,tr,chk,phs
   <p class="note">${C('एक घटना से कोई पद्धति सिद्ध नहीं होती। इसे “सत्यापन” टैब में “दुर्घटना / चोट” के रूप में दर्ज करें — तब हर पद्धति आपकी सभी घटनाओं पर परखी जाती है और जो आपके लिए अधिक सही बैठे उसे अधिक वज़न मिलता है।','One event does not prove a method. Record it in the Verification tab as “Accident / injury” — every method is then tested on all your events and the ones that fit you better get more weight.')}</p></section>`;}
 // ---- 4. recorded accidents vs the engine (shown on the caution page)
 function edMine(ch){const ev=getPev(ch).filter(e=>e.k==='accident'||e.k==='healthc');if(!ev.length)return '';
- const li=ev.map(e=>{const m=/^(\d{4})-(\d{2})-(\d{2})/.exec(e.d||'');if(!m)return '';const jd=julian(+m[1],+m[2],+m[3],12-ch.inp.tz);const c=c7At(ch,jd);if(!c)return '';const s0=edC7(ch).sm.slice().sort((a,b)=>Math.abs(a.jd-jd)-Math.abs(b.jd-jd))[0];if(s0&&Math.abs(s0.jd-jd)<=7){const st=s0.tt.find(t=>t.k==='st');if(st)c.tt.push(st);}c7Fin(c);const pc=edPct(ch,c.s),on=(edC7(ch).w||[]).some(w=>jd>=w.start-10&&jd<=w.end+10);
-  return `<li class="${on?'pos':''}"><b>${on?'✓':'✗'}</b> ${fdate(jd)} — ${T('ec_'+e.k)}: ${C(`अंक ${c.s.toFixed(1)}, आपके जीवन के ${pc}% समय से ऊँचा — ${on?'चिह्नित काल में':'चिह्नित नहीं'}`,`score ${c.s.toFixed(1)}, higher than ${pc}% of your life — ${on?'inside a marked period':'not marked'}`)}</li>`;}).join('');
+ const li=ev.map(e=>{const m=/^(\d{4})-(\d{2})-(\d{2})/.exec(e.d||'');if(!m)return '';const jd=julian(+m[1],+m[2],+m[3],12-ch.inp.tz);const c=c7At(ch,jd);if(!c)return '';const s0=edC7(ch).sm.slice().sort((a,b)=>Math.abs(a.jd-jd)-Math.abs(b.jd-jd))[0];if(s0&&Math.abs(s0.jd-jd)<=7){const st=s0.tt.find(t=>t.k==='st');if(st)c.tt.push(st);}c7Fin(c);const pc=edPct(ch,c.s),tol=e.ap?30:10,on=(edC7(ch).w||[]).some(w=>jd>=w.start-tol&&jd<=w.end+tol);
+  return `<li class="${on?'pos':''}"><b>${on?'✓':'✗'}</b> ${e.ap?'≈ ':''}${fdate(jd)}${e.ap?C(' (±1 माह)',' (±1 month)'):''} — ${T('ec_'+e.k)}: ${C(`अंक ${c.s.toFixed(1)}, आपके जीवन के ${pc}% समय से ऊँचा — ${on?'चिह्नित काल में':'चिह्नित नहीं'}`,`score ${c.s.toFixed(1)}, higher than ${pc}% of your life — ${on?'inside a marked period':'not marked'}`)}</li>`;}).join('');
  return li?`<h4>📌 ${C('आपकी दर्ज घटनाएँ बनाम यह इंजन','Your recorded events vs this engine')}</h4><ul class="fx vsfx">${li}</ul>`:'';}
 const _c7B253=c7Block;c7Block=function(ch){let h=_c7B253(ch);
  h=h.replace('<button class="btn" id="c7go">',`<label class="note">${T('edTm')} <input type="time" id="c7tm" value="${S.c7tm||''}"></label> <button class="btn" id="c7go">`);
@@ -10668,9 +10668,9 @@ document.addEventListener('click',e=>{if(e.target&&e.target.id==='c7go'){const t
 C7.mode='A';
 const _c7At253b=c7At;c7At=function(ch,j,da,tr){const x=_c7At253b(ch,j,da,tr);if(!x)return x;if(C7.mode==='B'){x.kd=krDis(ch,x.da.md.lord,x.da.ad.lord,x.da.pd.lord);x.key=true;}return x;};
 const _c7Fin253b=c7Fin;c7Fin=function(x){_c7Fin253b(x);if(C7.mode==='B'&&x.kd!=null){x.D=0.5*x.kd;x.s=x.D+x.T;}return x;};
-function c7Evs(ch){return getPev(ch).filter(e=>e.k==='accident').map(e=>{const m=/^(\d{4})-(\d{2})-(\d{2})/.exec(e.d||'');return m?julian(+m[1],+m[2],+m[3],12-ch.inp.tz):null;}).filter(j=>j&&j>ch.jd+3*365.25&&j<julianNow());}
-function c7Pick(ch){const ev=c7Evs(ch),now=julianNow(),key='pk'+ch.jd+Math.floor(now)+ev.map(Math.round).join(',');if(S.c7pk&&S.c7pk.key===key)return S.c7pk;
- const r={key,n:ev.length,mode:'A',h:{A:0,B:0}};if(ev.length){const m0=C7.mode;['A','B'].forEach(m=>{C7.mode=m;const sm=c7Scan(ch,ch.jd+3*365.25,now),w=c7Windows(sm);r.h[m]=ev.filter(j=>w.some(x=>j>=x.start-10&&j<=x.end+10)).length;});C7.mode=m0;if(r.h.B>r.h.A)r.mode='B';}
+function c7Evs(ch){return getPev(ch).filter(e=>e.k==='accident').map(e=>{const m=/^(\d{4})-(\d{2})-(\d{2})/.exec(e.d||'');return m?{j:julian(+m[1],+m[2],+m[3],12-ch.inp.tz),tol:e.ap?30:10}:null;}).filter(e=>e&&e.j>ch.jd+3*365.25&&e.j<julianNow());}
+function c7Pick(ch){const ev=c7Evs(ch),now=julianNow(),key='pk'+ch.jd+Math.floor(now)+ev.map(e=>Math.round(e.j)+'/'+e.tol).join(',');if(S.c7pk&&S.c7pk.key===key)return S.c7pk;
+ const r={key,n:ev.length,mode:'A',h:{A:0,B:0}};if(ev.length){const m0=C7.mode;['A','B'].forEach(m=>{C7.mode=m;const sm=c7Scan(ch,ch.jd+3*365.25,now),w=c7Windows(sm);r.h[m]=ev.filter(e=>w.some(x=>e.j>=x.start-e.tol&&e.j<=x.end+e.tol)).length;});C7.mode=m0;if(r.h.B>r.h.A)r.mode='B';}
  return S.c7pk=r;}
 function c7Use(ch){const p=c7Pick(ch);if(C7.mode!==p.mode||(S.c7&&(S.c7.mode||'A')!==p.mode)){C7.mode=p.mode;S.c7=null;}return p;}
 function edC7(ch){c7Use(ch);const now=julianNow(),from=ch.jd+3*365.25,to=now+10*365.25,key='c7'+ch.jd+Math.floor(now);
@@ -10757,6 +10757,34 @@ function swBookCheck(){return `<section class="blk"><h3>📚 ${C('पुस्�
  <li><b>•</b> ${C('पुस्तक का नियम “वक्री गुरु/शनि पिछली राशि से भी दृष्टि देते हैं” जोड़ा गया (एक और घटना पकड़ी गई)।','The book’s rule “retrograde Jupiter/Saturn also aspect from the previous sign” has been added (it catches one more event).')}</li></ul>
  <p class="note">${C('ये उदाहरण लेखक ने नियम समझाने के लिए चुने थे, इसलिए यह स्वतंत्र परीक्षण नहीं है। अपनी कुंडली पर नियम कितना सही है, यह "पद्धतियों की मान्यता" पेज पर आपकी दर्ज घटनाओं से दिखता है।','The author chose these examples to illustrate the rules, so this is not an independent test. How well the rule works on your chart is shown on the "Method reliability" page from your recorded events.')}</p></section>`;}
 const _rSaw255=renderSawhney;renderSawhney=function(ch){let h=_rSaw255(ch);try{h+=swBookCheck();}catch(e){console.error(e);}return h;};if(NEWT.sawhney)NEWT.sawhney=renderSawhney;
+
+// ===== v25.5: approximate event dates (±1 month) in verification; long background periods of Saturn/Rahu/Ketu over natal Mars on the caution page =====
+Object.assign(I18N.en,{vfAp:'Date approximate (±1 month)',vfApN:'Events with an approximate date are not used to score the timing methods (they need the exact day); the accident engine checks them with a ±1 month margin.'});
+Object.assign(I18N.hi,{vfAp:'तारीख अनुमानित (±1 माह)',vfApN:'अनुमानित तारीख वाली घटनाएँ समय-पद्धतियों की जाँच में नहीं गिनी जातीं (उन्हें सटीक दिन चाहिए); दुर्घटना इंजन उन्हें ±1 माह की छूट से जाँचता है।'});
+const _rV256=NEWT.verify;NEWT.verify=function(ch){let h=_rV256(ch);
+ h=h.replace(/(<input type="date" id="pvd">)(<\/label>)/,`$1$2<label class="note"><input type="checkbox" id="pvap"> ${T('vfAp')}</label>`);
+ const ev=getPev(ch);if(ev.some(e=>e.ap)){ev.filter(e=>e.ap).forEach(e=>{const d=fdate(julian(...e.d.split('-').map(Number),12-ch.inp.tz));h=h.replace(`<td>${d}</td>`,`<td>≈ ${d}<br><span class="note">±1 ${C('माह','month')}</span></td>`);});
+  h=h.replace(`<p class="note">${T('vfNote')}</p>`,`<p class="note">${T('vfNote')}</p><p class="note">≈ ${T('vfApN')}</p>`);}
+ return h;};
+const _rA256=renderAll;renderAll=function(){_rA256();if(S.mode!=='kundali'||!S.ch||S.tab!=='verify')return;const ch=S.ch,b=document.getElementById('pvadd');if(!b)return;
+ b.onclick=()=>{const d=document.getElementById('pvd').value;if(!d)return;const ap=document.getElementById('pvap');const a=getPev(ch);const e={k:document.getElementById('pvk').value,d};if(ap&&ap.checked)e.ap=1;a.push(e);a.sort((x,y)=>x.d<y.d?-1:1);putPev(ch,a);S.rcRes=null;S.rkb=null;S.c7pk=null;renderAll();};};
+// timing methods are scored only on exact dates
+rkEvents=function(ch){return getPev(ch).filter(e=>!e.ap).map(e=>{const m=/^(\d{4})-(\d{2})-(\d{2})/.exec(e.d||'');return m&&pDef(e.k)?{k:e.k,jd:julian(+m[1],+m[2],+m[3],12-ch.inp.tz)}:null;}).filter(x=>x&&x.jd>ch.jd&&x.jd<julianNow());};
+// ---- long background periods: Saturn, Rahu or Ketu transiting the sign of natal Mars (the injury karaka)
+function bgSpans(ch){const now=julianNow(),key='bg'+ch.jd+Math.floor(now/30);if(S.bg&&S.bg.key===key)return S.bg;const ms=ch.planets[2].sign,out=[];const st=10,from=ch.jd,to=now+13*365.25;
+ const open={};for(let j=from;j<=to;j+=st){const tr=transitAt(ch,j,true);[6,7,8].forEach(i=>{const on=tr[i].sign===ms;if(on&&!open[i])open[i]={i,start:j};else if(!on&&open[i]){open[i].end=j;out.push(open[i]);open[i]=null;}});}
+ Object.values(open).forEach(o=>{if(o){o.end=to;out.push(o);}});out.sort((a,b)=>a.start-b.start);
+ for(let k=out.length-1;k>0;k--){const a=out.findIndex((x,q)=>q<k&&x.i===out[k].i&&out[k].start-x.end<240);if(a>=0){out[a].end=Math.max(out[a].end,out[k].end);out.splice(k,1);}}
+ const past=out.reduce((a,o)=>a+Math.max(0,Math.min(o.end,now)-Math.max(o.start,from)),0),share=past/(now-from);return S.bg={key,sp:out,share};}
+function bgBlock(ch){const B=bgSpans(ch),now=julianNow(),ev=getPev(ch).filter(e=>e.k==='accident').map(e=>({...e,j:julian(...e.d.split('-').map(Number),12-ch.inp.tz)}));
+ const inS=e=>B.sp.some(o=>e.j>=o.start-(e.ap?30:0)&&e.j<=o.end+(e.ap?30:0)),nin=ev.filter(inS).length;
+ const li=B.sp.filter(o=>o.end>ch.jd+3*365.25&&o.start<now+10*365.25).map(o=>{const hit=ev.filter(e=>e.j>=o.start-(e.ap?30:0)&&e.j<=o.end+(e.ap?30:0));const fut=o.end>now;
+  return `<li class="${fut?'neg':hit.length?'neg':''}"><b>${pn(o.i)}</b> ${C('जन्म मंगल पर','over natal Mars')} <span class="pstyr">${fdate(o.start)} – ${fdate(o.end)}</span>${hit.length?` <span class="rk chal">${C('दर्ज दुर्घटना','recorded accident')}: ${hit.map(e=>(e.ap?'≈':'')+fdate(e.j)).join(', ')}</span>`:''}${fut?` <span class="note">(${o.start>now?C('आगे','upcoming'):C('चल रहा','running')})</span>`:''}</li>`;}).join('');
+ return `<section class="blk bgsp"><h3>🌑 ${C('लंबे पृष्ठभूमि काल — शनि / राहु / केतु जन्म मंगल पर','Long background periods — Saturn / Rahu / Ketu over natal Mars')}</h3>
+  <p class="note">${C(`मंगल चोट, दुर्घटना, सर्जरी व रक्त का कारक है। आपका जन्म मंगल ${sn(ch.planets[2].sign)} राशि (${ch.planets[2].house}वें भाव) में है। जब शनि (लगभग 2.5 वर्ष), राहु या केतु (लगभग 1.5 वर्ष) इस राशि से गुज़रते हैं, वह लंबा काल शरीर के लिए संवेदनशील पृष्ठभूमि माना जाता है — घटना का दिन दशा और छोटे गोचर (मंगल, सूर्य) तय करते हैं।`,`Mars signifies injury, accidents, surgery and blood. Your natal Mars is in ${sn(ch.planets[2].sign)} (house ${ch.planets[2].house}). When Saturn (about 2.5 years), Rahu or Ketu (about 1.5 years) pass through this sign, that long stretch is treated as a sensitive background for the body — the day itself is set by the dasha and fast transits (Mars, Sun).`)}</p>
+  <ul class="fx vsfx">${li}</ul>
+  <p class="note">${C(`ये काल आपके अब तक के जीवन का लगभग ${Math.round(B.share*100)}% हिस्सा हैं।`,`These periods cover about ${Math.round(B.share*100)}% of your life so far.`)}${ev.length?' '+C(`आपकी ${ev.length} दर्ज दुर्घटनाओं में से ${nin} इनके भीतर हैं (संयोग से लगभग ${(ev.length*B.share).toFixed(1)} की अपेक्षा)।`,`${nin} of your ${ev.length} recorded accidents fall inside them (about ${(ev.length*B.share).toFixed(1)} expected by chance).`):''}</p></section>`;}
+const _caut256=NEWT.caution;NEWT.caution=function(ch){let h=_caut256(ch);try{const b=bgBlock(ch),k=h.indexOf('<section class="blk ca4 c7"');h=k>=0?h.slice(0,k)+b+h.slice(k):h+b;}catch(e){console.error(e);}return h;};
 
 </script>
 <nav id="bnav" aria-label="Main"></nav>
