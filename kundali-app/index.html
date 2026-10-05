@@ -10601,7 +10601,7 @@ function edRel(ch,d,tr){const P=ch.planets,lv=[['ad',1],['pd',0.8],['sd',0.6],['
 function edEval(ch,jd){const d=dasha5At(ch,jd);if(!d||!d.pr)return null;const hi=hiV(),P=ch.planets,tr=transitAt(ch,jd,false),x=clX(ch),R=c7Roles(ch);
  const fd=j=>{j+=0.5/1440;const t=jdToDate(j,ch.inp.tz);return `${fdate(j)} ${pad(t.h)}:${pad(t.mi)}`;};
  const mar=new Set([x.L(2),x.L(7)]),lvl=[['md',C('महादशा','Mahadasha')],['ad',C('अंतर्दशा','Antardasha')],['pd',C('प्रत्यंतर','Pratyantar')],['sd',C('सूक्ष्म','Sukshma')],['pr',C('प्राण','Prana')]];
- const role=L=>{const r=[];if(R[L].v>=0.8)r.push(C('चोट का कारक','injury significator'));if(mar.has(L))r.push(C('मारक (2/7 का स्वामी)','maraka (lord of 2/7)'));
+ const role=L=>{const r=[];if(R[L].v>=0.8)r.push(C('चोट का कारक','injury significator'));{const g=mkGroup(ch,L);if(g)r.push(g===1?C('मारक (2/7 का स्वामी)','maraka (lord of 2/7)'):g===2?C('सहायक मारक','supporting maraka'):C('गौण मारक','secondary killer'));}
   if(L<7){const hs=housesRuled(ch,L);r.push(C(`${hs.join(', ')} भाव का स्वामी`,`lord of ${hs.join(', ')}`));}else r.push(C(`${P[L].house}वें भाव में`,`in house ${P[L].house}`));return r.join(' · ');};
  const rows=lvl.map(([k,n])=>{const p=d[k],bad=R[p.lord].v>=0.8||mar.has(p.lord);return `<tr class="${bad?'neg':''}"><td>${n}</td><td><b>${pn(p.lord)}</b></td><td class="note">${fd(p.start)} – ${fd(p.end)}</td><td class="note">${role(p.lord)}</td></tr>`;}).join('');
  const chk=[];const add=(ok,t)=>chk.push([ok,t]);
@@ -10614,7 +10614,9 @@ function edEval(ch,jd){const d=dasha5At(ch,jd);if(!d||!d.pr)return null;const hi
  // Charak (K.N. Rao school disease score)
  const kd=krDis(ch,d.md.lord,d.ad.lord,d.pd.lord);add(kd>=2.88?1:kd>=2.41?0.5:0,C(`रोग/चोट अंक (चरक, के.एन. राव पद्धति): ${kd.toFixed(2)} — `,`Disease/injury score (Charak, K.N. Rao school): ${kd.toFixed(2)} — `)+(kd>=2.88?C('बहुत ऊँचा (शीर्ष 10%)','very high (top 10%)'):kd>=2.41?C('ऊँचा (शीर्ष 25%)','high (top 25%)'):kd>=1.83?C('मध्यम','moderate'):C('सामान्य','normal')));
  // maraka
- const mk=['ad','pd','sd','pr'].filter(k=>mar.has(d[k].lord));add(mk.length?1:0,mk.length?C(`मारक ग्रह ${[...new Set(mk.map(k=>pn(d[k].lord)))].join(', ')} चल रही दशा (${mk.map(k=>lvN[k]||(k==='sd'?'सूक्ष्म':'प्राण')).join(', ')}) में`,`Maraka ${[...new Set(mk.map(k=>pn(d[k].lord)))].join(', ')} running (${mk.map(k=>lvN[k]||(k==='sd'?'sukshma':'prana')).join(', ')})`):C('कोई मारक ग्रह दशा में नहीं','No maraka running'));
+ const mg=['md','ad','pd','sd','pr'].map(k=>[k,mkGroup(ch,d[k].lord)]).filter(v=>v[1]),lvA=k=>lvN[k]||(k==='sd'?C('सूक्ष्म','sukshma'):C('प्राण','prana')),gN=g=>g===1?C('प्रधान','primary'):g===2?C('सहायक','supporting'):C('गौण','secondary');
+ const mp=mg.filter(v=>v[1]===1&&v[0]!=='md');add(mp.length||mg.filter(v=>v[0]!=='md').length>=2?1:mg.length?0.5:0,mg.length?C('मारक दशा में: ','Marakas running: ')+mg.map(([k,g])=>`${pn(d[k].lord)} (${lvA(k)}, ${gN(g)})`).join(', '):C('कोई मारक ग्रह दशा में नहीं','No maraka running'));
+ const tb=mkX(ch).tara.filter(o=>['ad','pd','sd'].some(k=>d[k].lord===o.i));if(tb.length)add(tb.some(o=>o.t===6)?1:0.5,C('दशा स्वामी कठिन तारा में: ','Dasha lord in a difficult tara: ')+tb.map(o=>`${pn(o.i)} — ${C(mkX(ch).TB[o.t][1],mkX(ch).TB[o.t][0])}`).join(', '));
  // satyacharya
  const sq=[d.ad.lord,d.pd.lord].map(L=>[L,satyaQ(ch,L).s]),sb=sq.filter(v=>v[1]<0);add(sb.length===2?1:sb.length?0.5:0,C('सत्याचार्य दशा-फल: ','Satyacharya period quality: ')+sq.map(([L,v])=>`${pn(L)} ${v>0?'+':''}${v.toFixed(1)}`).join(', '));
  // moon tara
@@ -10785,6 +10787,28 @@ function bgBlock(ch){const B=bgSpans(ch),now=julianNow(),ev=getPev(ch).filter(e=
   <ul class="fx vsfx">${li}</ul>
   <p class="note">${C(`ये काल आपके अब तक के जीवन का लगभग ${Math.round(B.share*100)}% हिस्सा हैं।`,`These periods cover about ${Math.round(B.share*100)}% of your life so far.`)}${ev.length?' '+C(`आपकी ${ev.length} दर्ज दुर्घटनाओं में से ${nin} इनके भीतर हैं (संयोग से लगभग ${(ev.length*B.share).toFixed(1)} की अपेक्षा)।`,`${nin} of your ${ev.length} recorded accidents fall inside them (about ${(ev.length*B.share).toFixed(1)} expected by chance).`):''}</p></section>`;}
 const _caut256=NEWT.caution;NEWT.caution=function(ch){let h=_caut256(ch);try{const b=bgBlock(ch),k=h.indexOf('<section class="blk ca4 c7"');h=k>=0?h.slice(0,k)+b+h.slice(k):h+b;}catch(e){console.error(e);}return h;};
+
+// ===== v25.6: fuller maraka picture — associates, secondary killers (functional-malefic lords of 6/8/12), nodes through their nakshatra lord, and natal tara (vadh / vipat / pratyak) =====
+function mkX(ch){if(ch._mkx)return ch._mkx;const x=clX(ch),P=ch.planets,L1=lordOf(ch,1),m=clMaraka(ch,0,0),R={};const add=(i,g,en,hi)=>{(R[i]=R[i]||{i,g:9,why:[]});R[i].g=Math.min(R[i].g,g);R[i].why.push(C(hi,en));};
+ m.prim.forEach(i=>add(i,1,`lord of ${housesRuled(ch,i).filter(h=>h===2||h===7).join(' & ')}`,`${housesRuled(ch,i).filter(h=>h===2||h===7).join(' व ')} भाव का स्वामी`));
+ m.sec.forEach(i=>add(i,2,x.inH(2).includes(i)||x.inH(7).includes(i)?`placed in house ${P[i].house}`:'joined with a maraka lord',x.inH(2).includes(i)||x.inH(7).includes(i)?`${P[i].house}वें भाव में स्थित`:'मारकेश के साथ'));
+ if(m.satRel)add(6,2,'Saturn linked to the marakas','शनि मारकों से संबद्ध');
+ // BPHS: when the maraka periods do not fall, lords of 12, 6 and 8 (functional malefics) can kill; the lagna lord is exempt
+ [12,6,8].forEach(h=>{const L=lordOf(ch,h);if(L===L1||m.prim.includes(L))return;if(funcNature(ch,L)==='fm')add(L,3,`lord of ${h}, a functional malefic (secondary killer)`,`${h}वें भाव का स्वामी, पापी स्वभाव (गौण मारक)`);});
+ // nodes act for their nakshatra lord and dispositor
+ [7,8].forEach(i=>{const nl=P[i].kp.nl,ds=SIGN_LORD[P[i].sign];[nl,ds].forEach((q,k)=>{if(q===i)return;const role=m.prim.includes(q)?C('मारकेश','a maraka lord'):q===lordOf(ch,8)?C('अष्टमेश','the 8th lord'):null;if(role)add(i,2,`${k?'its sign lord':'its nakshatra lord'} ${pn(q)} is ${role}`,`${k?'राशि स्वामी':'नक्षत्र स्वामी'} ${pn(q)} ${role} है`);});});
+ // tara of each planet's nakshatra counted from the janma nakshatra
+ const TB={2:['Vipat','विपत'],4:['Pratyak','प्रत्यरि'],6:['Vadh (Naidhana)','वध (नैधन)']};
+ const tara=[0,2,3,4,5,6,7,8].map(i=>({i,t:((P[i].nak-P[1].nak+27)%27)%9})).filter(o=>TB[o.t]);
+ tara.forEach(o=>{if(R[o.i])R[o.i].why.push(C(`${TB[o.t][1]} तारा में`,`in ${TB[o.t][0]} tara`));});
+ return ch._mkx={R,tara,TB,list:Object.values(R).sort((a,b)=>a.g-b.g)};}
+function mkGroup(ch,L){const r=mkX(ch).R[L];return r?r.g:0;}
+function mkHTML(ch){const M=mkX(ch),P=ch.planets,G={1:C('प्रधान मारक','Primary maraka'),2:C('सहायक मारक','Supporting maraka'),3:C('गौण मारक','Secondary killer')};
+ const nk=i=>L(NK)[P[i].nak];
+ return `<h4>${C('मारक ग्रह — पूरा चित्र','Maraka planets — full picture')}</h4><ul class="fx vsfx">${M.list.map(r=>`<li class="neg"><b>${pn(r.i)}</b> <span class="rk ${r.g===1?'chal':'mixed'}">${G[r.g]}</span><br><span class="note">${r.why.join(' · ')}</span></li>`).join('')}</ul>
+  ${M.tara.length?`<p><b>${C('जन्म नक्षत्र से कठिन तारा में ग्रह','Planets in difficult taras from the janma nakshatra')}</b> (${C('जन्म नक्षत्र','janma nakshatra')} ${nk(1)}): ${M.tara.map(o=>`${pn(o.i)} — ${nk(o.i)} (${C('स्वामी','lord')} ${pn(P[o.i].kp.nl)}), ${C(M.TB[o.t][1],M.TB[o.t][0])}`).join('; ')}</p>`:''}
+  <p class="note">${C('परंपरा: 2/7 के स्वामी प्रधान मारक; उनमें बैठे या उनसे युक्त ग्रह सहायक; शनि इनसे जुड़े तो सबसे प्रबल। मारक दशा न आए तो 12वें, 6ठे, 8वें के पापी स्वामी की दशा (लग्नेश को छोड़कर)। राहु-केतु अपने नक्षत्र व राशि स्वामी का फल देते हैं। वध तारा (7वीं) में बैठे ग्रह की दशा शरीर के लिए सबसे कठिन मानी जाती है, फिर विपत (3री) व प्रत्यरि (5वीं)। ये संकेत संवेदनशील काल बताते हैं — एक संकेत से निर्णय न करें।','Tradition: lords of 2 and 7 are the primary marakas; planets in those houses or joined with their lords support them; Saturn linked to them is the strongest. If no maraka period falls, the periods of the malefic lords of 12, 6 and 8 (the lagna lord excepted). Rahu and Ketu give the results of their nakshatra and sign lords. A planet in Vadh tara (7th) gives the hardest period for the body, then Vipat (3rd) and Pratyak (5th). These mark sensitive periods — never judge from one indication.')}</p>`;}
+if(typeof renderShastriya0==='function'){const _rs257=renderShastriya0;renderShastriya0=function(ch){let h=_rs257(ch);try{const k=h.indexOf(`<h4>${C('मारक ग्रह','Maraka planets')}</h4>`);if(k>=0){const e=h.indexOf('</p>',k)+4;h=h.slice(0,e)+mkHTML(ch)+h.slice(e);}}catch(e){console.error(e);}return h;};}
 
 </script>
 <nav id="bnav" aria-label="Main"></nav>
