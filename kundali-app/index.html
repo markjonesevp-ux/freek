@@ -10810,6 +10810,112 @@ function mkHTML(ch){const M=mkX(ch),P=ch.planets,G={1:C('प्रधान म�
   <p class="note">${C('परंपरा: 2/7 के स्वामी प्रधान मारक; उनमें बैठे या उनसे युक्त ग्रह सहायक; शनि इनसे जुड़े तो सबसे प्रबल। मारक दशा न आए तो 12वें, 6ठे, 8वें के पापी स्वामी की दशा (लग्नेश को छोड़कर)। राहु-केतु अपने नक्षत्र व राशि स्वामी का फल देते हैं। वध तारा (7वीं) में बैठे ग्रह की दशा शरीर के लिए सबसे कठिन मानी जाती है, फिर विपत (3री) व प्रत्यरि (5वीं)। ये संकेत संवेदनशील काल बताते हैं — एक संकेत से निर्णय न करें।','Tradition: lords of 2 and 7 are the primary marakas; planets in those houses or joined with their lords support them; Saturn linked to them is the strongest. If no maraka period falls, the periods of the malefic lords of 12, 6 and 8 (the lagna lord excepted). Rahu and Ketu give the results of their nakshatra and sign lords. A planet in Vadh tara (7th) gives the hardest period for the body, then Vipat (3rd) and Pratyak (5th). These mark sensitive periods — never judge from one indication.')}</p>`;}
 if(typeof renderShastriya0==='function'){const _rs257=renderShastriya0;renderShastriya0=function(ch){let h=_rs257(ch);try{const k=h.indexOf(`<h4>${C('मारक ग्रह','Maraka planets')}</h4>`);if(k>=0){const e=h.indexOf('</p>',k)+4;h=h.slice(0,e)+mkHTML(ch)+h.slice(e);}}catch(e){console.error(e);}return h;};}
 
+// ===== v25.7: deep area analysis with the same principles as the maraka/accident work — significator groups (lords, occupants, karakas, nodes via their nakshatra/sign lord),
+// obstructors (6/8/12 counted from the house), natal tara, period timing, slow background transits, check on recorded events; and relatives who trouble you, with their nature =====
+const GH_TQ=['जन्म','संपत','विपत','क्षेम','प्रत्यरि','साधक','वध','मित्र','अतिमित्र'];
+function ghTara(ch,i){const P=ch.planets;return ((P[i].nak-P[1].nak+27)%27)%9;}
+function ghTaraTxt(ch,i){const t=ghTara(ch,i);return {t,bad:[2,4,6].includes(t),txt:C(GH_TQ[t],TARA.en[t])};}
+const GH_AREAS=[
+ {k:'money',H:[2,11],kar:[4],ev:['wealth','recovery','speculation','legacy'],hi:'धन व आय',en:'Money and income',ic:'💰',
+  good:['धन संचय, आय के नए स्रोत, बचत व निवेश में वृद्धि','savings, new sources of income, growth of investments'],bad:['खर्च, उधार में फँसा पैसा, अचानक हानि','expenses, money stuck in loans, sudden loss']},
+ {k:'rise',H:[10],kar:[0,6],ev:['career','job','promotion','selection','fame'],hi:'उन्नति व पद',en:'Career rise and status',ic:'📈',
+  good:['पदोन्नति, नई ज़िम्मेदारी, मान-सम्मान','promotion, new responsibility, recognition'],bad:['रुकावट, अधिकारी से तनाव, पद पर दबाव','obstacles, friction with superiors, pressure on position']},
+ {k:'biz',H:[7,10],kar:[3],ev:['business','newpartner'],hi:'व्यापार व साझेदारी',en:'Business and partnership',ic:'🏪',
+  good:['व्यापार विस्तार, अच्छे साझेदार, सौदों में लाभ','business expansion, good partners, profitable deals'],bad:['साझेदार से विवाद, सौदे अटकना, धोखे का भय','disputes with partners, stuck deals, risk of being cheated']},
+ {k:'family',H:[2,4,7],kar:[5,1],ev:['marriage','children','house'],hi:'पारिवारिक जीवन',en:'Family life',ic:'🏡',
+  good:['घर में सुख-शांति, जीवनसाथी से सामंजस्य, परिवार में शुभ कार्य','peace at home, harmony with the spouse, auspicious family events'],bad:['घर में तनाव, वाणी से कलह, जीवनसाथी से दूरी','tension at home, quarrels from harsh words, distance from the spouse']}];
+function ghGroups(ch,A){const x=clX(ch),P=ch.planets,L1=lordOf(ch,1),R={};const add=(i,g,hi,en)=>{const r=R[i]=R[i]||{i,g:9,why:[]};if(g==='o'){r.o=1;}else r.g=Math.min(r.g,g);r.why.push(C(hi,en));};
+ const prim=[...new Set(A.H.map(h=>lordOf(ch,h)))];
+ prim.forEach(i=>add(i,1,`${A.H.filter(h=>lordOf(ch,h)===i).join(' व ')} भाव का स्वामी`,`lord of ${A.H.filter(h=>lordOf(ch,h)===i).join(' & ')}`));
+ A.H.forEach(h=>x.inH(h).forEach(i=>add(i,2,`${h}वें भाव में`,`in house ${h}`)));
+ P.forEach(p=>{if(prim.some(k=>x.conj(k,p.i)))add(p.i,2,'भावेश के साथ','with the house lord');});
+ A.kar.forEach(i=>add(i,2,'नैसर्गिक कारक','natural karaka'));
+ [7,8].forEach(i=>{const nl=P[i].kp.nl,ds=SIGN_LORD[P[i].sign];if(prim.includes(nl))add(i,2,`नक्षत्र स्वामी ${pn(nl)} भावेश`,`nakshatra lord ${pn(nl)} is a house lord`);else if(prim.includes(ds))add(i,2,`राशि स्वामी ${pn(ds)} भावेश`,`sign lord ${pn(ds)} is a house lord`);});
+ // obstructors: lords of 6, 8, 12 counted from the main house, when linked to the house or its lord (lagna lord exempt)
+ const H0=A.H[0];[[6,'विवाद/बाधा','disputes/obstacles'],[8,'अचानक हानि','sudden setbacks'],[12,'व्यय/हानि','expense/loss']].forEach(([n,th,te])=>{const h=((H0-1+n-1)%12)+1,L=lordOf(ch,h);if(L===L1)return;
+  const link=A.H.some(hh=>P[L].house===hh||x.aspH(L,hh))||prim.some(k=>x.rel(L,k));if(link)add(L,'o',`${H0}वें से ${n}वाँ स्वामी, जुड़ा हुआ — ${th}`,`lord of the ${n}th from house ${H0}, linked — ${te}`);});
+ Object.values(R).forEach(r=>{const t=ghTaraTxt(ch,r.i);r.t=t;r.st=bkStrong(ch,r.i);if(t.bad)r.why.push(C(`${t.txt} तारा`,`${t.txt} tara`));});
+ return R;}
+function ghPromise(ch,A,R){const x=clX(ch),P=ch.planets;let s=0;const why=[];const prim=Object.values(R).filter(r=>r.g===1);
+ prim.forEach(r=>{s+=r.st*0.8;why.push([r.st>=0.5?'+':r.st<=-0.5?'−':'•',C(`${pn(r.i)} (भावेश) — ${r.st>=0.5?'बलवान':r.st<=-0.5?'कमज़ोर':'मध्यम'}, ${P[r.i].house}वें भाव में`,`${pn(r.i)} (house lord) — ${r.st>=0.5?'strong':r.st<=-0.5?'weak':'medium'}, in house ${P[r.i].house}`)]);
+  if([6,8,12].includes(P[r.i].house)&&!A.H.includes(P[r.i].house)){s-=0.5;}});
+ A.H.forEach(h=>{const sg=(ch.lagna+h-1)%12,sv=ch.av.sav[sg];const v=sv>=30?0.6:sv<25?-0.6:0;s+=v;if(v)why.push([v>0?'+':'−',C(`${h}वें भाव में ${sv} सर्वाष्टक बिंदु`,`${sv} SAV points in house ${h}`)]);
+  if(x.aspH(4,h)||P[4].house===h){s+=0.5;why.push(['+',C(`गुरु की दृष्टि/स्थिति ${h}वें भाव पर`,`Jupiter aspects/occupies house ${h}`)]);}
+  const ml=x.inH(h).filter(i=>[2,6,7,8].includes(i));if(ml.length){s-=0.3*ml.length;why.push(['−',C(`${h}वें भाव में ${ml.map(pn).join(', ')}`,`${ml.map(pn).join(', ')} in house ${h}`)]);}});
+ const bt=prim.filter(r=>r.t.bad);if(bt.length){s-=0.3*bt.length;}
+ return {s,why,lv:s>=1.2?2:s>=0?1:0};}
+function ghPeriods(ch,A,R,from,to){const out=[];const good=i=>R[i]&&R[i].g<=2,obs=i=>R[i]&&R[i].o&&R[i].g>2,mix=i=>R[i]&&R[i].o&&R[i].g<=2;
+ ch.dasha.mds.forEach(md=>md.ads.forEach(ad=>{if(ad.end<from||ad.start>to)return;const a=ad.lord,m=md.lord;let v=0;
+  if(good(a))v+=(R[a].g===1?1.2:0.8)*(mix(a)?0.5:1);if(good(m))v+=mix(m)?0.25:0.5;if(obs(a))v-=1;if(obs(m))v-=0.4;if(R[a]&&R[a].t.bad)v-=0.3;if(R[a]&&R[a].st>=0.8)v+=0.2;if(R[a]&&R[a].st<=-0.6)v-=0.2;
+  out.push({md:m,ad:a,start:ad.start,end:ad.end,v});}));return out;}
+function ghSlow(ch,A,R){const now=julianNow(),P=ch.planets,prim=Object.values(R).filter(r=>r.g===1).map(r=>r.i);
+ const tg=new Map();A.H.forEach(h=>tg.set((ch.lagna+h-1)%12,C(`${h}वाँ भाव`,`house ${h}`)));prim.forEach(i=>{if(!tg.has(P[i].sign))tg.set(P[i].sign,C(`जन्म ${pn(i)}`,`natal ${pn(i)}`));});
+ const out=[],open={},st=10,to=now+10*365.25;for(let j=now-3*365.25;j<=to;j+=st){const tr=transitAt(ch,j,true);[4,6,7,8].forEach(i=>{const s=tr[i].sign,on=tg.has(s),k=i+':'+s;
+  Object.keys(open).filter(q=>q.startsWith(i+':')&&q!==k).forEach(q=>{open[q].end=j;out.push(open[q]);delete open[q];});if(on&&!open[k])open[k]={i,s,start:j,what:tg.get(s)};});}
+ Object.values(open).forEach(o=>{o.end=to;out.push(o);});
+ for(let k=out.length-1;k>0;k--){const a=out.findIndex((y,q)=>q<k&&y.i===out[k].i&&y.s===out[k].s&&out[k].start-y.end<240);if(a>=0){out[a].end=Math.max(out[a].end,out[k].end);out.splice(k,1);}}
+ return out.filter(o=>o.end>now).sort((a,b)=>a.start-b.start);}
+function ghCheck(ch,A,R){const ev=getPev(ch).filter(e=>A.ev.includes(e.k)&&!e.ap).map(e=>julian(...e.d.split('-').map(Number),12-ch.inp.tz)).filter(j=>j>ch.jd&&j<julianNow());if(!ev.length)return '';
+ const all=ghPeriods(ch,A,R,ch.jd,julianNow()),pos=all.filter(p=>p.v>=1);const share=pos.reduce((a,p)=>a+p.end-p.start,0)/Math.max(1,all.reduce((a,p)=>a+p.end-p.start,0));
+ const hit=ev.filter(j=>pos.some(p=>j>=p.start&&j<=p.end)).length;
+ return `<p class="note">🎯 ${C(`आपकी ${ev.length} दर्ज घटनाओं में से ${hit} इन अनुकूल अवधियों में आईं; ये अवधियाँ जीवन का ${Math.round(share*100)}% हैं, यानी संयोग से लगभग ${(ev.length*share).toFixed(1)} की अपेक्षा।`,`${hit} of your ${ev.length} recorded events fell in these favourable periods; they cover ${Math.round(share*100)}% of life, so about ${(ev.length*share).toFixed(1)} would be expected by chance.`)}</p>`;}
+function ghArea(ch,A){const R=ghGroups(ch,A),pr=ghPromise(ch,A,R),now=julianNow(),P=ch.planets;const list=Object.values(R);
+ const sup=list.filter(r=>r.g<=2).sort((a,b)=>a.g-b.g),obs=list.filter(r=>r.o&&r.g>2);
+ const per=ghPeriods(ch,A,R,now,now+15*365.25),cur=per.find(p=>p.start<=now&&p.end>now),nxtG=per.filter(p=>p.v>=1&&p.start>now).slice(0,4),nxtB=per.filter(p=>p.v<=-0.6&&p.end>now).slice(0,3);
+ const slow=ghSlow(ch,A,R);const LV=[C('कमज़ोर — प्रयास व उपाय से','weak — with effort and remedies'),C('मध्यम','medium'),C('मज़बूत','strong')];
+ const pl=r=>`<li class="${r.o&&r.g>2?'neg':r.g===1&&!r.o?'pos':''}"><b>${pn(r.i)}</b>${r.o&&r.g<=2?` <span class="rk mixed">${C('मिश्रित','mixed')}</span>`:''} <span class="note">${r.why.join(' · ')}</span></li>`;
+ const prl=p=>`<li class="${p.v>=1?'pos':p.v<=-0.6?'neg':''}"><b>${pn(p.md)}/${pn(p.ad)}</b> <span class="pstyr">${fdate(Math.max(p.start,now))} – ${fdate(p.end)}</span></li>`;
+ const verdict=cur?(cur.v>=1?C('अभी अनुकूल काल चल रहा है — ','A favourable period is running now — ')+C(A.good[0],A.good[1]):cur.v<=-0.6?C('अभी बाधा का काल है — ','An obstructing period is running now — ')+C(A.bad[0],A.bad[1]):C('अभी सामान्य काल — मेहनत के अनुसार फल।','An ordinary period now — results follow effort.')):'';
+ const body=`<p><b>${C('जन्म कुंडली का वादा','Promise in the birth chart')}:</b> <span class="rk ${['chal','mixed','strong'][pr.lv]}">${LV[pr.lv]}</span></p>
+  <ul class="fx vsfx">${pr.why.map(w=>`<li class="${w[0]==='+'?'pos':w[0]==='−'?'neg':''}"><b>${w[0]}</b> ${w[1]}</li>`).join('')}</ul>
+  ${cur?`<p><b>${C('अभी','Now')}:</b> ${pn(cur.md)}/${pn(cur.ad)} — ${verdict}</p>`:''}
+  <h4>${C('फल देने वाले ग्रह','Planets that give results')}</h4><ul class="fx vsfx">${sup.map(pl).join('')}</ul>
+  ${obs.length?`<h4>${C('बाधा डालने वाले ग्रह','Obstructing planets')}</h4><ul class="fx vsfx">${obs.map(pl).join('')}</ul>`:''}
+  ${nxtG.length?`<h4>✅ ${C('अगले अनुकूल काल (अंतर्दशा)','Next favourable periods (antardasha)')}</h4><ul class="fx vsfx">${nxtG.map(prl).join('')}</ul>`:''}
+  ${nxtB.length?`<h4>⛔ ${C('सावधानी के काल','Periods needing care')}</h4><ul class="fx vsfx">${nxtB.map(prl).join('')}</ul>`:''}
+  ${slow.length?`<h4>🐢 ${C('धीमे ग्रहों के लंबे काल (अगले 10 वर्ष)','Long slow-planet periods (next 10 years)')}</h4><ul class="fx vsfx">${slow.slice(0,8).map(o=>`<li class="${o.i===4?'pos':'neg'}"><b>${pn(o.i)}</b> ${C('गोचर में','transiting')} ${o.what} (${sn(o.s)}) <span class="pstyr">${fdate(o.start)} – ${fdate(o.end)}</span>${o.start<now?` <span class="note">(${C('चल रहा','running')})</span>`:''} — ${o.i===4?C('वृद्धि व संरक्षण','growth and protection'):o.i===6?C('धीमा, मेहनत से स्थायी फल','slow, lasting results through effort'):C('अस्थिरता, भ्रम से बचें','instability, avoid confusion')}</li>`).join('')}</ul>`:''}
+  ${ghCheck(ch,A,R)}`;
+ return vsDet(`${A.ic} ${C(A.hi,A.en)}`,body,A.k==='money');}
+// ---- relatives: who may cause trouble, of what kind, and their nature as seen in your chart
+const GH_REL=[['father',9,0,'पिता','Father'],['mother',4,1,'माता','Mother'],['spouse',7,5,'जीवनसाथी','Spouse'],['child',5,4,'संतान','Children'],['ysib',3,2,'छोटे भाई-बहन','Younger siblings'],['esib',11,4,'बड़े भाई-बहन / मित्र','Elder siblings / friends'],['fil',3,0,'ससुर','Father-in-law'],['mil',10,1,'सास','Mother-in-law'],['inlaw',8,null,'ससुराल पक्ष','Spouse’s family'],['mama',6,3,'मामा / ननिहाल','Maternal uncle']];
+const GH_PN={0:['स्वाभिमानी, अधिकार जताने वाले, उदार पर अहंकारी','proud, authoritative, generous but egoistic'],1:['भावुक, देखभाल करने वाले, मूडी','emotional, caring, moody'],2:['साहसी, सीधे, जल्दी गुस्सा','bold, direct, quick to anger'],3:['बुद्धिमान, बातूनी, व्यावहारिक, कभी चालाक','clever, talkative, practical, at times cunning'],4:['ज्ञानी, सलाह देने वाले, धार्मिक, कभी उपदेशक','wise, advising, religious, at times preachy'],5:['मिलनसार, सुख-प्रिय, कला-प्रेमी, खर्चीले','sociable, comfort-loving, artistic, spendthrift'],6:['गंभीर, अनुशासित, मेहनती, कठोर या ठंडे','serious, disciplined, hard-working, stern or cold'],7:['महत्वाकांक्षी, अपरंपरागत, रहस्यमय, भ्रम या छल की प्रवृत्ति','ambitious, unconventional, secretive, can confuse or deceive'],8:['विरक्त, आध्यात्मिक, कम बोलने वाले, दूरी रखने वाले','detached, spiritual, reserved, keep a distance']};
+const GH_TR={6:['विवाद, प्रतिस्पर्धा, उधार या कानूनी उलझन','disputes, rivalry, debts or legal tangles'],8:['छिपा नुकसान, अचानक टूट, अपमान या विरासत विवाद','hidden harm, sudden breaks, humiliation or inheritance disputes'],12:['धन व्यय, दूरी या अलगाव','expense of money, distance or separation'],2:['गुस्सा व झगड़ा','anger and quarrels'],6.5:['ठंडापन, उपेक्षा, देरी','coldness, neglect, delays'],7:['धोखा, भ्रम, छल','deceit, confusion, manipulation'],8.5:['बेरुखी, दूरी','indifference, distance'],0:['अहंकार, दबदबा','ego, domination']};
+function ghRel(ch){const x=clX(ch),P=ch.planets,L1=lordOf(ch,1),L6=lordOf(ch,6),L8=lordOf(ch,8),L12=lordOf(ch,12);
+ const grp=[];GH_REL.forEach(r=>{const g=grp.find(q=>q[1]===r[1]);if(g){g[3]+=' / '+r[3];g[4]+=' / '+r[4];}else grp.push(r.slice());});
+ return grp.map(([k,H,K,hi,en])=>{const L=lordOf(ch,H);let t=0,h=0;const why=[],types=new Set();const hs=housesRuled(ch,L);
+  [6,8,12].forEach(d=>{if(hs.includes(d)&&H!==d&&L!==L1){t+=1;types.add(d);why.push(C(`भावेश ${pn(L)} आपके ${d}वें भाव का भी स्वामी`,`its lord ${pn(L)} also rules your ${d}th house`));}});
+  [[L6,6,0.7],[L8,8,0.5],[L12,12,0.4]].forEach(([q,d,w])=>{if(q!==L&&q!==L1&&x.rel(q,L)){t+=w;types.add(d);why.push(C(`${pn(L)} पर ${d}वें के स्वामी ${pn(q)} का प्रभाव`,`${pn(L)} influenced by the ${d}th lord ${pn(q)}`));}});
+  if(L!==L1){const r=((P[L].sign-P[L1].sign+12)%12)+1;if(r===6||r===8){t+=0.8;types.add(8);why.push(C(`${pn(L)} व लग्नेश ${pn(L1)} षडाष्टक (6/8) में`,`${pn(L)} and your lagna lord ${pn(L1)} in 6/8 (shadashtak)`));}
+   if(ENEMY[L1].includes(L)||ENEMY[L].includes(L1)){t+=0.5;why.push(C(`${pn(L)} लग्नेश ${pn(L1)} का नैसर्गिक शत्रु`,`${pn(L)} is a natural enemy of your lagna lord ${pn(L1)}`));}
+   else if(FRIEND[L1].includes(L)&&FRIEND[L].includes(L1)){h+=0.5;why.push(C(`${pn(L)} लग्नेश का मित्र`,`${pn(L)} is a friend of your lagna lord`));}}
+  else{h+=0.8;why.push(C('इस भाव का स्वामी आपका लग्नेश ही है','this house is ruled by your own lagna lord'));}
+  x.inH(H).filter(i=>[2,6,7,8].includes(i)).forEach(i=>{t+=0.4;types.add(i===2?2:i===6?6.5:i===7?7:8.5);why.push(C(`${H}वें भाव में ${pn(i)}`,`${pn(i)} in house ${H}`));});
+  if(x.aspH(4,H)||x.asp(4,L)||x.conj(4,L)){h+=0.5;why.push(C('गुरु की रक्षा','Jupiter’s protection'));}
+  const tq=ghTaraTxt(ch,L);if(tq.t===6){t+=0.6;why.push(C(`${pn(L)} वध तारा में`,`${pn(L)} in Vadh tara`));}else if(tq.bad){t+=0.3;why.push(C(`${pn(L)} ${tq.txt} तारा में`,`${pn(L)} in ${tq.txt} tara`));}
+  const fn=funcNature(ch,L);if(fn==='fm'&&L!==L1){t+=0.4;}else if(fn==='yk'||fn==='fb'){h+=0.3;}
+  const occ=x.inH(H).filter(i=>i<9&&i!==L).slice(0,2);
+  const nat=C(GH_PN[L][0],GH_PN[L][1])+(occ.length?C('; साथ में ',' ; also ')+occ.map(i=>C(GH_PN[i][0],GH_PN[i][1]).split(',')[0]).join(', '):'');
+  return {k,H,L,hi,en,t,h,net:t-h,why,types:[...types],nat};}).sort((a,b)=>b.net-a.net);}
+function ghRelHTML(ch){const R=ghRel(ch),bad=R.filter(r=>r.net>=1),good=R.filter(r=>r.net<=0).sort((a,b)=>a.net-b.net);const now=julianNow();
+ const nextAD=L=>{let o=null;ch.dasha.mds.forEach(md=>md.ads.forEach(ad=>{if(!o&&ad.lord===L&&ad.end>now&&ad.start<now+20*365.25)o=ad;}));return o;};
+ const li=(r,neg)=>{const ad=nextAD(r.L);return `<li class="${neg?'neg':'pos'}"><b>${C(r.hi,r.en)}</b> <span class="note">(${r.H}${C('वाँ भाव','th house')}, ${C('स्वामी','lord')} ${pn(r.L)})</span>
+  <br>🧑 ${C('स्वभाव','Nature')}: ${r.nat}${neg&&r.types.length?`<br>⚠️ ${C('कष्ट का प्रकार','Kind of trouble')}: ${r.types.map(d=>C(GH_TR[d][0],GH_TR[d][1])).join('; ')}`:''}
+  ${neg&&ad?`<br>🕰️ ${C('यह रिश्ता अधिक सक्रिय','This relationship is most active')}: ${pn(ad.lord)} ${C('अंतर्दशा','antardasha')} ${fdate(Math.max(ad.start,now))} – ${fdate(ad.end)}`:''}
+  <br><span class="note">${r.why.join(' · ')}</span></li>`;};
+ return vsDet(`👥 ${C('जीवन में कष्ट देने वाले रिश्तेदार व उनका स्वभाव','Relatives who may cause trouble, and their nature')}`,
+  `<p class="note">${C('हर रिश्ते का भाव आपकी कुंडली में (पिता 9, माता 4, जीवनसाथी 7, संतान 5, छोटे भाई-बहन 3, बड़े 11, ससुर 3, सास 10, ससुराल 8, मामा 6)। कष्ट का संकेत: उस भाव का स्वामी आपके 6/8/12 भाव से जुड़ा हो, आपके लग्नेश से 6/8 में या शत्रु हो, पाप ग्रह उस भाव में हों, या स्वामी कठिन तारा में हो। गुरु की दृष्टि व लग्नेश से मित्रता बचाव करती है।','Each relation’s house in your chart (father 9, mother 4, spouse 7, children 5, younger siblings 3, elder 11, father-in-law 3, mother-in-law 10, spouse’s family 8, maternal uncle 6). Signs of trouble: that house lord linked to your 6/8/12, in 6/8 to or an enemy of your lagna lord, malefics in that house, or the lord in a difficult tara. Jupiter’s aspect and friendship with the lagna lord protect.')}</p>
+  ${bad.length?`<h4>⚠️ ${C('जिनसे कष्ट या तनाव की संभावना','Where trouble or friction is likely')}</h4><ul class="fx vsfx">${bad.map(r=>li(r,true)).join('')}</ul>`:`<p>${C('कोई रिश्ता स्पष्ट रूप से कष्टकारी नहीं दिखता।','No relationship clearly shows trouble.')}</p>`}
+  ${R.filter(r=>r.net>0&&r.net<1).length?`<p><b>⚖️ ${C('मिश्रित / सामान्य','Mixed / ordinary')}:</b> ${R.filter(r=>r.net>0&&r.net<1).map(r=>C(r.hi,r.en)).join(', ')}</p>`:''}
+  ${good.length?`<h4>🤝 ${C('सहयोगी रिश्ते','Supportive relationships')}</h4><ul class="fx vsfx">${good.slice(0,4).map(r=>li(r,false)).join('')}</ul>`:''}
+  <p class="note">${C('यह रिश्ते को वैसा दिखाता है जैसा वह आपके जीवन में अनुभव होता है — उस व्यक्ति की अपनी कुंडली नहीं। एक भाव में उस श्रेणी के सभी लोग आते हैं (जैसे 9वें में पिता, गुरु, पिता-तुल्य लोग)। किसी व्यक्ति पर इसी आधार पर निर्णय न लें।','This shows a relationship as you experience it — not that person’s own chart. A house covers everyone of that kind (e.g. the 9th: father, teachers, father-figures). Do not judge a real person on this alone.')}</p>`,false);}
+function renderGahan(ch){const h=`<section class="blk"><h3>🔎 ${C('क्षेत्र-वार गहन विश्लेषण','Deep area analysis')}</h3><p class="note">${C('दुर्घटना और मारक विश्लेषण वाले ही सिद्धांत हर क्षेत्र पर: फल देने वाले ग्रह (भावेश, भाव में बैठे, कारक, नक्षत्र/राशि स्वामी के ज़रिए राहु-केतु), बाधा डालने वाले (उस भाव से 6/8/12 के जुड़े स्वामी), जन्म नक्षत्र से तारा, दशा-काल, धीमे ग्रहों के लंबे गोचर, और आपकी दर्ज घटनाओं पर जाँच।','The same principles as the accident and maraka analysis, applied to each area: planets that give results (house lords, occupants, karakas, Rahu/Ketu through their nakshatra/sign lords), obstructors (linked lords of the 6/8/12 from that house), tara from the janma nakshatra, dasha periods, long slow-planet transits, and a check on your recorded events.')}</p></section>`;
+ let b='';GH_AREAS.forEach(A=>{try{b+=ghArea(ch,A);}catch(e){console.error(e);}});let r='';try{r=ghRelHTML(ch);}catch(e){console.error(e);}return h+b+r;}
+NEWT.gahan=renderGahan;if(!TABS.includes('gahan'))TABS.push('gahan');
+Object.assign(I18N.en,{t_gahan:'Deep area analysis'});Object.assign(I18N.hi,{t_gahan:'क्षेत्र-वार गहन विश्लेषण'});
+(function(){const r=SEC18.find(s=>s[0]==='read');const g=r&&r[2].find(x=>x[0]==='g18_full');if(g&&!g[1].includes('gahan'))g[1].splice(2,0,'gahan');
+ IC18.gahan='🔎';D18.gahan=['Money, career rise, business, family life — who gives, who obstructs, when; relatives who trouble you and their nature','धन, उन्नति, व्यापार, पारिवारिक जीवन — कौन देगा, कौन रोकेगा, कब; कष्ट देने वाले रिश्तेदार व उनका स्वभाव'];
+ if(typeof RB_SKIP!=='undefined'&&!RB_SKIP.includes('gahan'))RB_SKIP.push('gahan');if(typeof FR_TABS!=='undefined'){const f=FR_TABS.find(x=>x[0]==='read');if(f&&!f[1].includes('gahan'))f[1].push('gahan');}})();
+
 </script>
 <nav id="bnav" aria-label="Main"></nav>
 </body></html>
