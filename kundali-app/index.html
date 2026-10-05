@@ -10704,6 +10704,45 @@ function edAfter(ch,jd){const d=dasha5At(ch,jd);if(!d)return '';const P=ch.plane
   ${nl?`<p><b>📜 ${C('आगे के प्रत्यंतर (पुस्तक अध्याय 17)','Following pratyantars (book ch. 17)')}</b></p><ul class="fx vsfx">${nl}</ul>`:''}`;}
 const _evDeep253b=evDeep;evDeep=function(ch,jd){let h=_evDeep253b(ch,jd);if(!h)return h;try{const a=edAfter(ch,jd);const k=h.indexOf('<h4>👨‍👩‍👧');h=k>=0?h.slice(0,k)+a+h.slice(k):h.replace('</section>',a+'</section>');}catch(e){console.error(e);}return h;};
 
+// ===== v25.3: transit of the dasha lords themselves (rule of double prediction: the running MD/AD/PD lords' own transit) =====
+// Linear: house of each transiting dasha lord from lagna and from the Moon (event houses support; 6/8/12 obstruct unless they are event houses).
+// Dynamic: its transit counted from its own natal sign (1/5/9 supports, 6/8/12 obstructs). Weights MD 0.5, AD 1, PD 0.8.
+CT_W.dlt=0.7;
+function dltEval(ch,key,md,ad,pd,jd,tr){const d=pDef(key);if(!d)return null;tr=tr||transitAt(ch,jd,true);const P=ch.planets,good=new Set([d.H,...d.sup]),dus=[6,8,12].filter(h=>!good.has(h));
+ let s=0;const rows=[];[['md',md,0.5],['ad',ad,1],['pd',pd,0.8]].forEach(([k,L,w])=>{if(L==null)return;const t=tr[L],why=[];let v=0;
+  const asp=signAspects(L).map(x=>((t.fl-1+x-1)%12)+1);
+  if(good.has(t.fl)){v+=1;why.push(['+',C(`लग्न से ${t.fl}वें — घटना का भाव`,`${t.fl} from lagna — an event house`)]);}
+  else if(good.has(t.fm)){v+=0.7;why.push(['+',C(`चंद्र से ${t.fm}वें — घटना का भाव`,`${t.fm} from the Moon — an event house`)]);}
+  else if(asp.includes(d.H)){v+=0.5;why.push(['+',C(`${d.H}वें भाव पर दृष्टि`,`aspects house ${d.H}`)]);}
+  if(dus.includes(t.fl)){v-=1;why.push(['−',C(`लग्न से ${t.fl}वें (बाधा भाव)`,`${t.fl} from lagna (obstructing house)`)]);}
+  const rel=((t.sign-P[L].sign+12)%12)+1;if([1,5,9].includes(rel)){v+=0.3;why.push(['+',C(`जन्म स्थिति से ${rel}वें`,`${rel} from its natal sign`)]);}else if([6,8,12].includes(rel)){v-=0.3;why.push(['−',C(`जन्म स्थिति से ${rel}वें`,`${rel} from its natal sign`)]);}
+  if(t.retro&&L>1&&L<7)why.push(['•',C('वक्री — परिणाम दोहराव/देरी के साथ','retrograde — results with review or delay')]);
+  s+=v*w;rows.push({k,L,t,v,why});});
+ return {s,v:s>=1?1:s<=-0.5?-1:0,rows,d};}
+function dltAdd(r,ch,key,md,ad,pd,jd,tr){if(!r||!ch||r.T.some(x=>x.k==='dlt'))return r;const e=dltEval(ch,key,md,ad,pd,jd,tr);if(!e)return r;
+ r.T.push({k:'dlt',v:e.v,w:CT_W.dlt});const ws=r.T.reduce((a,x)=>a+x.v*x.w,0),wt=r.T.reduce((a,x)=>a+x.w,0);r.score=ws/wt;r.agree=r.T.filter(x=>x.v>0).length;r.n=r.T.length;return r;}
+const _ctDlt=(ch,key,md,ad,pd,jd,tr)=>dltAdd(_ctSaw(ch,key,md,ad,pd,jd,tr),ch,key,md,ad,pd,jd,tr);
+rkBacktest=(0,eval)('('+rkBacktest.toString().replace(/_ctSaw\(/g,'_ctDlt(')+')');
+convergeTiming=function(ch,key,md,ad,pd,jd,tr){const r=_ctDlt(ch,key,md,ad,pd,jd,tr);if(!r||!ch)return r;const b=S.rkb&&S.rkb.key&&S.rkb.key.startsWith('rk'+ch.jd)?S.rkb:null;if(!b||!b.on)return r;
+ let ws=0,wt=0;r.T.forEach(t=>{const w=t.w*(b.mult[t.k]||1);ws+=t.v*w;wt+=w;});r.score=wt?ws/wt:r.score;r.cal=true;return r;};
+Object.assign(I18N.en.ipTN,{dlt:'Transit of the dasha lords'});Object.assign(I18N.hi.ipTN,{dlt:'दशा स्वामियों का गोचर'});
+// ---- card on the transit page: where the running dasha lords are now, and which areas they support
+const DLT_EV=['marriage','job','business','children','house','vehicle','foreign','wealth','exam','illness'];
+const DLT_LB={marriage:['विवाह','marriage'],job:['नौकरी / पदोन्नति','job / promotion'],business:['व्यापार / साझेदारी','business / partnership'],children:['संतान','children'],house:['घर / संपत्ति','house / property'],vehicle:['वाहन','vehicle'],foreign:['विदेश','foreign'],wealth:['धन लाभ','money gains'],exam:['परीक्षा / शिक्षा','exams / studies'],illness:['रोग (सावधानी)','illness (caution)']};
+function dltBlock(ch,jd){const da=dashaAt(ch,jd);if(!da)return '';const tr=transitAt(ch,jd,true),P=ch.planets,lv={md:C('महादशा','Mahadasha'),ad:C('अंतर्दशा','Antardasha'),pd:C('प्रत्यंतर','Pratyantar')};
+ const rows=[['md',da.md.lord],['ad',da.ad.lord],['pd',da.pd.lord]].map(([k,L])=>{const t=tr[L],rel=((t.sign-P[L].sign+12)%12)+1;
+  return `<tr><td>${lv[k]}</td><td><b>${pn(L)}</b>${t.retro&&L>1&&L<7?' ℞':''}</td><td>${sn(t.sign)}</td><td>${t.fl}</td><td>${t.fm}</td><td>${rel}</td></tr>`;}).join('');
+ const ev=DLT_EV.filter(k=>pDef(k)).map(k=>({k,e:dltEval(ch,k,da.md.lord,da.ad.lord,da.pd.lord,jd,tr)})).filter(x=>x.e);
+ const lab=k=>C(DLT_LB[k][0],DLT_LB[k][1]);
+ const sup=ev.filter(x=>x.e.v>0).sort((a,b)=>b.e.s-a.e.s),obs=ev.filter(x=>x.e.v<0).sort((a,b)=>a.e.s-b.e.s);
+ return `<section class="blk dlt"><h3>🔑 ${C('दशा स्वामियों का गोचर (दोहरी भविष्यवाणी नियम)','Transit of the dasha lords (rule of double prediction)')}</h3>
+  <p class="note">${C('दशा वादा करती है, गोचर उसे सक्रिय करता है — और सबसे अधिक वज़न चल रहे महादशा, अंतर्दशा व प्रत्यंतर स्वामियों के अपने गोचर का होता है। रेखीय: लग्न/चंद्र से भाव; गतिशील: अपनी जन्म स्थिति से गिनती।','The dasha promises, the transit delivers — and the most weight goes to the transit of the running MD, AD and PD lords themselves. Linear: house from lagna/Moon; dynamic: counted from the planet’s own natal sign.')}</p>
+  <table class="tbl"><thead><tr><th>${C('स्तर','Level')}</th><th>${C('स्वामी','Lord')}</th><th>${C('राशि','Sign')}</th><th>${C('लग्न से','From lagna')}</th><th>${C('चंद्र से','From Moon')}</th><th>${C('जन्म स्थिति से','From natal')}</th></tr></thead><tbody>${rows}</tbody></table>
+  ${sup.length?`<p><b>✅ ${C('अभी समर्थित विषय','Areas supported now')}:</b> ${sup.map(x=>lab(x.k)).join(', ')}</p>`:''}
+  ${obs.length?`<p><b>⛔ ${C('अभी बाधित विषय','Areas obstructed now')}:</b> ${obs.map(x=>lab(x.k)).join(', ')}</p>`:''}
+  <p class="note">${C('यह नियम एकीकृत फलादेश के समय-निर्धारण में एक कारक के रूप में जुड़ा है और "पद्धतियों की मान्यता" पेज पर आपकी दर्ज घटनाओं पर परखा जाता है। लेख में दिए प्रतिशत (75%, 70–85%) किसी प्रकाशित अध्ययन से नहीं हैं, इसलिए उपयोग नहीं किए गए।','This rule is added as one factor in the unified timing and is tested on your recorded events on the "Method reliability" page. The percentages quoted for it (75%, 70–85%) do not come from any published study, so they are not used.')}</p></section>`;}
+if(NEWT.tr){const _tr254=NEWT.tr;NEWT.tr=function(ch){const h=_tr254(ch);let a='';try{a=dltBlock(ch,julianNow());}catch(e){console.error(e);}return ipInsert(h,a);};}
+
 </script>
 <nav id="bnav" aria-label="Main"></nav>
 </body></html>
