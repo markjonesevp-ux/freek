@@ -10671,7 +10671,7 @@ C7.mode='A';
 const _c7At253b=c7At;c7At=function(ch,j,da,tr){const x=_c7At253b(ch,j,da,tr);if(!x)return x;if(C7.mode==='B'){x.kd=krDis(ch,x.da.md.lord,x.da.ad.lord,x.da.pd.lord);x.key=true;}return x;};
 const _c7Fin253b=c7Fin;c7Fin=function(x){_c7Fin253b(x);if(C7.mode==='B'&&x.kd!=null){x.D=0.5*x.kd;x.s=x.D+x.T;}return x;};
 function c7Evs(ch){return getPev(ch).filter(e=>e.k==='accident').map(e=>{const m=/^(\d{4})-(\d{2})-(\d{2})/.exec(e.d||'');return m?{j:julian(+m[1],+m[2],+m[3],12-ch.inp.tz),tol:e.ap?30:10}:null;}).filter(e=>e&&e.j>ch.jd+3*365.25&&e.j<julianNow());}
-function c7Pick(ch){const ev=c7Evs(ch),now=julianNow(),key='pk'+ch.jd+Math.floor(now)+ev.map(e=>Math.round(e.j)+'/'+e.tol).join(',');if(S.c7pk&&S.c7pk.key===key)return S.c7pk;
+function c7Pick(ch){if(bkOnly())return {key:'bk',n:0,mode:'A',h:{A:0,B:0},book:1};const ev=c7Evs(ch),now=julianNow(),key='pk'+ch.jd+Math.floor(now)+ev.map(e=>Math.round(e.j)+'/'+e.tol).join(',');if(S.c7pk&&S.c7pk.key===key)return S.c7pk;
  const r={key,n:ev.length,mode:'A',h:{A:0,B:0}};if(ev.length){const m0=C7.mode;['A','B'].forEach(m=>{C7.mode=m;const sm=c7Scan(ch,ch.jd+3*365.25,now),w=c7Windows(sm);r.h[m]=ev.filter(e=>w.some(x=>e.j>=x.start-e.tol&&e.j<=x.end+e.tol)).length;});C7.mode=m0;if(r.h.B>r.h.A)r.mode='B';}
  return S.c7pk=r;}
 function c7Use(ch){const p=c7Pick(ch);if(C7.mode!==p.mode||(S.c7&&(S.c7.mode||'A')!==p.mode)){C7.mode=p.mode;S.c7=null;}return p;}
@@ -10778,7 +10778,7 @@ function bgSpans(ch){const now=julianNow(),key='bg'+ch.jd+Math.floor(now/30);if(
  Object.values(open).forEach(o=>{if(o){o.end=to;out.push(o);}});out.sort((a,b)=>a.start-b.start);
  for(let k=out.length-1;k>0;k--){const a=out.findIndex((x,q)=>q<k&&x.i===out[k].i&&out[k].start-x.end<240);if(a>=0){out[a].end=Math.max(out[a].end,out[k].end);out.splice(k,1);}}
  const past=out.reduce((a,o)=>a+Math.max(0,Math.min(o.end,now)-Math.max(o.start,from)),0),share=past/(now-from);return S.bg={key,sp:out,share};}
-function bgBlock(ch){const B=bgSpans(ch),now=julianNow(),ev=getPev(ch).filter(e=>e.k==='accident').map(e=>({...e,j:julian(...e.d.split('-').map(Number),12-ch.inp.tz)}));
+function bgBlock(ch){if(bkOnly())return '';const B=bgSpans(ch),now=julianNow(),ev=getPev(ch).filter(e=>e.k==='accident').map(e=>({...e,j:julian(...e.d.split('-').map(Number),12-ch.inp.tz)}));
  const inS=e=>B.sp.some(o=>e.j>=o.start-(e.ap?30:0)&&e.j<=o.end+(e.ap?30:0)),nin=ev.filter(inS).length;
  const li=B.sp.filter(o=>o.end>ch.jd+3*365.25&&o.start<now+10*365.25).map(o=>{const hit=ev.filter(e=>e.j>=o.start-(e.ap?30:0)&&e.j<=o.end+(e.ap?30:0));const fut=o.end>now;
   return `<li class="${fut?'neg':hit.length?'neg':''}"><b>${pn(o.i)}</b> ${C('जन्म मंगल पर','over natal Mars')} <span class="pstyr">${fdate(o.start)} – ${fdate(o.end)}</span>${hit.length?` <span class="rk chal">${C('दर्ज दुर्घटना','recorded accident')}: ${hit.map(e=>(e.ap?'≈':'')+fdate(e.j)).join(', ')}</span>`:''}${fut?` <span class="note">(${o.start>now?C('आगे','upcoming'):C('चल रहा','running')})</span>`:''}</li>`;}).join('');
@@ -10960,7 +10960,7 @@ function lpEval(ch,md,ad){const P=ch.planets,x=clX(ch),L=h=>lordOf(ch,h),L1=L(1)
 CT_W.lp=0.6;
 // scores are compared with this chart's own average over all its antardashas (the raw rules lean negative)
 function lpNorm(ch){if(ch._lpn)return ch._lpn;const a=[];ch.dasha.mds.forEach(md=>md.ads.forEach(ad=>a.push(lpEval(ch,md.lord,ad.lord).s)));const mu=a.reduce((x,y)=>x+y,0)/a.length,sd=Math.sqrt(a.reduce((x,y)=>x+(y-mu)**2,0)/a.length)||1;return ch._lpn={mu,sd};}
-function lpZ(ch,md,ad){const n=lpNorm(ch);return (lpEval(ch,md,ad).s-n.mu)/n.sd;}
+function lpZ(ch,md,ad){if(bkOnly()){const s=lpEval(ch,md,ad).s;return s>=0.8?1:s<=-0.8?-1:0;}const n=lpNorm(ch);return (lpEval(ch,md,ad).s-n.mu)/n.sd;}
 function lpAdd(r,ch,key,md,ad,pd,jd,tr){if(!r||!ch||r.T.some(x=>x.k==='lp'))return r;const d=pDef(key);if(!d)return r;const z=lpZ(ch,md,ad);let v=z>=0.5?1:z<=-0.5?-1:0;if(d.neg)v=-v;
  r.T.push({k:'lp',v,w:CT_W.lp});const ws=r.T.reduce((a,x)=>a+x.v*x.w,0),wt=r.T.reduce((a,x)=>a+x.w,0);r.score=ws/wt;r.agree=r.T.filter(x=>x.v>0).length;r.n=r.T.length;return r;}
 const _ctLp=(ch,key,md,ad,pd,jd,tr)=>lpAdd(_ctDlt(ch,key,md,ad,pd,jd,tr),ch,key,md,ad,pd,jd,tr);
@@ -11135,7 +11135,7 @@ function mnAt(ch,j,full){const P=ch.planets,M=mnLords(ch),d=dashaAt(ch,j);if(!d)
  // 1. dasha lords as money significators / obstructors
  [[d.md.lord,0.5],[d.ad.lord,1],[d.pd.lord,0.4]].forEach(([L,w])=>{const r=M.R[L];if(!r)return;if(r.o&&r.g>2)add(-0.8*w,`${pn(L)} धन का बाधक`,`${pn(L)} obstructs money`);else if(r.g<=2)add((r.g===1?0.9:0.6)*w*(r.o?0.5:1),`${pn(L)} धन का कारक`,`${pn(L)} signifies money`);});
  // ★ own rule 1: a node's period gives the result of its sign lord; if that lord rules 2/11 and is debilitated/weak, money suffers
- [[d.md.lord,0.5],[d.ad.lord,1]].forEach(([L,w])=>{if(L<7)return;const ds=SIGN_LORD[P[L].sign];if((ds===M.L2||ds===M.L11)&&M.weak(ds))add(-1.2*w,`★ ${pn(L)} की दशा अपने राशि स्वामी ${pn(ds)} (धन/लाभेश, निर्बल) का फल देती है`,`★ ${pn(L)}'s period gives the results of its sign lord ${pn(ds)} (money lord, weak)`,1);});
+ [[d.md.lord,0.5],[d.ad.lord,1]].forEach(([L,w])=>{if(L<7||bkOnly())return;const ds=SIGN_LORD[P[L].sign];if((ds===M.L2||ds===M.L11)&&M.weak(ds))add(-1.2*w,`★ ${pn(L)} की दशा अपने राशि स्वामी ${pn(ds)} (धन/लाभेश, निर्बल) का फल देती है`,`★ ${pn(L)}'s period gives the results of its sign lord ${pn(ds)} (money lord, weak)`,1);});
  // 2. Laghu Parashari relation of MD/AD (relative to this chart)
  const z=lpZ(ch,d.md.lord,d.ad.lord);if(Math.abs(z)>=0.5)add(z>0?0.4:-0.4,`लघु पाराशरी: ${z>0?'अनुकूल':'प्रतिकूल'} दशा-संबंध`,`Laghu Parashari: ${z>0?'favourable':'unfavourable'} MD–AD relation`);
  // 3. transits
@@ -11145,7 +11145,7 @@ function mnAt(ch,j,full){const P=ch.planets,M=mnLords(ch),d=dashaAt(ch,j);if(!d)
  if(tr[6].good)add(0.3,'शनि गोचर चंद्र से शुभ','Saturn transit good from the Moon');else add(-0.3,'शनि गोचर चंद्र से अशुभ','Saturn transit adverse from the Moon');
  if(tr[4].good)add(0.3,'गुरु गोचर चंद्र से शुभ','Jupiter transit good from the Moon');
  // ★ own rule 2: Rahu/Ketu transiting the 2nd or 11th from lagna (or the money lords) unsettles money
- [7,8].forEach(i=>{if(tr[i].sign===h2||tr[i].sign===h11)add(-0.6,`★ ${pn(i)} गोचर में ${tr[i].sign===h2?'2रे':'11वें'} भाव पर`,`★ ${pn(i)} transiting the ${tr[i].sign===h2?'2nd':'11th'} house`,1);});
+ if(!bkOnly())[7,8].forEach(i=>{if(tr[i].sign===h2||tr[i].sign===h11)add(-0.6,`★ ${pn(i)} गोचर में ${tr[i].sign===h2?'2रे':'11वें'} भाव पर`,`★ ${pn(i)} transiting the ${tr[i].sign===h2?'2nd':'11th'} house`,1);});
  const jb=ch.av.bav&&ch.av.bav[4]?ch.av.bav[4][tr[4].sign]:null;if(jb!=null){if(jb>=5)add(0.3,`गुरु अष्टकवर्ग में ${jb} बिंदु`,`Jupiter has ${jb} bindus in its ashtakavarga`);else if(jb<=3)add(-0.3,`गुरु अष्टकवर्ग में ${jb} बिंदु`,`Jupiter has ${jb} bindus in its ashtakavarga`);}
  return {j,s,why,d};}
 function mnScan(ch){const now=julianNow(),key='mn'+ch.jd+Math.floor(now/30);if(S.mn&&S.mn.key===key)return S.mn;const out=[];for(let j=ch.jd+18*365.25;j<=now+12*365.25;j+=30.44){const x=mnAt(ch,j,false);if(x)out.push(x);}
@@ -11193,9 +11193,9 @@ const CL_NAT={0:['तेजस्वी, स्वाभिमानी, ने�
 function clSigEval(ch,S0){const [H,k,hi,en,hs,kar,neg,ev]=S0,A={H:hs,kar,ev,hi,en,good:['',''],bad:['','']};const R=ghGroups(ch,A),pr=ghPromise(ch,A,R),P=ch.planets,x=clX(ch);
  const own=[];
  // ★ rule 1: Rahu/Ketu in the group act through their sign lord — if that lord is weak/debilitated, they weaken this matter
- [7,8].forEach(i=>{const r=R[i];if(!r||r.o)return;const ds=SIGN_LORD[P[i].sign];if(R[ds]&&R[ds].g===1&&(P[ds].dign==='debil'||bkStrong(ch,ds)<=-0.6)){r.weakNode=ds;own.push(C(`★ ${pn(i)} इस विषय का फल अपने राशि स्वामी ${pn(ds)} (निर्बल) जैसा देगा — इसकी दशा में यह विषय दबेगा`,`★ ${pn(i)} gives this matter the result of its weak sign lord ${pn(ds)} — this matter is pressed in its period`));}});
+ if(!bkOnly())[7,8].forEach(i=>{const r=R[i];if(!r||r.o)return;const ds=SIGN_LORD[P[i].sign];if(R[ds]&&R[ds].g===1&&(P[ds].dign==='debil'||bkStrong(ch,ds)<=-0.6)){r.weakNode=ds;own.push(C(`★ ${pn(i)} इस विषय का फल अपने राशि स्वामी ${pn(ds)} (निर्बल) जैसा देगा — इसकी दशा में यह विषय दबेगा`,`★ ${pn(i)} gives this matter the result of its weak sign lord ${pn(ds)} — this matter is pressed in its period`));}});
  // ★ rule 3: primary lord in a difficult tara from the janma nakshatra delays the matter
- Object.values(R).filter(r=>r.g===1&&r.t&&r.t.t===6).forEach(r=>own.push(C(`★ स्वामी ${pn(r.i)} वध तारा में — इस विषय में देरी/अचानक रुकावट`,`★ lord ${pn(r.i)} in Vadh tara — delays or sudden stops in this matter`)));
+ if(!bkOnly())Object.values(R).filter(r=>r.g===1&&r.t&&r.t.t===6).forEach(r=>own.push(C(`★ स्वामी ${pn(r.i)} वध तारा में — इस विषय में देरी/अचानक रुकावट`,`★ lord ${pn(r.i)} in Vadh tara — delays or sudden stops in this matter`)));
  const prim=Object.values(R).filter(r=>r.g===1).map(r=>r.i),sup=Object.values(R).filter(r=>r.g<=2&&!r.o&&!prim.includes(r.i)).map(r=>r.i),obs=Object.values(R).filter(r=>r.o&&r.g>2).map(r=>r.i);
  return {S0,A,R,pr,prim,sup,obs,own};}
 function clSigPeriods(ch,E,from,to){const per=ghPeriods(ch,E.A,E.R,from,to);per.forEach(p=>{const r=E.R[p.ad];if(r&&r.weakNode!=null)p.v-=2;const m=E.R[p.md];if(m&&m.weakNode!=null)p.v-=0.6;});return per;}
@@ -11361,10 +11361,11 @@ function kpcSig(ch){if(ch._kpc)return ch._kpc;const P=ch.planets,W=Array(9).fill
 function kpcHouses(ch){const K=kpcSig(ch),c=K.L.sl,nl=ch.planets[c].kp.nl;return [...new Set([...sigThru(ch,c),...sigThru(ch,nl)])];}
 function kpcProf(ch){const K=kpcSig(ch),W=K.W,H=kpcHouses(ch),dec=[K.L.sl,ch.planets[K.L.sl].kp.nl];
  const one=([en,hi,pl,hs],own)=>{const ps=pl.split(' ').map(x=>KPP_PL[x]);if(!ps.every(p=>W[p]>=1))return null;const ws=ps.map(p=>W[p]);
+  if(bkOnly())return {en,hi,ps,hs,s:ws.reduce((a,b)=>a+b,0)/ws.length+0.35*(ps.length-1),own};
   let s=0.5*(ws.reduce((a,b)=>a+b,0)/ws.length)+0.5*Math.min(...ws)+0.15*(ps.length-1);
   if(hs){const h=hs.split(' ').map(Number);s+=0.8*h.filter(x=>H.includes(x)).length/h.length;}
   if(ps.some(p=>dec.includes(p)))s+=0.3;return {en,hi,ps,hs,s,own};};
- return [...KPP_COMB.map(r=>one(r,0)),...KPP_MOD.map(r=>one(r,1))].filter(Boolean).sort((a,b)=>b.s-a.s);}
+ return [...KPP_COMB.map(r=>one(r,0)),...(bkOnly()?[]:KPP_MOD).map(r=>one(r,1))].filter(Boolean).sort((a,b)=>b.s-a.s);}
 const KPC_HF={1:['अपनी मेहनत/नाम से काम','own effort and name'],2:['वित्त, वाणी, बिक्री की बातचीत','finance, speech, sales talk'],3:['संचार, फ़ोन, मार्केटिंग, लेखन, छोटी यात्राएँ','communication, phone, marketing, writing, short trips'],4:['ऑफ़िस/स्थायी जगह, भूमि-वाहन, शिक्षा','office/fixed place, land and vehicles, education'],5:['रचनात्मक काम, शिक्षण, सट्टा/निवेश','creative work, teaching, speculation/investment'],6:['नौकरी/सेवा, प्रशासन, रोज़मर्रा का काम, प्रतियोगिता','service, administration, daily work, competition'],7:['ग्राहक/जनता से व्यवहार, साझेदारी, व्यापार','dealing with clients/the public, partnership, business'],8:['शोध, जाँच-पड़ताल, बीमा, छिपी जानकारी','research, investigation, insurance, hidden information'],9:['सलाह, उच्च ज्ञान, कानून, विदेश','advice, higher knowledge, law, foreign'],10:['पद, प्रबंधन, अधिकार','position, management, authority'],11:['लक्ष्य, कमीशन, नेटवर्क, लाभ','targets, commission, network, gains'],12:['बैक-ऑफ़िस, विदेश, अस्पताल, अलग जगह','back office, foreign, hospital, separate places']};
 function kpcNature(ch){const K=kpcSig(ch),P=ch.planets,out=[];const add=(hi,en,v)=>out.push({t:C(hi,en),v:v||0});
  const HH=kpcHouses(ch).sort((a,b)=>a-b);add(`<b>कार्य-क्षेत्र (10वें कस्प का उप-स्वामी ${pn(K.L.sl)} व उसका नक्षत्र स्वामी ${pn(P[K.L.sl].kp.nl)} — KP में यही निर्णायक):</b> `+HH.map(h=>`${h} — ${KPC_HF[h][0]}`).join('; '),`<b>Field of work (10th cusp sub lord ${pn(K.L.sl)} and its star lord ${pn(P[K.L.sl].kp.nl)} — decisive in KP):</b> `+HH.map(h=>`${h} — ${KPC_HF[h][1]}`).join('; '),1);
@@ -11416,6 +11417,201 @@ function kpcBlock(ch){const K=kpcSig(ch),P=ch.planets,now=julianNow();const st=k
 if(NEWT.career){const _car264=NEWT.career;NEWT.career=function(ch){const h=_car264(ch);let a='';try{a=kpcBlock(ch);}catch(e){console.error(e);}return ipInsert(h,a);};}
 const _rKP264=renderKP;renderKP=function(ch){let h=_rKP264(ch);try{h=kpcBlock(ch)+h;}catch(e){console.error(e);}return h;};
 (function(){const st=document.createElement('style');st.textContent=`.kpcl{margin:4px 0 8px 18px;padding:0}.kpcl li{margin:3px 0}.kpcl li.own{background:rgba(255,200,0,.15);border-radius:6px}`;document.head.appendChild(st);})();
+
+// ===== v26.4: (1) "केवल ग्रंथ नियम" — a book-only switch that turns off Claude's ★ rules and event-tuned choices; (2) KP analysis of every house (KP Readers 1–2): promise from the cusp sub lord, significators in KP order, the books' own rules, KP timeline, date-fixing by Sun/Moon transit; (3) a road to sharper prediction: KP + Parashari + double transit, the mix checked leave-one-out on the native's own events =====
+function bkOnly(){return SET.bookOnly===true;}
+(function(){const v=CT_W.vimkp;Object.defineProperty(CT_W,'vimkp',{get(){return bkOnly()?1.3:v;},set(x){},enumerable:true,configurable:true});})();
+function bkClear(ch){['mn','c7pk','c7','bg','kpct','rkb','edb','chk','ipc','kpb','rcRes'].forEach(k=>{S[k]=null;});if(ch)Object.keys(ch).forEach(k=>{if(k[0]==='_')delete ch[k];});}
+function bkSet(on){SET.bookOnly=!!on;try{localStorage.setItem('kd_set2',JSON.stringify(SET));}catch(e){}bkClear(S.ch);const s=document.getElementById('bkSel');if(s)s.value=on?'1':'0';renderAll();}
+Object.assign(I18N.en,{bkLbl:'Book rules only',bkOff:'Off (with Claude’s ★ rules)',bkOn:'On (only the books)',t_kpbhava:'KP — every house'});
+Object.assign(I18N.hi,{bkLbl:'केवल ग्रंथ नियम',bkOff:'बंद (Claude के ★ नियम सहित)',bkOn:'चालू (सिर्फ़ ग्रंथ)',t_kpbhava:'KP — सभी भाव'});
+window.addEventListener('DOMContentLoaded',()=>{const g=document.querySelector('#manual .grid');if(!g||document.getElementById('bkSel'))return;
+ g.insertAdjacentHTML('beforeend',`<label><span data-t="bkLbl"></span><select id="bkSel"><option value="0" data-t="bkOff"></option><option value="1" data-t="bkOn"></option></select></label>`);
+ const sel=document.getElementById('bkSel');sel.value=bkOnly()?'1':'0';sel.onchange=()=>bkSet(sel.value==='1');
+ if(typeof applyI18n==='function')try{applyI18n();}catch(e){}});
+document.addEventListener('click',e=>{const b=e.target.closest&&e.target.closest('[data-bk]');if(!b)return;e.preventDefault();bkSet(b.dataset.bk==='1');});
+function bkBanner(){return bkOnly()?`<p class="note bkban">📕 <b>${C('केवल ग्रंथ नियम मोड चालू','Book-rules-only mode is on')}</b> — ${C('Claude के ★ नियम, घटनाओं से चुने गए मॉडल, आधुनिक ★ व्यवसाय और Claude की रैंकिंग बंद हैं; केवल पुस्तकों के नियम व मूल सीमाएँ। सेटिंग में बदलें।','Claude’s ★ rules, the event-chosen models, the modern ★ jobs and Claude’s ranking are off; only the books’ rules and original thresholds. Change it in Settings.')} <button class="ghost" data-bk="0">${C('Claude नियम भी चालू करें','Turn Claude’s rules back on')}</button></p>`:'';}
+
+// ---- KP matters for every house. [id, cusp, houses that give, houses that negate (12th to them), karakas, hi, en, event kinds (+), event kinds (−), age range, book source]
+const KPB=[
+ ['self',1,[1,5,11],[6,8,12],[0],'स्वास्थ्य, शरीर व आत्मबल','health, body and vitality',[],['accident','healthc'],[0,99],'KP Reader 2 — 1, 5, 11 = health/recovery; 6, 8, 12 = disease, hospital'],
+ ['wealth',2,[2,6,11],[5,8,12],[4],'धन संचय, बैंक बैलेंस, परिवार','savings, bank balance, family',['wealth'],['finloss'],[16,99],'KP Reader 2 — Finance: 2, 6, 11 gain; 5, 8, 12 loss'],
+ ['sibling',3,[3,11],[2,10],[2],'भाई-बहन, साहस, संचार, छोटी यात्राएँ','siblings, courage, communication, short trips',[],[],[0,99],'KP: 3 and 11 for co-borns; the 12th to a house negates it'],
+ ['home',4,[4,11,12],[3,5,10],[2,6],'मकान, ज़मीन, माता','house, land, mother',['property'],[],[20,99],'KP Reader 2 — House: “look to the houses 4, 11 and 12” (12 = the cheque you pay)'],
+ ['vehicle',4,[4,11],[3,8,12],[5],'वाहन','vehicle',['vehicle'],[],[18,99],'KP Reader 2 — Conveyance: 4 and 11; Venus the karaka'],
+ ['edu',4,[4,9,11],[3,8,10],[3,4],'शिक्षा व परीक्षा','education and exams',['education'],['studybreak'],[4,32],'KP Reader 2 — Education: 4 basic, 9 higher, 11 success; 3/8/10 (12th to them) breaks'],
+ ['child',5,[2,5,11],[1,4,10],[4],'संतान','children',['children'],[],[20,48],'KP Reader 2 — “For children, one has to examine the houses 2, 5 and 11; also the strength of Jupiter”'],
+ ['spec',5,[2,5,11],[8,12],[4,7],'शेयर, सट्टा, लॉटरी','shares, speculation, lottery',[],[],[18,99],'KP Reader 2 — Lottery: 5 = urge to speculate; 2, 11 gain; 8, 12 loss'],
+ ['loan',6,[2,6,11],[8,12],[6],'कर्ज़/लोन मिलना','getting a loan',[],[],[18,99],'KP Reader 2 — Borrowing: 6 = loan, 2/11 = money in hand'],
+ ['debt',6,[4,5,8,12],[2,6,11],[4],'कर्ज़ चुकाना / कर्ज़ से मुक्ति','repaying and clearing debt',[],['finloss'],[18,99],'KP Reader 2 — “Debt is discharged in the periods of planets occupying or owning 8, 12, 4 and 5”'],
+ ['legal',6,[1,2,6,11],[5,7,8,12],[2],'मुकदमा, प्रतियोगिता, शत्रु पर जीत','litigation, competition, victory over rivals',[],[],[16,99],'KP Reader 2 — “If lords of 1, 2, 6 and 11 are stronger than lords of 7, 8, 12 and 5, the native wins”'],
+ ['marriage',7,[2,7,11],[1,6,10],[5],'विवाह व वैवाहिक जीवन','marriage and married life',['marriage'],[],[18,50],'KP Reader 2 — “Houses 2, 7 and 11 are considered for marriage”; 1, 6, 10 negate'],
+ ['inherit',8,[2,8,11],[1,7,10],[6],'अचानक लाभ, विरासत, बीमा','sudden gains, inheritance, insurance',[],[],[18,99],'KP: 8 = unearned money, with 2 and 11; the 12th to them negates'],
+ ['fortune',9,[9,11],[8,10],[4,0],'भाग्य, पिता, धर्म, गुरु','fortune, father, dharma, teachers',[],[],[0,99],'KP: 9 fortune/father, 11 fulfilment; 8 and 10 (12th to them) obstruct'],
+ ['career',10,[2,6,10,11],[1,5,9,12],[0,6],'नौकरी व करियर','job and career',['career'],['jobloss'],[18,65],'KP Reader 2 — Profession: 2, 6, 10, 11 service; 1, 5, 9, 12 break'],
+ ['gain',11,[2,6,11],[5,8,12],[4],'आय, लाभ, बड़े भाई-बहन, मित्र','income, gains, elder siblings, friends',['wealth'],['finloss'],[16,99],'KP: 11 = gains, with 2 and 6; 5, 8, 12 = loss'],
+ ['foreign',12,[3,9,12],[2,4,11],[7],'विदेश यात्रा / निवास','foreign travel or settlement',['foreign'],[],[16,99],'KP Reader 2 — “If Lords of 3, 9 and 12 operate overseas is indicated”; 2, 4, 11 bring you back home']
+].map(([id,cusp,pos,neg,kar,hi,en,ep,en2,age,src])=>({id,cusp,pos,neg,kar,hi,en,ep,en2,age,src}));
+const KPB_IC={self:'💪',wealth:'🏦',sibling:'🤝',home:'🏠',vehicle:'🚗',edu:'🎓',child:'👶',spec:'📈',loan:'💳',debt:'🧾',legal:'⚖️',marriage:'💍',inherit:'🎁',fortune:'🍀',career:'💼',gain:'💰',foreign:'✈️'};
+// relative house meaning (12th to a house negates it — the KP rule; the rest is bhavat-bhavam)
+const KPB_REL={1:['विषय स्वयं','the matter itself'],2:['उससे धन/सहारा','money/support from it'],3:['उसमें बदलाव, प्रयास','change, effort in it'],4:['स्थायित्व, पूर्णता','stability, completion'],5:['उसमें आनंद व वृद्धि','joy and growth in it'],6:['उसमें संघर्ष, प्रतिस्पर्धा','struggle, competition in it'],7:['दूसरा पक्ष, साझेदारी','the other party, partnership'],8:['अचानक रुकावट/मोड़','sudden obstacle or twist'],9:['उसका भाग्य, बड़ों की मदद','its luck, help from elders'],10:['उसमें कर्म, मान','action and standing in it'],11:['उसकी पूर्ति, लाभ','its fulfilment, gain'],12:['उसकी हानि/अंत (नकार)','its loss/end (negation)']};
+function kpbF(ch,L,set){const m=ch._kpbf||(ch._kpbf={}),k=L+'|'+set.join(',');if(m[k]==null)m[k]=kpcF(ch,L,set);return m[k];}
+function kpbSig(ch,m){const c0=ch._kpbs||(ch._kpbs={});if(c0[m.id])return c0[m.id];const P=ch.planets,c=ch.cusps[m.cusp-1],L=ch.cuspL[m.cusp-1],W=Array(9).fill(0),why=[...Array(9)].map(()=>[]);
+ const add=(i,w,t)=>{if(w>W[i])W[i]=w;why[i].push(t);};
+ add(L.sl,3,C(`${m.cusp}वें कस्प का उप-स्वामी (निर्णायक)`,`sub lord of cusp ${m.cusp} (decides)`));add(P[L.sl].kp.nl,2.5,C(`उप-स्वामी ${pn(L.sl)} का नक्षत्र स्वामी`,`star lord of the sub lord ${pn(L.sl)}`));
+ P.forEach(p=>{if(p.i>8)return;const d=Math.abs(((p.kpLon-c+540)%360)-180);if(d<=5)add(p.i,2.5,C(`कस्प के ${d.toFixed(1)}° पास`,`within ${d.toFixed(1)}° of the cusp`));});
+ const LV=[['A',2.5,'में बैठे ग्रह के नक्षत्र में','in the star of an occupant of'],['B',2,'में बैठा','occupies'],['C',1.5,'के स्वामी के नक्षत्र में','in the star of the lord of'],['D',1,'का स्वामी','owns']];
+ m.pos.forEach(h=>P.forEach(p=>{if(p.i>8)return;const s=ch.kpSig[p.i];for(const [k,w,hi,en] of LV)if(s[k].includes(h)){add(p.i,w,C(`${h}वें भाव ${hi}`,`${en} house ${h}`));break;}}));
+ [7,8].forEach(n=>{const ds=SIGN_LORD[P[n].sign];[0,1,2,3,4,5,6].forEach(q=>{if(W[q]<1.5)return;const rel=q===ds||P[q].sign===P[n].sign||aspectsHouse(ch,q,P[n].house);if(rel&&W[q]+0.5>W[n])add(n,W[q]+0.5,C(`${pn(q)} से जुड़ा — छाया ग्रह अधिक बलवान`,`linked to ${pn(q)} — nodes are stronger`));});});
+ const subH=i=>sigThru(ch,P[i].kp.sl),fr=W.map((w,i)=>m.pos.some(h=>subH(i).includes(h))),ng=W.map((w,i)=>m.neg.some(h=>subH(i).includes(h)));
+ const ord=[...Array(9).keys()].filter(i=>W[i]>0).sort((a,b)=>W[b]-W[a]||fr[b]-fr[a]);return c0[m.id]={W,why,ord,fr,ng};}
+// how many minutes of birth-time error the cusp's sub lord survives (cusps move ~1° in 4 minutes)
+function kpbStab(ch,cusp){const c=ch.cusps[cusp-1],sl=ch.cuspL[cusp-1].sl;let a=0,b=0;while(a<3&&kpLords(c-a-0.01).sl===sl)a+=0.01;while(b<3&&kpLords(c+b+0.01).sl===sl)b+=0.01;return {back:Math.round(a*4),fwd:Math.round(b*4),prev:kpLords(c-a-0.02).sl,next:kpLords(c+b+0.02).sl};}
+function kpbPromise(ch,m){const csl=ch.cuspL[m.cusp-1].sl,H=sigThru(ch,csl).sort((a,b)=>a-b),pos=m.pos.filter(h=>H.includes(h)),neg=m.neg.filter(h=>H.includes(h));
+ const lv=pos.length&&!neg.length?3:pos.length>neg.length?2:pos.length?1:0;return {csl,nl:ch.planets[csl].kp.nl,H,pos,neg,lv};}
+const KPB_PL=[['स्पष्ट रूप से नहीं (या बहुत देर से)','not clearly promised (or very late)','chal'],['वादा है पर बाधा/शर्तों के साथ','promised but with hurdles','mixed'],['वादा है, कुछ बाधा के साथ','promised, with some hurdles','mixed'],['स्पष्ट वादा','clearly promised','strong']];
+// the books' own rules for each matter
+function kpbRules(ch,m,pr,sg){const P=ch.planets,out=[],add=(hi,en,v)=>out.push({t:C(hi,en),v:v||0}),csl=pr.csl,dual=s=>s%3===2,L=h=>lordOf(ch,h);
+ const sgOf=i=>P[i].sign;
+ if(m.id==='marriage'){if(dual(sgOf(csl))||dual(sgOf(P[csl].kp.nl)))add(`7वें कस्प का उप-स्वामी ${pn(csl)} (या उसका नक्षत्र स्वामी) द्विस्वभाव राशि में — एक से अधिक संबंध/विवाह की संभावना (KP)`,`7th CSL ${pn(csl)} (or its star lord) in a dual sign — more than one relationship/marriage is possible (KP)`,-1);
+  if(csl===6||P[csl].kp.nl===6)add('उप-स्वामी या उसका नक्षत्र स्वामी शनि — विवाह में देरी','sub lord or its star lord is Saturn — marriage is delayed',-1);
+  if(pr.H.includes(6)||pr.H.includes(12))add('उप-स्वामी 6/12 का भी कारक — मतभेद या कुछ समय की दूरी','sub lord also signifies 6/12 — disagreements or spells of separation',-1);
+  if([4,5].includes(csl))add(`उप-स्वामी ${pn(csl)} शुभ ग्रह — सौहार्द`,`sub lord ${pn(csl)} is a benefic — harmony`,1);}
+ if(m.id==='child'){const s5=signOf(ch.cusps[4]);if([2,4,5].includes(s5))add('5वाँ कस्प बंध्य राशि (मिथुन/सिंह/कन्या) में — संतान में देरी/कम संख्या','5th cusp in a barren sign (Gemini/Leo/Virgo) — delay or fewer children',-1);if([3,7,11].includes(s5))add('5वाँ कस्प जल (फलदायी) राशि में — संतान सुख','5th cusp in a fruitful water sign — children promised',1);
+  const j=bkStrong(ch,4);add(j>=0.5?'गुरु बलवान — संतान का कारक अच्छा':j<=-0.5?'गुरु निर्बल — संतान में देरी, गुरु के उपाय':'गुरु मध्यम बल',j>=0.5?'Jupiter strong — good for children':j<=-0.5?'Jupiter weak — delay; Jupiter remedies help':'Jupiter of middling strength',j>=0.5?1:j<=-0.5?-1:0);}
+ if(m.id==='loan'||m.id==='debt'){const l1=P[L(1)];if(l1.dign==='debil'&&[6,8,12].includes(l1.house))add('लग्नेश नीच और 6/8/12 में — कर्ज़ लेने की प्रवृत्ति (KP Reader 2)','lagna lord debilitated in 6/8/12 — prone to borrowing (KP Reader 2)',-1);
+  if(P[0].house===2&&P[6].house===2)add('सूर्य-शनि दूसरे भाव में — धनी घर में जन्म हो तो भी कर्ज़ (KP Reader 2)','Sun and Saturn in the 2nd — borrows even if born rich (KP Reader 2)',-1);
+  const ben=[1,3,4,5].filter(i=>[4,5,8,12].includes(P[i].house));if(ben.length)add(`शुभ ग्रह ${ben.map(pn).join(', ')} 4/5/8/12 में — इनकी दशा में कर्ज़ उतरता है (KP Reader 2)`,`benefics ${ben.map(pn).join(', ')} in 4/5/8/12 — debts are cleared in their periods (KP Reader 2)`,1);
+  const mal=[0,2,6,7,8].filter(i=>[2,5,9,12].includes(P[i].house));if(mal.length)add(`पाप ग्रह ${mal.map(pn).join(', ')} 2/5/9/12 में — न चुका पाने पर मान-हानि का भय; समय पर चुकाएँ (KP Reader 2)`,`malefics ${mal.map(pn).join(', ')} in 2/5/9/12 — loss of reputation if not repaid; repay on time (KP Reader 2)`,-1);
+  if(P[6].sign===7&&[5,9,12].includes(P[6].house))add('शनि वृश्चिक में 5/9/12 भाव में — कर्ज़ से कानूनी झंझट का भय (KP Reader 2)','Saturn in Scorpio in 5/9/12 — legal trouble over debt (KP Reader 2)',-1);
+  const h2=P[L(2)].house,SRC={3:['भाई/पड़ोसी से, या बॉन्ड लिखकर','a brother/neighbour, or on a bond'],4:['पास के रिश्तेदार से','a close relative'],9:['दूर के/अजनबी साहूकार से','a distant lender or stranger'],10:['दफ़्तर या अधिकारी से','the office or an officer'],11:['बड़े भाई-बहन, मित्र या चाचा से','an elder sibling, friend or uncle'],6:['अधीनस्थ से, या कुछ गिरवी रखकर','a subordinate, or by pledging something']};
+  if(SRC[h2])add(`धनेश ${pn(L(2))} ${h2}वें भाव में — उधार ${SRC[h2][0]} (KP Reader 2)`,`2nd lord ${pn(L(2))} in house ${h2} — a loan from ${SRC[h2][1]} (KP Reader 2)`);}
+ if(m.id==='legal'){const st=hs=>hs.reduce((a,h)=>a+bkStrong(ch,L(h)),0)/hs.length,a=st([1,2,6,11]),b=st([7,8,12,5]);add(a>b?`1/2/6/11 के स्वामी (${a.toFixed(1)}) 7/8/12/5 के स्वामियों (${b.toFixed(1)}) से बलवान — विवाद/प्रतियोगिता में जीत (KP Reader 2)`:`7/8/12/5 के स्वामी (${b.toFixed(1)}) अधिक बलवान — विवाद से बचें, समझौता अच्छा (KP Reader 2)`,a>b?`lords of 1/2/6/11 (${a.toFixed(1)}) stronger than lords of 7/8/12/5 (${b.toFixed(1)}) — you win disputes/competitions (KP Reader 2)`:`lords of 7/8/12/5 (${b.toFixed(1)}) are stronger — avoid disputes; settle (KP Reader 2)`,a>b?1:-1);}
+ if(m.id==='foreign'){const l12=L(12),c=[L(6),L(11)].filter(x=>[3,9,12].some(h=>sigThru(ch,x).includes(h)));if(c.length)add('6/11 के स्वामी 3/9/12 से जुड़े — इलाज या नौकरी के लिए भी विदेश/दूर जाना (KP Reader 2)','lords of 6/11 linked to 3/9/12 — travel abroad/far also for treatment or work (KP Reader 2)');
+  if(sigThru(ch,l12).includes(4)&&(l12===2||aspectsHouse(ch,2,P[l12].house)||P[2].sign===P[l12].sign))add('12वें स्वामी का 4 और मंगल से संबंध — निवास बदलना (KP Reader 2)','12th lord linked with the 4th and Mars — change of residence (KP Reader 2)');
+  if(pr.H.includes(4)&&!pr.H.includes(12))add('12वें का उप-स्वामी 4 का कारक — विदेश जाकर भी लौट आना','12th CSL signifies 4 — you go but come back',0);}
+ if(m.id==='edu'){const g=[2,3,4].filter(i=>[4,9,11].some(h=>sigThru(ch,i).includes(h)));if(g.length)add(`${g.map(pn).join(', ')} 4/9/11 से जुड़े — शिक्षा में सफलता (KP Reader 2)`,`${g.map(pn).join(', ')} linked to 4/9/11 — success in studies (KP Reader 2)`,1);
+  if(pr.H.includes(6)&&pr.H.includes(11))add('4था भाव 6 और 11 से जुड़ा — छात्रवृत्ति/लोन से पढ़ाई (KP Reader 2)','4th linked with 6 and 11 — scholarship or study loan (KP Reader 2)',1);}
+ if(m.id==='home'){if([2,6].includes(csl))add(csl===2?'उप-स्वामी मंगल — ज़मीन/प्लॉट':'उप-स्वामी शनि — पुराना/सस्ता या देर से मकान',csl===2?'sub lord Mars — land/plot':'sub lord Saturn — an old or modest house, or late',0);if(csl===5)add('उप-स्वामी शुक्र — सुंदर, सुविधायुक्त मकान','sub lord Venus — a beautiful, comfortable home',1);}
+ if(m.id==='spec'){const hs=[1,2,3,6,10,11].filter(h=>pr.H.includes(h)).length;if(hs>=3)add('5वें का उप-स्वामी 1/2/3/6/10/11 में से कई का कारक — खेल/लॉटरी/प्रतियोगिता में लाभ का योग (KP Reader 2)','5th CSL signifies several of 1/2/3/6/10/11 — gain in games/lottery/competition (KP Reader 2)',1);if(pr.H.includes(8)||pr.H.includes(12))add('5वें का उप-स्वामी 8/12 का कारक — सट्टे में हानि का भय; सीमित रखें','5th CSL signifies 8/12 — risk of loss in speculation; keep it small',-1);}
+ return out;}
+// ---- KP timeline per matter
+function kpbPds(ch){if(ch._kpbp)return ch._kpbp;const now=julianNow(),out=[];ch.dasha.mds.forEach(md=>md.ads.forEach(ad=>{if(ad.end<ch.jd||ad.start>now+15*365.25)return;pratyantar(ad).forEach(pd=>{if(pd.end>ch.jd)out.push({md:md.lord,ad:ad.lord,pd:pd.lord,start:Math.max(pd.start,ch.jd),end:pd.end});});}));return ch._kpbp=out;}
+function kpbRaw(ch,m,md,ad,pd){let s=0;[[md,0.5],[ad,1],[pd,0.7]].forEach(([L,w])=>{s+=w*(kpbF(ch,L,m.pos)-kpbF(ch,L,m.neg));});return s;}
+function kpbTL(ch,m){const c=ch._kpbt||(ch._kpbt={});if(c[m.id])return c[m.id];const arr=kpbPds(ch).map(x=>({...x,s:kpbRaw(ch,m,x.md,x.ad,x.pd)}));
+ const so=arr.map(x=>x.s).sort((a,b)=>a-b),q=f=>so[Math.min(so.length-1,Math.floor(so.length*f))],hi=q(0.85),lo=q(0.15);
+ arr.forEach(x=>x.k=x.s>=hi&&x.s>0?'up':x.s<=lo&&x.s<0?'down':'flat');const win=[];arr.forEach(x=>{const w=win[win.length-1];if(w&&w.k===x.k&&x.start-w.end<2){w.end=x.end;w.pds.push(x.pd);w.s=Math.max(w.s,x.s);}else win.push({k:x.k,start:x.start,end:x.end,md:x.md,ad:x.ad,pds:[x.pd],s:x.s});});
+ const pct=s=>{let a=0,b=so.length;while(a<b){const m=(a+b)>>1;if(so[m]<s)a=m+1;else b=m;}return a/so.length;};return c[m.id]={arr,win,hi,lo,so,pct};}
+// ---- date-fixing (KP): within a period, the event comes when the Sun (month) and then the Moon (day) transit the sign/star/sub of the fruitful significators, on a day ruled by one of them
+function kpbFix(ch,m,w){const sg=kpbSig(ch,m);let set=sg.ord.filter(i=>sg.fr[i]&&sg.W[i]>=1.5).slice(0,5);if(set.length<2)set=sg.ord.slice(0,4);const S1=new Set(set);
+ const from=Math.max(w.start,julianNow()),to=Math.min(w.end,from+300),days=[];
+ for(let j=Math.floor(from)+1-ch.inp.tz/24;j<=to;j+=1){const s=siderealAll(j,'kp',['_']),su=kpLords(s.Su),mo=kpLords(s.Mo),wd=Math.floor(j+1.5)%7;
+  const sc=(S1.has(SIGN_LORD[signOf(s.Su)])?1:0)+(S1.has(su.nl)?1:0)+(S1.has(su.sl)?1:0),mc=(S1.has(SIGN_LORD[signOf(s.Mo)])?1:0)+(S1.has(mo.nl)?1:0)+(S1.has(mo.sl)?1:0);days.push({j,sc,mc,st:S1.has(su.nl),wd:S1.has(wd)?1:0});}
+ const sun=[];days.forEach(d=>{if(!(d.st||d.sc>=2))return;const l=sun[sun.length-1];if(l&&d.j-l.end<=3.01){l.end=d.j;l.sc=Math.max(l.sc,d.sc);}else sun.push({start:d.j,end:d.j,sc:d.sc});});
+ const best=days.filter(d=>d.st||d.sc>=2).map(d=>({...d,t:d.sc+d.mc+d.wd})).filter(d=>d.t>=4).sort((a,b)=>b.t-a.t||a.j-b.j).slice(0,6).sort((a,b)=>a.j-b.j);return {set,sun:sun.slice(0,4),best};}
+// ---- ★ the sharper-prediction method: three independent book methods; their mix is chosen on the native's other events and tested on the left-out one
+function kpbPar(ch,m,md,ad){const P=ch.planets,H=m.cusp,bad=[5,7,11].map(k=>((H-1+k)%12)+1);let v=0;
+ [[md,0.5],[ad,1]].forEach(([L,w])=>{const own=housesRuled(ch,L),lk=own.includes(H)||P[L].house===H||aspectsHouse(ch,L,H)||m.kar.includes(L),fn=funcNature(ch,L);
+  if(lk)v+=w*(fn==='fm'?-0.4:1);else if(own.some(h=>bad.includes(h))&&fn==='fm')v-=w;});return Math.max(-1,Math.min(1,v/1.5));}
+function kpbMonths(ch){const now=julianNow(),key='kpbm'+ch.jd+Math.floor(now/30);if(S.kpb&&S.kpb.key===key)return S.kpb;const out=[];
+ for(let j=ch.jd+4*365.25;j<=now+12*365.25;j+=30.44){const d=dashaAt(ch,j);if(!d)continue;const tr=transitAt(ch,j,true);out.push({j,d,dt:doubleTransit(tr),ju:tr[4].fl});}return S.kpb={key,out};}
+function kpbAt(ch,m,x,wt){const TL=kpbTL(ch,m),r=TL.pct(kpbRaw(ch,m,x.d.md.lord,x.d.ad.lord,x.d.pd.lord)),K=2*r-1,Pa=kpbPar(ch,m,x.d.md.lord,x.d.ad.lord),T=x.dt.includes(m.cusp)?1:m.pos.some(h=>x.dt.includes(h))?0.5:0;
+ return {K,Pa,T,v:(wt[0]*K+wt[1]*Pa)*(1+0.4*T)};}
+const KPB_G=[[1,0],[1,0.5],[1,1],[0.5,1],[0,1]];
+function kpbEvents(ch){const out=[];getPev(ch).forEach(e=>{const mt=/^(\d{4})-(\d{2})-(\d{2})/.exec(e.d||'');if(!mt)return;const j=julian(+mt[1],+mt[2],+mt[3],12-ch.inp.tz);if(j<=ch.jd+4*365.25||j>julianNow())return;
+ KPB.forEach(m=>{if(m.ep.includes(e.k))out.push({e,m,j,dir:1});else if(m.en2.includes(e.k))out.push({e,m,j,dir:-1});});});return out;}
+function kpbEvPct(ch,E,wt,M){const near=M.out.filter(x=>Math.abs(x.j-E.j)<=(E.e.ap?46:16));if(!near.length)return null;const lc=M.life||(M.life={}),lk=E.m.id+wt.join(),life=lc[lk]||(lc[lk]=M.out.filter(x=>x.j<=julianNow()).map(x=>kpbAt(ch,E.m,x,wt).v));
+ const v=Math.max(...near.map(x=>E.dir*kpbAt(ch,E.m,x,wt).v));return life.filter(s=>E.dir*s<v).length/life.length;}
+function kpbCal(ch){const M=kpbMonths(ch),Ev=kpbEvents(ch);if(!Ev.length)return {Ev,rows:[],wt:KPB_G[bkOnly()?0:1],gi:bkOnly()?0:1};
+ const tab=Ev.map(E=>KPB_G.map(g=>kpbEvPct(ch,E,g,M)));
+ const pick=ex=>{if(bkOnly())return 0;let b=1,bs=-1;KPB_G.forEach((g,gi)=>{const v=tab.filter((r,i)=>i!==ex&&r[gi]!=null);const s=v.length?v.reduce((a,r)=>a+r[gi],0)/v.length:gi===1?1:0;if(s>bs+1e-9){bs=s;b=gi;}});return b;};
+ const rows=Ev.map((E,i)=>({E,kp:tab[i][0],par:tab[i][4],loo:tab[i][pick(i)],g:pick(i)}));const all=pick(-1);return {Ev,rows,wt:KPB_G[all],gi:all};}
+function kpbAhead(ch,wt){const M=kpbMonths(ch),now=julianNow(),out=[];
+ KPB.forEach(m=>{const life=M.out.map(x=>({x,a:kpbAt(ch,m,x,wt)})),so=life.map(y=>y.a.v).sort((a,b)=>a-b),hi=so[Math.floor(so.length*0.9)],lo=so[Math.floor(so.length*0.1)];
+  const fut=life.filter(y=>y.x.j>now-15&&y.x.j<now+5*365.25);let cur=null;
+  fut.forEach(y=>{const age=(y.x.j-ch.jd)/365.25;const k=y.a.v>=hi&&y.a.v>0?1:y.a.v<=lo&&y.a.v<0?-1:0;if(!k||age<m.age[0]||age>m.age[1]){cur=null;return;}
+   const ag=(y.a.K*k>=0.5?1:0)+(y.a.Pa*k>0?1:0)+(y.a.T>0?1:0);if(cur&&cur.k===k&&y.x.j-cur.end<31){cur.end=y.x.j+30.44;cur.ag=Math.max(cur.ag,ag);}else{cur={m,k,start:y.x.j,end:y.x.j+30.44,ag};out.push(cur);}});});
+ return out.sort((a,b)=>b.ag-a.ag||a.start-b.start);}
+// ---- page
+function kpbCard(ch,m,cal){const P=ch.planets,pr=kpbPromise(ch,m),sg=kpbSig(ch,m),st=kpbStab(ch,m.cusp),TL=kpbTL(ch,m),now=julianNow(),age=j=>(j-ch.jd)/365.25,c=ch.cusps[m.cusp-1],L=ch.cuspL[m.cusp-1];
+ const PL=KPB_PL[pr.lv],rel=pr.H.map(h=>{const r=((h-m.cusp+12)%12)+1,cls=m.pos.includes(h)?'pos':m.neg.includes(h)?'neg':'';return `<li class="${cls}"><b>${h}</b> — ${C(KPB_REL[r][0],KPB_REL[r][1])}${cls==='pos'?' ✓':cls==='neg'?' ✗':''}</li>`;}).join('');
+ const sig=sg.ord.slice(0,5).map(i=>`<li class="${sg.fr[i]&&!sg.ng[i]?'pos':sg.ng[i]&&!sg.fr[i]?'neg':''}"><b>${pn(i)}</b> <span class="rk ${sg.W[i]>=2.5?'strong':'mixed'}">${sg.W[i].toFixed(1)}</span> ${sg.fr[i]?C('✓ फल देगा (उप-स्वामी अनुकूल)','✓ will deliver (sub lord agrees)'):sg.ng[i]?C('✗ रोकेगा (उप-स्वामी विरोधी)','✗ blocks (sub lord opposes)'):C('· सामान्य','· neutral')}<br><span class="note">${[...new Set(sg.why[i])].slice(0,3).join(' · ')}</span></li>`).join('');
+ const rules=kpbRules(ch,m,pr,sg).map(r=>`<li class="${r.v>0?'pos':r.v<0?'neg':''}">${r.t}</li>`).join('');
+ const ok=w=>age(w.start)<=m.age[1]&&age(w.end)>=m.age[0];
+ const fut=TL.win.filter(w=>w.end>now&&w.k!=='flat'&&w.end-w.start>=20&&ok(w)).slice(0,6),past=TL.win.filter(w=>w.end<=now&&w.k!=='flat'&&w.end-w.start>=20&&ok(w)).slice(-5);
+ const wl=w=>`<li class="${w.k==='up'?'pos':'neg'}"><b>${w.k==='up'?C('फलदायी','fruitful'):C('रुकावट','obstacles')}</b> <span class="pstyr">${fdate(Math.max(w.start,w.end>now?Math.min(now,w.end):w.start))} – ${fdate(w.end)}</span> <span class="note">(${pn(w.md)}/${pn(w.ad)}: ${[...new Set(w.pds)].map(pn).join(', ')})</span></li>`;
+ const nx=fut.find(w=>w.k==='up');let fx='';if(nx&&pr.lv>0){try{const F=kpbFix(ch,m,nx);fx=`<h4>📅 ${C('दिन-निर्धारण (अगला फलदायी काल)','Date-fixing (next fruitful period)')}</h4><p class="note">${C('फलदायी कारक','Fruitful significators')}: ${F.set.map(pn).join(', ')}. ${C('KP नियम: घटना तब होती है जब सूर्य इनकी राशि/नक्षत्र/उप से गुज़रे, और दिन चंद्र के इनके नक्षत्र में होने व इनके वार से तय होता है।','KP rule: the event comes when the Sun transits their sign/star/sub; the day is fixed by the Moon in their star and a weekday they rule.')}</p>
+  ${F.sun.length?`<p>☀️ ${C('सूर्य-काल','Sun windows')}: ${F.sun.map(s=>`<b>${fdate(s.start)} – ${fdate(s.end)}</b>${s.sc===3?' ★★':''}`).join('; ')}</p>`:''}${F.best.length?`<p>🌙 ${C('सबसे संभावित दिन','Most likely days')}: ${F.best.map(d=>fdate(d.j)).join(', ')}</p>`:''}`;}catch(e){console.error(e);}}
+ const evs=(cal.rows||[]).filter(r=>r.E.m===m).map(r=>{const tl=TL.pct(kpbRaw(ch,m,...(()=>{const d=dashaAt(ch,r.E.j);return [d.md.lord,d.ad.lord,d.pd.lord];})()));const p=r.E.dir>0?tl:1-tl;return `<li class="${p>=0.75?'pos':p<0.5?'neg':''}"><b>${p>=0.75?'✓':p>=0.5?'≈':'✗'}</b> ${r.E.e.ap?'≈':''}${fdate(r.E.j)} — ${T('ec_'+r.E.e.k)}: ${C(`KP समय-रेखा ने इसे जीवन के ${Math.round(p*100)}% कालों से ऊपर रखा`,`the KP timeline placed it above ${Math.round(p*100)}% of life’s periods`)}</li>`;}).join('');
+ const body=`<p><b>${C('कस्प','Cusp')} ${m.cusp}:</b> ${sn(signOf(c))} ${fdeg(c)} — ${C('राशि','sign')} ${pn(SIGN_LORD[signOf(c)])}, ${C('नक्षत्र','star')} ${pn(L.nl)}, ${C('उप','sub')} <b>${pn(L.sl)}</b></p>
+  <p><b>${C('वादा (उप-स्वामी','Promise (sub lord')} ${pn(pr.csl)} ${C('व उसका नक्षत्र स्वामी','and its star lord')} ${pn(pr.nl)} ${C('इन भावों के कारक','signify houses')}):</b> <span class="rk ${PL[2]}">${C(PL[0],PL[1])}</span></p><ul class="fx vsfx">${rel}</ul>
+  <p class="note">⏱️ ${C(`जन्म-समय संवेदनशीलता: यह उप-स्वामी लगभग −${st.back} / +${st.fwd} मिनट तक नहीं बदलता (पहले ${pn(st.prev)}, बाद में ${pn(st.next)})।`,`Birth-time sensitivity: this sub lord holds for about −${st.back} / +${st.fwd} minutes (before: ${pn(st.prev)}, after: ${pn(st.next)}).`)}${Math.min(st.back,st.fwd)<3?C(' ⚠️ बहुत पास — जन्म-समय की थोड़ी गलती से निष्कर्ष बदल सकता है।',' ⚠️ very close — a small birth-time error can change this verdict.'):''}</p>
+  <h4>${C('कारक ग्रह (KP क्रम, छाया ग्रह अधिक बलवान)','Significators (KP order, nodes stronger)')}</h4><ul class="fx vsfx">${sig}</ul>
+  ${rules?`<h4>📘 ${C('ग्रंथ के नियम इस कुंडली पर','Book rules applied to this chart')}</h4><ul class="fx vsfx">${rules}</ul>`:''}
+  <h4>🕰️ ${C('KP समय-रेखा','KP timeline')}</h4>${fut.length?`<ul class="fx vsfx">${fut.map(wl).join('')}</ul>`:`<p class="note">${C('आगे की आयु-सीमा में कोई विशेष काल नहीं','no marked window ahead in the relevant age range')}</p>`}
+  ${past.length?`<p class="note"><b>${C('पिछले काल','Past windows')}</b></p><ul class="fx vsfx">${past.map(wl).join('')}</ul>`:''}${fx}
+  ${evs?`<h4>📌 ${C('आपकी दर्ज घटनाएँ','Your recorded events')}</h4><ul class="fx vsfx">${evs}</ul>`:''}
+  <p class="note">📗 ${C('स्रोत','Source')}: ${m.src}</p>`;
+ return vsDet(`${KPB_IC[m.id]} ${C(m.hi,m.en)} <span class="note">(${C('कस्प','cusp')} ${m.cusp})</span> <span class="rk ${PL[2]}" style="float:right">${pr.lv===3?C('स्पष्ट वादा','clear'):pr.lv===0?C('कमज़ोर','weak'):C('वादा+बाधा','with hurdles')}</span>`,body,false);}
+function kpbAccBlock(ch,cal){const now=julianNow(),R=cal.rows,f=x=>x==null?'–':Math.round(x*100)+'%';
+ const mean=k=>{const v=R.map(r=>r[k]).filter(x=>x!=null);return v.length?v.reduce((a,b)=>a+b,0)/v.length:null;},hit=k=>R.filter(r=>r[k]!=null&&r[k]>=0.75).length;
+ const GN=[C('केवल KP','KP only'),C('KP + ½ पाराशरी','KP + ½ Parashari'),C('KP + पाराशरी बराबर','KP + Parashari equal'),C('½ KP + पाराशरी','½ KP + Parashari'),C('केवल पाराशरी','Parashari only')];
+ const ah=kpbAhead(ch,cal.wt).filter(w=>w.ag>=2),ahead=[...ah.filter(w=>w.k>0).slice(0,6),...ah.filter(w=>w.k<0).slice(0,5)];
+ const AG=[C('कम','low'),C('कम','low'),C('मध्यम','medium'),C('उच्च','high')];
+ let fx='';const top=ahead.find(w=>w.k>0);if(top){try{const F=kpbFix(ch,top.m,top);if(F.sun.length||F.best.length)fx=`<p>🎯 <b>${C(top.m.hi,top.m.en)}</b> — ☀️ ${F.sun.slice(0,2).map(s=>`${fdate(s.start)} – ${fdate(s.end)}`).join('; ')}${F.best.length?` · 🌙 ${F.best.slice(0,3).map(d=>fdate(d.j)).join(', ')}`:''}</p>`;}catch(e){console.error(e);}}
+ return `<section class="blk kpbacc"><h3>🎯 ${C('सटीक भविष्यवाणी की ओर — Claude का तरीका ★','Towards accurate prediction — Claude’s method ★')}</h3>
+  <p>${C('“पूरी तरह सटीक” भविष्यवाणी कोई पद्धति ईमानदारी से नहीं दे सकती; पर गलती तीन जगह से आती है और तीनों को अलग-अलग कसा जा सकता है:','No method can honestly promise “perfectly accurate”; but errors come from three places, and each can be tightened separately:')}</p>
+  <ol><li><b>${C('वादा (क्या होगा)','Promise (will it happen)')}</b> — ${C('KP: कस्प का उप-स्वामी। हर भाव के कार्ड में दिखाया है कि जन्म-समय में कितने मिनट की गलती यह वादा बदल देगी।','KP: the cusp sub lord. Each house card shows how many minutes of birth-time error would change it.')}</li>
+  <li><b>${C('काल (कब)','Period (when)')}</b> — ${C('तीन स्वतंत्र ग्रंथ-पद्धतियाँ: KP दशा-भुक्ति-अंतर, पाराशरी दशा-स्वामी संबंध, गुरु-शनि दोहरा गोचर। जब तीनों एक साथ हों, तभी “उच्च विश्वास”।','three independent book methods: KP dasha-bhukti-antara, Parashari dasha-lord links, Jupiter–Saturn double transit. “High confidence” only when all three agree.')}</li>
+  <li><b>${C('दिन (किस दिन)','Day (which day)')}</b> — ${C('KP दिन-निर्धारण: सूर्य व चंद्र का फलदायी कारकों के नक्षत्र/उप से गोचर।','KP date-fixing: the Sun and Moon transiting the star/sub of the fruitful significators.')}</li></ol>
+  <p>★ ${C('मेरा जोड़: KP व पाराशरी का मिश्रण आपकी ही दर्ज घटनाओं से चुना जाता है — और ईमानदार जाँच के लिए हर घटना को छोड़कर बाकी से चुना मिश्रण उसी छोड़ी घटना पर परखा जाता है (leave-one-out)। इससे “घटना जानकर नियम बनाने” का धोखा नहीं होता।','My addition: the KP/Parashari mix is chosen from your own recorded events — and, to test honestly, each event is left out, the mix is chosen on the rest, and then tested on the left-out one (leave-one-out). That stops “fitting the rules after knowing the answer”.')}</p>
+  ${R.length?`<table class="tbl"><tr><th>${C('घटना','Event')}</th><th>${C('भाव','Matter')}</th><th>KP</th><th>${C('पाराशरी','Parashari')}</th><th>${C('मिश्रण (LOO)','Mix (LOO)')}</th></tr>${R.map(r=>`<tr><td>${r.E.e.ap?'≈':''}${fdate(r.E.j)}<br>${T('ec_'+r.E.e.k)}</td><td>${C(r.E.m.hi,r.E.m.en).split(',')[0]}</td><td>${f(r.kp)}</td><td>${f(r.par)}</td><td class="${r.loo!=null&&r.loo>=0.75?'pos':''}"><b>${f(r.loo)}</b></td></tr>`).join('')}</table>
+  <p class="note">${C('प्रतिशत = जीवन के कितने प्रतिशत महीनों से उस घटना का समय (घटना की दिशा में) ऊपर रखा गया। 50% = अनुमान जितना; 75%+ = सही पकड़ा। संयोग से शीर्ष चौथाई में आने की संभावना 25% है।','Percent = above how many of the life’s months the event date was placed (in the event’s direction). 50% = a guess; 75%+ = caught. Landing in the top quarter by chance is 25%.')}</p>
+  <p><b>${C('औसत','Average')}:</b> KP ${f(mean('kp'))} · ${C('पाराशरी','Parashari')} ${f(mean('par'))} · <b>${C('मिश्रण LOO','Mix LOO')} ${f(mean('loo'))}</b> — ${C('शीर्ष चौथाई में','in top quarter')}: ${hit('loo')}/${R.filter(r=>r.loo!=null).length} (${C('संयोग से अपेक्षित','expected by chance')} ${Math.round(R.filter(r=>r.loo!=null).length*0.25*10)/10})</p>
+  <p class="note">${C('चुना गया मिश्रण','Chosen mix')}: <b>${GN[cal.gi]}</b>${bkOnly()?C(' (केवल ग्रंथ मोड में मिश्रण बंद है)',' (mixing is off in book-only mode)'):''}. ${R.length<6?C('घटनाएँ कम हैं — यह जाँच दिशा दिखाती है, प्रमाण नहीं। जितनी अधिक सटीक तिथि वाली घटनाएँ “सत्यापन” में जोड़ेंगे, उतना भरोसा बढ़ेगा।','Few events — this check shows a direction, not proof. The more exact-dated events you add in Verification, the more it can be trusted.'):C('घटनाएँ बढ़ने पर यह जाँच और भरोसेमंद होगी।','More events make this check more reliable.')}</p>`
+  :`<p class="note">${C('“सत्यापन” टैब में अपनी घटनाएँ (विवाह, संतान, नौकरी, नौकरी छूटना, धन हानि, दुर्घटना…) तिथि सहित जोड़ें — तब यह तरीका आपकी कुंडली पर परखा जाएगा।','Add your events (marriage, child, job, job loss, money loss, accident…) with dates in Verification — the method is then tested on your chart.')}</p>`}
+  <h4>🔭 ${C('अगले 5 वर्ष — जहाँ पद्धतियाँ सहमत हैं','Next 5 years — where the methods agree')}</h4>
+  ${ahead.length?`<ul class="fx vsfx">${ahead.map(w=>`<li class="${w.k>0?'pos':'neg'}">${KPB_IC[w.m.id]} <b>${C(w.m.hi,w.m.en)}</b> — ${w.k>0?C('फलदायी','fruitful'):C('रुकावट/सावधानी','obstacle/caution')} <span class="pstyr">${fdate(Math.max(w.start,now))} – ${fdate(w.end)}</span> <span class="rk ${w.ag>=3?'strong':'mixed'}">${C('विश्वास','confidence')}: ${AG[w.ag]} (${w.ag}/3)</span></li>`).join('')}</ul>${fx}`:`<p class="note">${C('अगले 5 वर्षों में कोई ऐसा काल नहीं जहाँ दो से अधिक पद्धतियाँ सहमत हों।','No period in the next 5 years where two or more methods agree.')}</p>`}
+  </section>`;}
+// ---- book-only vs Claude side by side
+function bkCompare(ch){const ev=getPev(ch),key='bkc'+ch.jd+Math.floor(julianNow())+JSON.stringify(ev);if(S.bkcmp&&S.bkcmp.key===key)return S.bkcmp;
+ const keep={},ks=['mn','c7pk','c7','bg','kpct','rkb','edb','chk','ipc','kpb'],cks=Object.keys(ch).filter(k=>k[0]==='_'),ckeep={},m0=SET.bookOnly,c7m=C7.mode;ks.forEach(k=>keep[k]=S[k]);cks.forEach(k=>ckeep[k]=ch[k]);
+ const run=on=>{SET.bookOnly=on;ks.forEach(k=>S[k]=null);Object.keys(ch).forEach(k=>{if(k[0]==='_')delete ch[k];});const r={};
+  try{const M=mnScan(ch),now=julianNow(),lv=s=>s>=M.p75?2:s<=M.p25?0:1,cur=mnAt(ch,now,false);r.mnNow=lv(cur.s);const fg=M.out.filter(x=>x.j>now&&lv(x.s)===2);r.mnGood=fg.length?fg[0].j:null;
+   r.mnEv=ev.filter(e=>['finloss','wealth'].includes(e.k)).map(e=>{const j=julian(...e.d.split('-').map(Number),12-ch.inp.tz),x=mnAt(ch,j,false);return x?(e.k==='finloss'?lv(x.s)===0:lv(x.s)===2):false;});}catch(e){console.error(e);}
+  try{r.prof=kpcProf(ch).slice(0,5).map(p=>C(p.hi,p.en));}catch(e){}
+  try{r.c7=c7Pick(ch).mode;}catch(e){}
+  try{const d=dashaAt(ch,julianNow()),z=lpZ(ch,d.md.lord,d.ad.lord);r.lp=z>=0.5?1:z<=-0.5?-1:0;}catch(e){}
+  return r;};
+ let A,B;try{A=run(false);B=run(true);}finally{SET.bookOnly=m0;C7.mode=c7m;ks.forEach(k=>S[k]=keep[k]);Object.keys(ch).forEach(k=>{if(k[0]==='_')delete ch[k];});Object.assign(ch,ckeep);}
+ return S.bkcmp={key,A,B};}
+function bkCmpBlock(ch){const R=bkCompare(ch),A=R.A,B=R.B,LB=[C('कठिन','hard'),C('सामान्य','ordinary'),C('अच्छा','good')],LP=x=>x>0?C('अनुकूल','favourable'):x<0?C('प्रतिकूल','unfavourable'):C('मध्यम','neutral');
+ const evh=r=>r.mnEv&&r.mnEv.length?`${r.mnEv.filter(Boolean).length}/${r.mnEv.length}`:'–';
+ const row=(t,a,b)=>`<tr><td>${t}</td><td>${a}</td><td>${b}</td></tr>`;
+ return `<section class="blk bkcmp"><h3>⚖️ ${C('ग्रंथ बनाम Claude — आमने-सामने','Books vs Claude — side by side')}</h3>
+  <table class="tbl"><tr><th></th><th>📕 ${C('केवल ग्रंथ','Books only')}</th><th>🧠 ${C('ग्रंथ + Claude ★','Books + Claude ★')}</th></tr>
+  ${row(C('धन: अभी','Money: now'),LB[B.mnNow]??'–',LB[A.mnNow]??'–')}
+  ${row(C('धन: अगला अच्छा महीना','Money: next good month'),B.mnGood?fdate(B.mnGood):'–',A.mnGood?fdate(A.mnGood):'–')}
+  ${row(C('धन-घटनाएँ सही पकड़ीं','Money events caught'),evh(B),evh(A))}
+  ${row(C('लघु पाराशरी: अभी की दशा','Laghu Parashari: current period'),LP(B.lp),LP(A.lp))}
+  ${row(C('दुर्घटना मॉडल','Accident model'),B.c7||'A',A.c7||'A')}
+  ${row(C('KP: शीर्ष 5 काम','KP: top 5 jobs'),(B.prof||[]).join('<br>'),(A.prof||[]).join('<br>'))}</table>
+  <p class="note">${C('जहाँ दोनों कॉलम एक जैसे हैं, वहाँ निष्कर्ष केवल ग्रंथों से है। जहाँ अलग हैं, वहाँ अंतर Claude के ★ नियमों/चुनावों से है — उन्हें परखने के लिए अधिक घटनाएँ जोड़ें।','Where both columns agree, the verdict comes from the books alone. Where they differ, the difference is from Claude’s ★ rules/choices — add more events to test them.')}</p>
+  <p>${bkOnly()?`<button class="ghost" data-bk="0">🧠 ${C('Claude नियम भी चालू करें','Turn Claude’s rules on')}</button>`:`<button class="ghost" data-bk="1">📕 ${C('पूरा ऐप केवल ग्रंथ नियम पर चलाएँ','Run the whole app on book rules only')}</button>`}</p></section>`;}
+function renderKPB(ch){const cal=kpbCal(ch);let h=bkBanner()+`<section class="blk"><h3>🗝️ ${C('KP — हर भाव का विश्लेषण','KP — analysis of every house')}</h3><p class="note">${C('हर विषय के लिए: (1) कस्प का उप-स्वामी क्या वादा करता है, (2) कौन से ग्रह फल देंगे या रोकेंगे, (3) ग्रंथ के विशेष नियम, (4) कब — KP समय-रेखा, (5) किस दिन — सूर्य/चंद्र गोचर से दिन-निर्धारण। व्यवसाय का विस्तृत विश्लेषण “करियर” पृष्ठ पर है।','For each matter: (1) what the cusp sub lord promises, (2) which planets will deliver or block, (3) the books’ specific rules, (4) when — KP timeline, (5) which day — date-fixing by Sun/Moon transit. The detailed profession analysis is on the Career page.')}</p>
+  <p><button class="ghost" data-go="career">💼 ${C('KP व्यवसाय विश्लेषण','KP profession analysis')} →</button></p></section>`;
+ try{h+=kpbAccBlock(ch,cal);}catch(e){console.error(e);}
+ KPB.forEach(m=>{try{h+=kpbCard(ch,m,cal);}catch(e){console.error(e);}});
+ try{h+=bkCmpBlock(ch);}catch(e){console.error(e);}return h;}
+NEWT.kpbhava=renderKPB;if(!TABS.includes('kpbhava'))TABS.push('kpbhava');
+(function(){const r=SEC18.find(s=>s[0]==='read');const g=r&&r[2].find(x=>x[0]==='g18_full');if(g&&!g[1].includes('kpbhava'))g[1].splice(g[1].indexOf('claude')+1,0,'kpbhava');
+ const sy=SEC18.find(s=>s[0]==='more');const g2=sy&&sy[2].find(x=>x[0]==='g18_sys');if(g2&&!g2[1].includes('kpbhava'))g2[1].splice(g2[1].indexOf('kp')+1,0,'kpbhava');
+ IC18.kpbhava='🗝️';D18.kpbhava=['KP for every house: promise, significators, book rules, timeline, date-fixing, and an accuracy check on your events','KP से हर भाव: वादा, कारक, ग्रंथ नियम, समय-रेखा, दिन-निर्धारण, और आपकी घटनाओं पर सटीकता जाँच'];
+ if(typeof RB_SKIP!=='undefined'&&!RB_SKIP.includes('kpbhava'))RB_SKIP.push('kpbhava');if(typeof FR_TABS!=='undefined'){const f=FR_TABS.find(x=>x[0]==='read');if(f&&!f[1].includes('kpbhava'))f[1].push('kpbhava');}
+ const st=document.createElement('style');st.textContent=`.bkban{background:rgba(120,90,200,.12);border-radius:8px;padding:6px 8px}.bkcmp td,.kpbacc td{vertical-align:top}`;document.head.appendChild(st);})();
+// banner + links on the pages whose results change with the switch
+['claude','bhava12','career','caution','gahan','rog'].forEach(t=>{if(!NEWT[t])return;const f=NEWT[t];NEWT[t]=function(ch){const h=f(ch);if(S.frBuilding||!bkOnly())return h;return ipInsert(h,bkBanner());};});
+const _rKP265=renderKP;renderKP=function(ch){let h=_rKP265(ch);if(S.frBuilding)return h;return bkBanner()+`<p><button class="ghost" data-go="kpbhava">🗝️ ${C('KP — सभी भावों का विश्लेषण, दिन-निर्धारण व सटीकता जाँच','KP — every house, date-fixing and accuracy check')} →</button></p>`+h;};
 
 </script>
 <nav id="bnav" aria-label="Main"></nav>
