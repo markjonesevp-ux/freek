@@ -11818,6 +11818,44 @@ function tmBlock(ch){const T2=tmScan(ch),now=julianNow(),{W,why}=tmLords(ch);con
   ${fut.length?`<h4>${C('विवाह-योग्य काल (आगे)','Marriage windows (ahead)')}</h4><ul class="fx vsfx">${fut.map(wl).join('')}</ul>`:''}`,false);}
 if(NEWT.navamsa){const _nav272=NEWT.navamsa;NEWT.navamsa=function(ch){const h=_nav272(ch);let b='';try{b=tmBlock(ch);}catch(e){console.error(e);}return ipInsert(h,b);};}
 
+// ===== v27.3: Navamsa & Nadi techniques — C.S. Patel, "Predicting through Navamsa and Nadi Astrology" (eventful years by navamsa count, Bhrigu Bindu, taramsa transit, 64th navamsa, Saturn over the Moon's navamsa sign) and the IJATET paper "Light House for Human Life — Navamsha" (vargottama, pushkara, vish navamsa, deva/nara/rakshasa). Tested on recorded events: chance level, so shown for reading, not added to any score =====
+const NN_REL=[['पिता','father'],['माता','mother'],['भाई-बहन','siblings'],['मामा/संबंधी','maternal uncle/relatives'],['संतान/गुरु','children/teacher'],['जीवनसाथी','spouse'],['सेवक/बड़े','servants/elders'],['दादा','paternal grandfather'],['नाना','maternal grandfather']];
+const NN_FIX={0:[12,25,50,65],1:[10,22,32,72],2:[16,24,34,40,63],3:[8,18,21,22,72,80],4:[10,20,30,60,82],5:[20,50,60],6:[3,23,27,38,54,76],7:[13,18,23,28,55,70],8:[4,9,16,36,44,72],9:[19,27,34,49,54,68],10:[7,14,20,28,32,61],11:[10,12,21,26,52,61]};
+const NN_MOON=[8,9,24,22,5,1,4,2,20,38,21,10];
+const nnN=l=>Math.floor(norm(l)/(10/3))+1;
+function nnPlanet(ch,i){const p=ch.planets[i],lon=norm(p.lon),s=Math.floor(lon/30),k=Math.floor((lon%30)/(10/3))+1,nv=varga(lon,9),t=[];
+ if(nv===s)t.push(C('वर्गोत्तम','vargottama'));if(PADA_PUSH[s%4].includes(k))t.push(C('पुष्कर नवांश','pushkara navamsa'));
+ const vish=([0,1,5,8].includes(s)&&k===1)?C('सर्प','sarpa'):([2,4,6,10].includes(s)&&k===5)?C('गृध्र','gridhra'):([3,7,9,11].includes(s)&&k===9)?C('शूकर','shookara'):null;
+ const dg=i<9?dignity(i,nv):'';const nat=[C('देव','deva'),C('नर','nara'),C('राक्षस','rakshasa')][nv%3];return {nv,t,vish,dg,nat};}
+function nnYears(ch){const P=ch.planets,nA=nnN(ch.asc),nM=nnN(P[1].lon),mal=[0,2,6,7,8],out=[];
+ for(let i=0;i<9;i++){const n=nnN(P[i].lon);const y=[((nA-n+108)%108)+1,n,((nM-n+108)%108)+1,((n-nA+108)%108)+1];y.forEach((v,m)=>out.push({y:v,i,m,bad:mal.includes(i)}));}
+ const ln=(nA-1)%12,mn=(nM-1)%12;NN_FIX[ln].concat([8,32,59]).forEach(v=>out.push({y:v,i:-1,m:4,bad:true}));for(let v=NN_MOON[mn];v<=90;v+=12)out.push({y:v,i:1,m:5,bad:true});return out;}
+function nnScan(ch,fn,yrs){const now=julianNow(),out=[];let cur=null;for(let j=now;j<now+yrs*365.25;j+=4){const tr=transitAt(ch,j,true);const h=fn(tr);if(h){if(cur&&j-cur.b<9)cur.b=j;else{cur={a:j,b:j,h};out.push(cur);}}}return out.slice(0,5);}
+function nnBlock(ch){const P=ch.planets,now=julianNow(),age=Math.floor((now-ch.jd)/365.25)+1;
+ const rows=[...Array(9).keys()].map(i=>{const x=nnPlanet(ch,i);const bad=x.vish||x.dg==='debil',good=x.t.length||['exalted','own'].includes(x.dg);
+  return `<li class="${bad&&!good?'neg':good&&!bad?'pos':''}"><b>${pn(i)}</b> → ${C('नवांश','navamsa')} ${sn(x.nv)} · ${x.nat}${x.t.length?' · '+x.t.join(', '):''}${x.dg==='exalted'?' · '+C('नवांश में उच्च','exalted in D9'):x.dg==='debil'?' · '+C('नवांश में नीच','debilitated in D9'):x.dg==='own'?' · '+C('नवांश में स्वराशि','own sign in D9'):''}${x.vish?` · ⚠️ ${C(`${x.vish} (विष) नवांश — ${NN_REL[i][0]} के लिए कष्टकारी`,`${x.vish} (vish) navamsa — harmful to ${NN_REL[i][1]}`)}`:''}</li>`;}).join('');
+ const Y=nnYears(ch),MN=[C('ग्रह→लग्न (होरासार)','planet→lagna (Horasara)'),C('अश्विनी→ग्रह (बुध नाड़ी)','Ashwini→planet (Budha Nadi)'),C('ग्रह→चंद्र (चंद्रकला नाड़ी)','planet→Moon (Chandrakala Nadi)'),C('लग्न→ग्रह (प्रश्न मार्ग)','lagna→planet (Prashna Marga)'),C('लग्न नवांश की निश्चित वर्ष सूची','fixed years of the lagna navamsa'),C('चंद्र नवांश की वर्ष सूची','years of the Moon navamsa')];
+ const up=Y.filter(x=>x.y>=age&&x.y<=age+12).sort((a,b)=>a.y-b.y);const byY={};up.forEach(x=>{(byY[x.y]=byY[x.y]||[]).push(x);});
+ const yl=Object.keys(byY).map(y=>{const a=byY[y],b=a.filter(x=>x.bad).length,g=a.length-b;return `<li class="${b>g?'neg':g>b?'pos':''}"><b>${y}${C('वाँ वर्ष','th year')}</b> (${fdate(ch.jd+(+y-1)*365.25).slice(-4)}–${fdate(ch.jd+(+y)*365.25).slice(-4)}): ${a.map(x=>(x.i>=0?pn(x.i):C('लग्न','lagna'))+' — '+MN[x.m]).join('; ')}</li>`;}).join('');
+ const bb=norm(P[7].lon+norm(P[1].lon-P[7].lon)/2),d=(a,b)=>Math.abs(((a-b+540)%360)-180);
+ const juBB=nnScan(ch,tr=>d(tr[4].lon,bb)<=5,12),saBB=nnScan(ch,tr=>d(tr[6].lon,bb)<=5,12);
+ const nM=nnN(P[1].lon)-1,sM=Math.floor(nM/4),TN=[['जन्म','janma'],['संपत','sampat'],['विपत','vipat'],['क्षेम','kshema'],['प्रत्यक','pratyak'],['साधक','sadhaka'],['वध','vadha'],['मित्र','mitra'],['परम मित्र','parama mitra']];
+ const tar=l=>{const k=nnN(l)-1;if(((k-nM)%4+4)%4)return null;return ((Math.floor(k/4)-sM)%9+9)%9;};
+ const juT=nnScan(ch,tr=>{const t=tar(tr[4].lon);return t!=null&&[1,3,5,7,8].includes(t);},6),saT=nnScan(ch,tr=>[6,7,8].some(i=>{const t=tar(tr[i].lon);return t!=null&&[0,2,4,6].includes(t);}),4);
+ const cn=varga(P[1].lon,9),saCN=nnScan(ch,tr=>tr[6].sign===cn||tr[6].sign===(cn+7)%12,12);
+ const wl=(arr,cls)=>arr.length?arr.map(w=>`<span class="${cls}">${fdate(w.a)} – ${fdate(w.b)}</span>`).join('; '):C('अगले वर्षों में नहीं','not in the coming years');
+ return vsDet(`🪷 ${C('नवांश व नाड़ी विशेष (सी.एस. पटेल)','Navamsa & Nadi techniques (C.S. Patel)')}`,
+  `<p class="note">${C('स्रोत: सी.एस. पटेल, “Predicting through Navamsa and Nadi Astrology” (होरासार, चंद्रकला नाड़ी, नंदी नाड़ी, प्रश्न मार्ग से संकलित); और “Light House for Human Life — Navamsha” (IJATET, 2022)।','Sources: C.S. Patel, “Predicting through Navamsa and Nadi Astrology” (from Horasara, Chandrakala Nadi, Nandi Nadi, Prashna Marga); and “Light House for Human Life — Navamsha” (IJATET, 2022).')}</p>
+  <h4>${C('हर ग्रह का नवांश स्वभाव','Each planet in the navamsa')}</h4><ul class="fx vsfx">${rows}</ul>
+  <h4>📅 ${C('घटना-वर्ष (एक नवांश = जीवन का एक वर्ष) — अगले 12 वर्ष','Eventful years (one navamsa = one year of life) — next 12 years')}</h4><p class="note">${C('लाल = पाप ग्रह/कष्ट-सूची से, हरा = शुभ ग्रह से।','Red = from malefics/trouble lists, green = from benefics.')}</p><ul class="fx vsfx">${yl||'<li>—</li>'}</ul>
+  <h4>🎯 ${C('भृगु बिंदु (राहु-चंद्र मध्य बिंदु, नंदी नाड़ी)','Bhrigu Bindu (Rahu–Moon midpoint, Nandi Nadi)')}: ${sn(signOf(bb))} ${fdeg(bb)}</h4>
+  <p>${C('गुरु इस पर (शुभ घटना)','Jupiter over it (good event)')}: ${wl(juBB,'pos')}<br>${C('शनि इस पर (कष्ट)','Saturn over it (difficulty)')}: ${wl(saBB,'neg')}</p>
+  <h4>⭐ ${C('तारांश गोचर (चंद्रकला नाड़ी)','Taramsa transit (Chandrakala Nadi)')}</h4>
+  <p>${C('गुरु शुभ तारांश में','Jupiter in a good taramsa')}: ${wl(juT,'pos')}<br>${C('शनि/राहु/केतु अशुभ तारांश में','Saturn/Rahu/Ketu in a bad taramsa')}: ${wl(saT,'neg')}</p>
+  <p>${C(`शनि चंद्र-नवांश राशि (${sn(cn)}) या उससे 8वीं राशि में — कष्ट`,`Saturn in the Moon's navamsa sign (${sn(cn)}) or the 8th from it — difficulty`)}: ${wl(saCN,'neg')}</p>
+  <p class="note">🔬 ${C('ईमानदार जाँच: ये तरीके आपकी व 1965 वाली कुंडली की 15 दर्ज घटनाओं पर परखे गए — घटना-वर्ष विधियाँ 60 जाँचों में 3 बार सही (संयोग से 3.5 अपेक्षित), तारांश व भृगु बिंदु भी लगभग संयोग जितने। इसलिए ये पढ़ने के लिए हैं; किसी अंक या भविष्यवाणी में नहीं जोड़े गए।','Honest check: these were tested on 15 recorded events from your chart and the 1965 chart — the eventful-year methods hit 3 of 60 checks (3.5 expected by chance); taramsa and Bhrigu Bindu were also near chance. So they are shown for reading and are not added to any score or prediction.')}</p>`,false);}
+if(NEWT.navamsa){const _nav273=NEWT.navamsa;NEWT.navamsa=function(ch){const h=_nav273(ch);let b='';try{b=nnBlock(ch);}catch(e){console.error(e);}return ipInsert(h,b);};}
+
 // ===== v27.9: navigation re-organised — every page appears exactly once, grouped by what the user wants to do; each group has a one-line guide =====
 const NAV27=[
  ['sol',[['g18_prob',['samasya','labh','rog','upay','kat']],['g27_ask',['prashna','s_ask','ask','questions','converge']],['g27_muh',['muhurat']]]],
