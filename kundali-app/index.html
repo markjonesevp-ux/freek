@@ -12351,6 +12351,166 @@ Object.assign(DY_M,{mars:['मंगल गोचर 7वें/7वें स�
  if(X3_POS.includes(k)){const d=pre?pre.d:dashaAt(ch,jd);if(d){const t=x3tara(P[d.ad.lord].nak,P[1].nak);o.tara=[2,4,6,8,9].includes(t)?1:t===1?0.5:0;}}}catch(e){}return o;};}
 {const _ds283=dySnap;dySnap=function(ch){const s=_ds283(ch);s.v='28.1';return s;};}
 
+// ===== v28.2: running-year analysis engine for the "Running-year snapshot" page.
+// The year's governing house (Sawhney) is read through the lagna chart: its lord's house, sign and dignity, the houses the lord
+// aspects, the planets joined with / aspecting the lord (with the houses THEY rule), planets on the governing house, the dasha
+// periods inside the year and the slow transits. Every life area gets an activation and a tone with the reasons behind it;
+// health is broken down into body parts and ailment types. Accuracy is checked three ways: how specific a statement is to this
+// year, the user's own recorded events in past years, and a blind test against the predictions of another year. =====
+const SYA_AR=[
+ {k:'health',h:[1,6,8,12],lab:['स्वास्थ्य','Health']},{k:'money',h:[2,11,12,8],lab:['धन और ख़र्च','Money and expenses']},
+ {k:'career',h:[10,6,11],lab:['काम-धंधा, नौकरी','Work and job']},{k:'spouse',h:[7,2],lab:['जीवनसाथी, साझेदारी','Spouse, partnership']},
+ {k:'children',h:[5],lab:['संतान, पढ़ाई','Children, studies']},{k:'home',h:[4],lab:['घर, माता, वाहन, मन','Home, mother, vehicle, mind']},
+ {k:'siblings',h:[3],lab:['भाई-बहन, साहस, छोटी यात्रा, संवाद','Siblings, courage, short trips, communication']},{k:'father',h:[9],lab:['भाग्य, पिता, गुरु, धर्म','Fortune, father, teachers, dharma']},
+ {k:'foreign',h:[12,9],lab:['दूर की यात्रा, विदेश, नींद','Long travel, abroad, sleep']},{k:'gains',h:[11],lab:['लाभ, मित्र, इच्छापूर्ति','Gains, friends, wishes']},
+ {k:'disputes',h:[6],lab:['विवाद, कर्ज़, प्रतियोगिता','Disputes, debts, competition']},{k:'sudden',h:[8],lab:['अचानक घटनाएँ, बीमा/विरासत, गूढ़ विषय','Sudden events, insurance/inheritance, the occult']}];
+const SYA_TX={
+ health:[['सेहत पर ध्यान दें — {b} से जुड़ी परेशानी; {a}।','Watch your health — trouble linked to {b}; {a}.'],['सेहत में उतार-चढ़ाव — {b}; {a}।','Ups and downs in health — {b}; {a}.'],['सेहत ठीक रहेगी; पुरानी परेशानी में सुधार।','Health holds well; old troubles ease.']],
+ money:[['अचानक ख़र्च, उधार/EMI या पैसा अटकने के योग।','Sudden expenses, loans/EMIs or money getting stuck.'],['आमदनी और ख़र्च दोनों बढ़ेंगे — बजट पर नज़र रखें।','Both income and spending rise — keep an eye on the budget.'],['आमदनी या बचत में बढ़त, अटका पैसा मिल सकता है।','Income or savings grow; stuck money may come back.']],
+ career:[['काम में दबाव, बदलाव या रुकावट; ऊपर वालों से तनाव।','Pressure, change or hold-ups at work; friction with seniors.'],['काम में बदलाव — मेहनत ज़्यादा, नतीजा धीरे।','Change at work — more effort, slower results.'],['काम में तरक़्क़ी, नई ज़िम्मेदारी या पहचान।','Progress at work, new responsibility or recognition.']],
+ spouse:[['जीवनसाथी से तनाव या उनकी सेहत की चिंता; साझेदारी में सावधानी।','Strain with the spouse or worry about their health; care in partnerships.'],['रिश्ते में उतार-चढ़ाव — बातचीत से सुलझेगा।','Ups and downs in the relationship — talking it out helps.'],['रिश्ते में मज़बूती; विवाह या साझेदारी के अवसर।','The relationship strengthens; chances of marriage or partnership.']],
+ children:[['संतान की सेहत या पढ़ाई की चिंता।','Worry about a child’s health or studies.'],['संतान/पढ़ाई पर ज़्यादा ध्यान देना होगा।','Children/studies need more attention.'],['संतान से ख़ुशी, पढ़ाई में सफलता; संतान-योग।','Joy from children, success in studies; a chance of childbirth.']],
+ home:[['घर में अशांति, माता की सेहत या वाहन/मकान पर ख़र्च; मन बेचैन।','Unrest at home, mother’s health or spending on vehicle/house; a restless mind.'],['घर में बदलाव — मरम्मत, सामान या जगह बदलना।','Changes at home — repairs, purchases or a move.'],['घर/वाहन का सुख, नया सामान या संपत्ति।','Comfort at home, a vehicle, new things or property.']],
+ siblings:[['भाई-बहन से मतभेद, थकान; छोटी यात्राओं में सावधानी।','Differences with siblings, fatigue; care on short trips.'],['मेहनत ज़्यादा, नतीजे मिले-जुले; बातचीत में संयम।','More effort, mixed results; restraint in speech.'],['हिम्मत और मेहनत का फल, भाई-बहन का साथ।','Courage and effort pay off; siblings support you.']],
+ father:[['पिता/गुरु की सेहत या उनसे मतभेद; भाग्य का साथ कम।','Father’s/teacher’s health or differences with them; luck is thin.'],['भाग्य कभी साथ, कभी नहीं; धर्म-कर्म में रुचि।','Luck comes and goes; interest in dharma.'],['भाग्य का साथ, पिता/गुरु से सहयोग, धार्मिक यात्रा।','Luck supports you; help from father/teachers; a pilgrimage.']],
+ foreign:[['यात्राओं में थकान/ख़र्च, नींद की कमी।','Tiring or costly travel, poor sleep.'],['यात्रा और ख़र्च दोनों बढ़ेंगे।','More travel and more spending.'],['दूर की यात्रा या विदेश से लाभ।','Gain from long travel or abroad.']],
+ gains:[['मित्रों से निराशा, लाभ में देरी।','Disappointment from friends, delayed gains.'],['लाभ होगा पर देर से।','Gains come, but late.'],['लाभ, इच्छापूर्ति, मित्रों से मदद।','Gains, wishes fulfilled, help from friends.']],
+ disputes:[['विवाद, कर्ज़ या प्रतियोगिता में उलझन; बीमारी का भी संकेत।','Entanglement in disputes, debts or competition; also a sign of illness.'],['प्रतिस्पर्धा कड़ी — धैर्य से जीत।','Tough competition — patience wins.'],['प्रतियोगिता में जीत, कर्ज़ से राहत।','Winning in competition, relief from debt.']],
+ sudden:[['अचानक घटनाएँ, बाधाएँ और मानसिक दबाव।','Sudden events, obstacles and mental pressure.'],['अचानक बदलाव — कुछ अच्छे, कुछ परेशान करने वाले।','Sudden changes — some good, some troubling.'],['गूढ़ विद्या/शोध में रुचि, बीमा या पैतृक लाभ।','Interest in research/the occult; gain from insurance or inheritance.']]};
+// body (kalapurusha: sign or house 1..12) and planets' health significations
+const SYA_BP={head:['सिर','head'],face:['चेहरा, गला','face, throat'],arms:['कंधे, बाँहें, साँस','shoulders, arms, breathing'],chest:['छाती, फेफड़े','chest, lungs'],heart:['हृदय, पेट का ऊपरी भाग','heart, upper abdomen'],
+ gut:['आँतें, पाचन','intestines, digestion'],back:['कमर, किडनी','lower back, kidneys'],priv:['गुप्त अंग, मूत्र','private parts, urinary'],hips:['कूल्हे, जाँघ','hips, thighs'],knee:['घुटने, हड्डियाँ','knees, bones'],
+ calf:['पिंडली, रक्त-संचार','calves, circulation'],feet:['पैर, नींद','feet, sleep'],nerve:['नसें, मन','nerves, mind'],skin:['त्वचा','skin'],blood:['रक्त','blood'],eyes:['आँखें','eyes'],liver:['लिवर, चर्बी','liver, fat']};
+const SYA_KP=['head','face','arms','chest','heart','gut','back','priv','hips','knee','calf','feet'];
+const SYA_PB=[{head:1,eyes:1,heart:0.5},{chest:1,nerve:1},{head:0.7,blood:1},{nerve:1,skin:0.7,arms:0.7,face:0.5},{liver:1},{face:0.7,back:0.7,priv:0.5},{knee:1,calf:0.5},{nerve:0.8,skin:0.4},{skin:0.5,nerve:0.4}];
+const SYA_AIL=[['सिरदर्द, बुख़ार, आँखों में जलन','headache, fever, eye strain'],['सर्दी-ज़ुकाम, कफ, नींद और मन की बेचैनी','colds, phlegm, sleep and an uneasy mind'],['बुख़ार, सूजन, चोट, ख़ून','fever, inflammation, injury, blood'],
+ ['तनाव, नसें, साँस/गला, त्वचा','stress, nerves, breathing/throat, skin'],['कफ, लिवर, चर्बी/शुगर','phlegm, liver, fat/sugar'],['गला, कफ, हार्मोन, मूत्र','throat, phlegm, hormones, urinary'],
+ ['पुरानी थकान, जोड़ों का दर्द, वात','long fatigue, joint pain, vata'],['तनाव/चिंता, संक्रमण, एलर्जी','stress/anxiety, infection, allergy'],['अचानक संक्रमण, कट/चोट','sudden infection, cuts/injury']];
+const SYA_DO=[{p:1},{k:1,v:0.5},{p:1},{v:1},{k:1},{k:1,v:0.5},{v:1},{v:1},{p:1}],SYA_DN={k:['कफ','kapha'],p:['पित्त','pitta'],v:['वात','vata']};
+const syaRel=(a,b)=>((a-b+12)%12)+1;
+function syaTouch(i,s,N){return N[i]===s||signAspects(i).some(a=>(N[i]+a-1)%12===s);}
+function syaPol(ch,i){const fnv={yk:1,fb:0.7,fn:0,fm:-0.7,neutral:0}[funcNature(ch,i)]||0,nat=[4,5].includes(i)?0.5:i===3?0.2:i===1?(ch.tithi<15?0.3:-0.2):-0.5;
+ const dus=i<7&&housesRuled(ch,i).some(h=>[6,8,12].includes(h))&&!housesRuled(ch,i).includes(1)?-0.4:0;return Math.max(-1.5,Math.min(1.5,fnv+nat+dus));}
+const syaHT=h=>L(HOUSE_T)[h-1];
+const syaHX=h=>S.lang==='hi'?`${HN[h]} भाव`:`${ord(h)} house`,syaHO=h=>S.lang==='hi'?`${X3_HO[h-1]} भाव`:`${ord(h)} house`;
+const syaCache=new Map();
+function syaYear(ch,ry){const ck=Math.round(ch.jd*1440)+'_'+ry+'_'+S.lang;if(syaCache.has(ck))return syaCache.get(ck);
+ const P=ch.planets,N=P.map(p=>p.sign),lag=ch.lagna,gh=((ry-1)%12)+1,gs=(lag+gh-1)%12,Lg=SIGN_LORD[gs],lp=P[Lg],lh=syaRel(lp.sign,lag),owns=housesRuled(ch,Lg);
+ const start=birthdayJD(ch,ch.inp.y+ry-1),end=birthdayJD(ch,ch.inp.y+ry),dus=[6,8,12].includes(gh);
+ const F=[];const add=(w,hs,pol,txt,kind,pl)=>F.push({w,hs,pol,txt,kind,pl});
+ const lr=i=>housesRuled(ch,i),lrT=i=>lr(i).length?` (${C('स्वामी','lord of')} ${lr(i).join(', ')})`:'';
+ const dg=lp.dign,dpol=dg==='exalted'?1:['own','mt'].includes(dg)?0.8:dg==='friend'?0.3:dg==='enemy'?-0.5:dg==='debil'?-1:0;
+ // 1 the governing house itself
+ add(3,[gh],dus?-0.8:[1,5,9,4,7,10].includes(gh)?0.4:0.1,C(`शासक भाव ${HN[gh]} (${sn(gs)}) — ${syaHT(gh)}`,`governing house ${ord(gh)} (${sn(gs)}) — ${syaHT(gh)}`),'gh');
+ // 2 the lord's placement, sign and dignity
+ const dtx={exalted:C('उच्च','exalted'),own:C('अपनी राशि में','own sign'),mt:C('मूलत्रिकोण में','moolatrikona'),friend:C('मित्र राशि में','friend’s sign'),neutral:C('सम राशि में','neutral sign'),enemy:C('शत्रु राशि में','enemy sign'),debil:C('नीच','debilitated')}[dg]||'';
+ add(2,[lh],dpol+(dus?-0.6:0)+([6,8,12].includes(lh)?-0.4:0)+(lp.comb?-0.4:0),C(`स्वामी ${pn(Lg)} ${X3_HO[lh-1]} भाव में, ${sn(lp.sign)} — ${dtx}${lp.retro&&Lg>1?', वक्री':''}${lp.comb?', अस्त':''}`,`lord ${pn(Lg)} in the ${ord(lh)} house, ${sn(lp.sign)} — ${dtx}${lp.retro&&Lg>1?', retrograde':''}${lp.comb?', combust':''}`),'lp',Lg);
+ // 3 the other houses the lord rules
+ owns.filter(h=>h!==gh).forEach(h=>add(1.5,[h],dpol*0.5+(dus?-0.5:0),C(`${pn(Lg)} ${X3_HO[h-1]} भाव का भी स्वामी — ${syaHT(h)}`,`${pn(Lg)} also rules the ${ord(h)} house — ${syaHT(h)}`),'own',Lg));
+ // 4 houses the lord aspects
+ signAspects(Lg).forEach(a=>{const s=(lp.sign+a-1)%12,h=syaRel(s,lag),occ=P.filter(p=>p.i!==Lg&&p.sign===s).map(p=>pn(p.i));
+  add(1,[h],dpol*0.5+(dus?-0.4:0),C(`${pn(Lg)} की दृष्टि ${X3_HO[h-1]} भाव (${syaHT(h)}) पर${occ.length?` — वहाँ ${occ.join(', ')}`:''}`,`${pn(Lg)} aspects the ${ord(h)} house (${syaHT(h)})${occ.length?` — holding ${occ.join(', ')}`:''}`),'asp',Lg);});
+ // 5 planets joined with the lord, and 6 planets aspecting the lord
+ const conj=[],aspL=[];for(let i=0;i<9;i++){if(i===Lg)continue;if(N[i]===lp.sign)conj.push(i);else if(signAspects(i).some(a=>(N[i]+a-1)%12===lp.sign))aspL.push(i);}
+ conj.forEach(i=>{const hs=lr(i);add(1.3,hs.length?hs:[gh],syaPol(ch,i)+(dus?-0.4:0),C(`साथ बैठे ${pn(i)}${lrT(i)}${hs.length?' — '+hs.map(syaHT).join('; '):i===7?' — भ्रम, तनाव, अचानक बात':' — अलगाव, अचानक बात'}`,`joined by ${pn(i)}${lrT(i)}${hs.length?' — '+hs.map(syaHT).join('; '):i===7?' — confusion, stress, the unexpected':' — detachment, the unexpected'}`),'conj',i);});
+ aspL.forEach(i=>{const hs=lr(i);add(0.9,hs.length?hs:[gh],syaPol(ch,i)-([2,6,7,8].includes(i)?0.3:0)+(dus?-0.3:0),C(`${pn(i)}${lrT(i)} की दृष्टि स्वामी पर`,`${pn(i)}${lrT(i)} aspects the lord`),'aspL',i);});
+ // 7 planets in / aspecting the governing house
+ const inG=[],onG=[];for(let i=0;i<9;i++){if(i===Lg)continue;if(N[i]===gs)inG.push(i);else if(signAspects(i).some(a=>(N[i]+a-1)%12===gs))onG.push(i);}
+ inG.forEach(i=>{const hs=lr(i);add(1.1,hs.length?hs:[gh],syaPol(ch,i)+(dus?-0.3:0),C(`शासक भाव में ${pn(i)}${lrT(i)}`,`${pn(i)}${lrT(i)} sits in the governing house`),'inG',i);});
+ onG.forEach(i=>{const hs=lr(i);add(0.7,hs.length?hs:[gh],syaPol(ch,i),C(`शासक भाव पर ${pn(i)}${lrT(i)} की दृष्टि`,`${pn(i)}${lrT(i)} aspects the governing house`),'onG',i);});
+ // 8 dasha periods inside the year
+ const ads=[];ch.dasha.mds.forEach(m=>m.ads.forEach(a=>{if(a.end>start&&a.start<end)ads.push({md:m.lord,ad:a.lord,s:Math.max(a.start,start),e:Math.min(a.end,end)});}));
+ const players=new Set([Lg,...conj,...aspL,...inG]);
+ const mdF={};ads.forEach(a=>{mdF[a.md]=mdF[a.md]||{s:a.s,e:a.e};mdF[a.md].e=a.e;});const dl2=[...Object.entries(mdF).map(([D,x])=>({D:+D,j:0,s:x.s,e:x.e})),...ads.map(a=>({D:a.ad,j:1,s:a.s,e:a.e}))];
+ dl2.forEach(a=>{const frac=(a.e-a.s)/(end-start);[a.D].forEach(D=>{const j=a.j;const link=D===Lg?C('स्वयं शासक भाव का स्वामी','the governing lord itself'):conj.includes(D)?C('स्वामी के साथ बैठा','joined with the lord'):aspL.includes(D)?C('स्वामी को देखता है','aspects the lord'):inG.includes(D)?C('शासक भाव में बैठा','sits in the governing house'):'';
+  if(!link)return;const hs=lr(D);add((j?1.4:0.8)*Math.max(0.25,frac),hs.length?[gh,...hs]:[gh],syaPol(ch,D)+(dus?-0.3:0),C(`${j?'अंतर्दशा':'महादशा'} ${pn(D)} (${fdate(a.s)} – ${fdate(a.e)}) — ${link}`,`${j?'antardasha':'mahadasha'} ${pn(D)} (${fdate(a.s)} – ${fdate(a.e)}) — ${link}`),'dasha',D);});});
+ // 9 slow transits during the year (12 monthly samples)
+ const tr=[];for(let k=0;k<12;k++){const j=start+(k+0.5)*(end-start)/12,s=siderealAll(j,SET.ayan);tr.push({j,T:PL.map(x=>signOf(s[x]))});}
+ const frac=(i,s)=>tr.filter(t=>syaTouch(i,s,t.T)).length/12;
+ const saG=Math.max(frac(6,gs),frac(6,lp.sign)),juG=Math.max(frac(4,gs),frac(4,lp.sign)),saL=frac(6,lag),saM=tr.filter(t=>[12,1,2,4,8].includes(syaRel(t.T[6],N[1]))).length/12;
+ if(saG>=0.25)add(1.2*saG,[gh,lh],-0.7,C(`गोचर शनि शासक भाव/स्वामी पर (${Math.round(saG*12)} महीने)`,`transit Saturn on the governing house/lord (${Math.round(saG*12)} months)`),'tr',6);
+ if(juG>=0.25)add(1.2*juG,[gh,lh],0.8,C(`गोचर गुरु शासक भाव/स्वामी पर (${Math.round(juG*12)} महीने)`,`transit Jupiter on the governing house/lord (${Math.round(juG*12)} months)`),'tr',4);
+ if(saL>=0.25)add(0.8*saL,[1],-0.6,C(`गोचर शनि लग्न पर (${Math.round(saL*12)} महीने)`,`transit Saturn on the lagna (${Math.round(saL*12)} months)`),'tr',6);
+ if(saM>=0.25)add(0.8*saM,[1,4],-0.5,C(`साढ़ेसाती/ढैया (${Math.round(saM*12)} महीने)`,`sade sati/dhaiya (${Math.round(saM*12)} months)`),'tr',6);
+ // area scores
+ const areas=SYA_AR.map(A=>{let act=0,pw=0;const why=[];F.forEach(f=>{const ov=f.hs.reduce((a,h)=>a+(A.h[0]===h?1:A.h.includes(h)?0.55:0),0);if(!ov)return;const c=f.w*ov;act+=c;pw+=c*f.pol;why.push({c,f});});
+  why.sort((a,b)=>b.c-a.c);const nz=1+0.55*(A.h.length-1);return {k:A.k,lab:A.lab,act:act/nz,tone:act?pw/act:0,why:why.slice(0,4).map(x=>x.f)};});
+ const ranked=[...areas].sort((a,b)=>b.act-a.act);ranked.forEach((a,i)=>a.rank=i+1);
+ // health detail
+ const bp={},ail={},dos={k:0,p:0,v:0};const bpa=(k,w)=>bp[k]=(bp[k]||0)+w;
+ bpa(SYA_KP[gh-1],1.5);bpa(SYA_KP[gs],1.5);bpa(SYA_KP[lh-1],1.5);bpa(SYA_KP[lp.sign],0.8);
+ const hp=[Lg,...conj,...aspL,...inG];ads.forEach(a=>{if(players.has(a.ad))hp.push(a.ad);});
+ hp.forEach(i=>{const w=[0,2,6,7,8].includes(i)?1.2:1;Object.entries(SYA_PB[i]).forEach(([k,v])=>bpa(k,v*w));ail[i]=(ail[i]||0)+w;Object.entries(SYA_DO[i]).forEach(([k,v])=>dos[k]+=v*w);});
+ const health={bp:Object.entries(bp).sort((a,b)=>b[1]-a[1]).slice(0,3).map(x=>x[0]),ail:Object.entries(ail).sort((a,b)=>b[1]-a[1]).slice(0,3).map(x=>+x[0]),dos:(()=>{const o=Object.entries(dos).sort((a,b)=>b[1]-a[1]);return o[1][1]>=0.85*o[0][1]?[o[0][0],o[1][0]]:[o[0][0]];})()};
+ // months: pratyantar lord and Mars transit for health; good months
+ const hset=new Set([lordOf(ch,6),lordOf(ch,8),lordOf(ch,12),7,8,...(dus?[Lg]:[])]),gset=new Set([lordOf(ch,1),lordOf(ch,5),lordOf(ch,9),4]);
+ const months=tr.map(t=>{const d=dashaAt(ch,t.j);if(!d)return null;const ms=[gs,lag].some(s=>t.T[2]===s||(t.T[2]+6)%12===s);
+  const hz=(hset.has(d.pd.lord)?1:0)+(hset.has(d.ad.lord)?0.5:0)+(ms?0.7:0)+(syaTouch(6,lag,t.T)?0.3:0),gd=(gset.has(d.pd.lord)?1:0)+(syaTouch(4,gs,t.T)||syaTouch(4,lag,t.T)?0.6:0)-(ms?0.3:0);
+  return {j:t.j,pd:d.pd.lord,ad:d.ad.lord,hz,gd,mars:ms};}).filter(Boolean);
+ const trs=[6,4,7].map(i=>{const seq=[];tr.forEach(t=>{const s=t.T[i];if(!seq.length||seq[seq.length-1]!==s)seq.push(s);});return {i,seq};});
+ const R={ry,gh,gs,L:Lg,lh,owns,dus,F,conj,aspL,inG,onG,ads,areas,ranked,health,months,trs,start,end,saM};syaCache.set(ck,R);return R;}
+const syaBand=t=>t<=-0.25?0:t>=0.25?2:1;
+function syaText(ch,r,a){const b=syaBand(a.tone);let t=C(...SYA_TX[a.k][b]);
+ if(a.k==='health'){const hh=r.health;t=t.replace('{b}',hh.bp.map(k=>C(...SYA_BP[k])).join(', ')).replace('{a}',hh.ail.map(i=>C(...SYA_AIL[i])).join('; ')+C(` (${hh.dos.map(d=>SYA_DN[d][0]).join('-')} प्रकृति)`,` (${hh.dos.map(d=>SYA_DN[d][1]).join('-')} nature)`));}
+ return t;}
+const SYA_EVA={marriage:['spouse',1],divorce:['spouse',-1],children:['children',1],career:['career',1],jobloss:['career',-1],property:['home',1],vehicle:['home',1],foreign:['foreign',0],wealth:['money',1],finloss:['money',-1],
+ education:['children',1],studybreak:['children',-1],healthc:['health',-1],accident:['health',-1],bereave:['sudden',-1]};
+// statement items for a year: the top 4 areas with their tone (used by the specificity count and the blind test)
+function syaItems(ch,r){return r.ranked.slice(0,4).map(a=>({k:a.k,b:syaBand(a.tone)}));}
+function syaSpec(ch,ry){const me=syaItems(ch,syaYear(ch,ry)),cnt={};for(let y=ry+1;y<ry+12;y++){const it=syaItems(ch,syaYear(ch,y));me.forEach(m=>{if(it.some(x=>x.k===m.k&&Math.abs(x.b-m.b)<=1))cnt[m.k]=(cnt[m.k]||0)+1;});}return cnt;}
+// recorded events of past years vs. the engine: was the event's area among that year's top 4? Chance = the same check in the other 11 years
+function syaBacktest(ch){const ev=getPev(ch).filter(e=>SYA_EVA[e.k]),now=julianNow(),out=[];
+ ev.forEach(e=>{const [y,m,d]=e.d.split('-').map(Number),jd=julian(y,m,d,12-ch.inp.tz);if(jd>now||jd<ch.jd)return;const ry=runningYearAt(ch,jd),[ak,sg]=SYA_EVA[e.k];
+  const hit=ry2=>{const r=syaYear(ch,ry2),a=r.areas.find(x=>x.k===ak);return a.rank<=4&&(sg===0||(sg<0?a.tone<0.25:a.tone>-0.25));};
+  let c=0;for(let k=1;k<12;k++)if(hit(ry+k))c++;out.push({e,ry,gh:((ry-1)%12)+1,hit:hit(ry),base:c/11,ak});});
+ return out;}
+function syaBlind(ch,ry){const r=syaYear(ch,ry),real=syaItems(ch,r);let dec=[];for(const off of [6,5,7,4,8]){syaItems(ch,syaYear(ch,ry+off)).forEach(x=>{if(!real.some(y=>y.k===x.k)&&!dec.some(y=>y.k===x.k))dec.push({...x,off});});if(dec.length>=4)break;}
+ dec=dec.slice(0,4);const all=[...real.map(x=>({...x,real:1})),...dec.map(x=>({...x,real:0}))];let seed=Math.round(ch.jd*1440)%9973+ry*31;const rnd=()=>(seed=(seed*16807)%2147483647)/2147483647;
+ for(let i=all.length-1;i>0;i--){const j=Math.floor(rnd()*(i+1));[all[i],all[j]]=[all[j],all[i]];}return all;}
+const syaBKey=(ch,ry)=>'kd_syb_'+Math.round(ch.jd*1440)+'_'+ry;
+function syaBGet(ch,ry){try{return JSON.parse(localStorage.getItem(syaBKey(ch,ry))||'{}');}catch(e){return (S.sybMem||{})[syaBKey(ch,ry)]||{};}}
+function syaBPut(ch,ry,v){S.sybMem=S.sybMem||{};S.sybMem[syaBKey(ch,ry)]=v;try{localStorage.setItem(syaBKey(ch,ry),JSON.stringify(v));}catch(e){}}
+
+function syaBlock(ch,ry){const r=syaYear(ch,ry),P=ch.planets,now=julianNow(),cur=runningYearAt(ch,now),past=r.end<now,hi=S.lang==='hi';
+ const tone=t=>{const b=syaBand(t);return chip(['chal','mixed','fav'][b],[C('सावधानी','caution'),C('मिला-जुला','mixed'),C('शुभ','favourable')][b]);};
+ // 1 the chain through the lagna chart
+ const chain=r.F.filter(f=>!['dasha','tr'].includes(f.kind)).map(f=>`<li class="${f.pol<=-0.3?'bad':f.pol>=0.3?'pos':''}">${f.txt}</li>`).join('');
+ const sum=C(`${ry}वाँ वर्ष (${fdate(r.start)} – ${fdate(r.end)}) <b>${syaHO(r.gh)}</b> का है, जिसके स्वामी <b>${pn(r.L)}</b> ${syaHO(r.lh)} में बैठे हैं। इसलिए इस वर्ष ${syaHT(r.gh)} के विषय ${syaHT(r.lh)} के रास्ते आते हैं${r.conj.length?`, और साथ बैठे ${r.conj.map(pn).join(', ')} के भावों (${[...new Set(r.conj.flatMap(i=>housesRuled(ch,i)))].sort((a,b)=>a-b).join(', ')||'—'}) के विषय भी जुड़ते हैं`:''}।`,
+  `Year ${ry} (${fdate(r.start)} – ${fdate(r.end)}) belongs to the <b>${syaHX(r.gh)}</b>, whose lord <b>${pn(r.L)}</b> sits in the ${syaHX(r.lh)}. So the matters of ${syaHT(r.gh)} come through ${syaHT(r.lh)}${r.conj.length?`, joined by the matters of the houses ruled by ${r.conj.map(pn).join(', ')} (${[...new Set(r.conj.flatMap(i=>housesRuled(ch,i)))].sort((a,b)=>a-b).join(', ')||'—'})`:''}.`);
+ const dl=r.ads.map(a=>`${pn(a.md)}–${pn(a.ad)} <span class="note">${fdate(a.s)} – ${fdate(a.e)}</span>`).join('<br>');
+ const dlink=r.F.filter(f=>f.kind==='dasha').map(f=>`<li>${f.txt}</li>`).join('');
+ const trl=r.trs.map(t=>`${pn(t.i)}: ${t.seq.map(s=>`${sn(s)} (${C(HN[syaRel(s,ch.lagna)],ord(syaRel(s,ch.lagna)))})`).join(' → ')}`).join('<br>')+r.F.filter(f=>f.kind==='tr').map(f=>`<br><b>•</b> ${f.txt}`).join('');
+ // 2 area predictions
+ const spec=syaSpec(ch,ry);
+ const top=r.ranked.slice(0,5).map((a,ix)=>{const sp=ix<4?(spec[a.k]||0)+1:null;return `<li class="${syaBand(a.tone)===0?'bad':syaBand(a.tone)===2?'pos':''}"><b>${C(...a.lab)}</b> ${tone(a.tone)}<br>${syaText(ch,r,a)}<br><span class="note">${C('क्यों','Why')}: ${a.why.map(f=>f.txt.replace(/<[^>]+>/g,'')).slice(0,3).join(' · ')}</span>${sp?`<br><span class="note">${C(`यह बात 12 में से ${sp} ${sp>1?'वर्षों':'वर्ष'} में आती है`,`This appears in ${sp} of 12 years`)} — ${sp<=3?C('इस वर्ष के लिए ख़ास','specific to this year'):sp<=6?C('कुछ हद तक ख़ास','somewhat specific'):C('लगभग हर वर्ष — सामान्य बात','almost every year — generic')}</span>`:''}</li>`;}).join('');
+ const rest=r.ranked.slice(5).map(a=>`${C(...a.lab)} ${tone(a.tone)}`).join(' · ');
+ // 3 months
+ const mh=[...r.months].sort((a,b)=>b.hz-a.hz).filter(m=>m.hz>=1).slice(0,4).sort((a,b)=>a.j-b.j),mg=[...r.months].sort((a,b)=>b.gd-a.gd).filter(m=>m.gd>=1&&!mh.includes(m)&&!m.mars).slice(0,3).sort((a,b)=>a.j-b.j);
+ const ml=m=>`<b>${fdate(m.j).slice(3)}</b> <span class="note">(${C('प्रत्यंतर','pratyantar')} ${pn(m.pd)}${m.mars?C(', मंगल गोचर',', Mars transit'):''})</span>`;
+ // 4 past events of this chart
+ const bt=syaBacktest(ch),btH=bt.filter(x=>x.hit).length,btE=bt.reduce((a,x)=>a+x.base,0);
+ const btRows=bt.map(x=>({cls:x.hit?'pos':'',c:[`${x.e.d}`,T('ec_'+x.e.k)||x.e.k,`${x.ry} (${x.gh})`,x.hit?`✓ ${C('ऊपर के 4 में','in the top 4')}`:'✗',`${Math.round(x.base*100)}%`]}));
+ // 5 blind test
+ const BL=syaBlind(ch,ry),bv=syaBGet(ch,ry),done=BL.every((x,i)=>bv[i]==='y'||bv[i]==='n');
+ const bit=BL.map((x,i)=>{const a=SYA_AR.find(z=>z.k===x.k),txt=C(...SYA_TX[x.k][x.b]).replace(/ — \{b\}.*$|\{b\}|\{a\}/g,'').replace(/[;—]\s*[।.]?$/,'');
+  return `<li>${C(...a.lab)}: ${txt}<br><span class="bar"><button class="btn${bv[i]==='y'?'':' ghost'}" data-syb="${i}" data-v="y">✓ ${C('हुआ','happened')}</button> <button class="btn${bv[i]==='n'?'':' ghost'}" data-syb="${i}" data-v="n">✗ ${C('नहीं हुआ','did not')}</button>${done?` <span class="note">${x.real?C('← इस वर्ष की भविष्यवाणी','← this year’s prediction'):C(`← दूसरे वर्ष (${ry+x.off}) की`,`← from another year (${ry+x.off})`)}</span>`:''}</span></li>`;}).join('');
+ let bres='';if(done){const rr=BL.filter((x,i)=>x.real),dd=BL.filter(x=>!x.real),rh=BL.filter((x,i)=>x.real&&bv[i]==='y').length,dh=BL.filter((x,i)=>!x.real&&bv[i]==='y').length;
+  bres=`<p><b>${C('नतीजा','Result')}:</b> ${C(`इस वर्ष की भविष्यवाणी ${rh}/${rr.length} सही; दूसरे वर्ष की (नकली) ${dh}/${dd.length} सही।`,`This year’s prediction ${rh}/${rr.length} right; another year’s (decoy) ${dh}/${dd.length} right.`)} ${rh>dh?C('इंजन ने इस वर्ष को सच में पहचाना।','The engine really picked out this year.'):rh===dh?C('इंजन नकली से बेहतर नहीं निकला।','The engine did no better than the decoy.'):C('नकली बातें ज़्यादा सही निकलीं — इस वर्ष इंजन चूका।','The decoys did better — the engine missed this year.')}</p>`;}
+ return sec(`🔭 ${C('लग्न कुंडली से इस वर्ष का विश्लेषण','This year read through the lagna chart')} — ${syaHX(r.gh)}`,
+   `<p>${sum}</p><ul class="fx vsfx">${chain}</ul>`)+
+  sec(`📆 ${C('इस वर्ष की दशा और गोचर','Dasha and transits in this year')}`,`<p>${dl}</p>${dlink?`<ul class="fx vsfx">${dlink}</ul>`:`<p class="note">${C('इस वर्ष की दशा शासक भाव से सीधे नहीं जुड़ती — फल हल्के रह सकते हैं।','This year’s dasha does not link directly to the governing house — results may stay mild.')}</p>`}<p class="note">${trl}</p>`)+
+  sec(`🎯 ${C('इस वर्ष क्या-क्या होगा','What this year brings')}`,`<ul class="fx vsfx">${top}</ul><p class="note">${C('बाक़ी विषय (कम सक्रिय)','Other areas (less active)')}: ${rest}</p>
+   ${mh.length?`<p>🩺 ${C('सेहत/सावधानी के महीने','Months to take care')}: ${mh.map(ml).join(', ')}</p>`:''}${mg.length?`<p>🌿 ${C('अनुकूल महीने','Favourable months')}: ${mg.map(ml).join(', ')}</p>`:''}
+   <p class="note">${C('हर बात के साथ लिखा है कि वह 12 में से कितने वर्षों में आती है। “लगभग हर वर्ष” वाली बात इस वर्ष के बारे में ज़्यादा कुछ नहीं बताती।','Each statement says in how many of 12 years it appears. A statement that comes “almost every year” says little about this year in particular.')}</p>`)+
+  sec(`🧪 ${C('कितना सटीक? — आपकी दर्ज घटनाओं से जाँच','How accurate? — checked against your recorded events')}`,`<p class="note">🔬 ${C('40 लोगों (जन्म-समय वाले) की 240 घटनाओं पर यही इंजन: 54 बार घटना का विषय उस वर्ष के ऊपर के 4 विषयों में था, संयोग से 60.4 — यानी यह पद्धति अब तक संयोग से बेहतर साबित नहीं हुई। इसलिए इसे दिशा-सूचक मानें, पक्की भविष्यवाणी नहीं; अपनी कुंडली पर नीचे की अंधी जाँच से ख़ुद परखें।','On 240 events of 40 people with birth times, this engine put the event’s area among that year’s top 4 in 54 cases, chance 60.4 — so the method has not yet proved better than chance. Treat it as a pointer, not a firm prediction; test it on your own chart with the blind test below.')}</p>`+(bt.length?
+   `<p>${C(`आपकी ${bt.length} दर्ज घटनाओं में से <b>${btH}</b> का विषय उसी वर्ष के ऊपर के 4 विषयों में था। संयोग से (बाक़ी 11 वर्षों के इंजन से) लगभग <b>${btE.toFixed(1)}</b> आता।`,`Of your ${bt.length} recorded events, <b>${btH}</b> had their area among that year’s top 4. By chance (the engine’s other 11 years) about <b>${btE.toFixed(1)}</b> would.`)}</p>${vsDet(C('हर घटना','Each event'),tbl([C('तारीख़','Date'),C('घटना','Event'),C('वर्ष (भाव)','Year (house)'),C('इंजन','Engine'),C('संयोग','Chance')],btRows),false)}`
+   :`<p>${C('“पिछली घटनाओं से जाँच” में अपनी घटनाएँ दर्ज करें — यहाँ अपने-आप दिखेगा कि इंजन ने उन वर्षों को सही पहचाना या नहीं।','Record your events in “Verify with past events” — this panel will then show whether the engine picked out those years.')}</p>`))+
+  sec(`🙈 ${C('अंधी जाँच — इस वर्ष','Blind test — this year')}`,`<p>${C('नीचे 8 बातें हैं: 4 इस वर्ष की भविष्यवाणी से, 4 किसी दूसरे वर्ष की भविष्यवाणी से — मिलाकर। जो सच में हुआ उस पर ✓, जो नहीं हुआ उस पर ✗ लगाएँ। सब पूरा होने पर ऐप बताएगा कि असली बातें नकली से ज़्यादा सही निकलीं या नहीं।','Below are 8 statements: 4 from this year’s prediction and 4 from another year’s, mixed. Mark ✓ for what really happened and ✗ for what did not. When all are marked, the app shows whether the real ones beat the decoys.')}${past||ry===cur?'':`<br><span class="note">${C('यह वर्ष अभी आया नहीं — इसे वर्ष बीतने पर भरें।','This year has not come yet — fill this in after it passes.')}</span>`}</p><ul class="fx vsfx">${bit}</ul>${bres}`);}
+if(NEWT.snapyr){const _sy284=NEWT.snapyr;NEWT.snapyr=function(ch){const h=_sy284(ch);let b='';try{const ry=S.syr||runningYearAt(ch,julianNow());b=syaBlock(ch,ry);}catch(e){console.error(e);}
+ const k=h.indexOf(`<section class="blk"><h3>${T('syLife')}`);return k>=0?h.slice(0,k)+b+h.slice(k):h+b;};}
+document.addEventListener('click',e=>{const t=e.target&&e.target.closest&&e.target.closest('[data-syb]');if(!t||!S.ch)return;const ry=S.syr||runningYearAt(S.ch,julianNow()),v=syaBGet(S.ch,ry);v[t.dataset.syb]=t.dataset.v;syaBPut(S.ch,ry,v);renderAll();});
+SH_ROWS.push(['चालू वर्ष इंजन (शासक भाव + लग्न विश्लेषण): घटना का विषय उस वर्ष के ऊपर के 4 विषयों में','Running-year engine (governing house + lagna reading): event’s area among that year’s top 4',54,240,60.4]);
+
 </script>
 <nav id="bnav" aria-label="Main"></nav>
 </body></html>
