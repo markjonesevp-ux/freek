@@ -12208,7 +12208,7 @@ Object.assign(I18N.hi,{t_bsamhita:'भृगु संहिता — लग्
 function renderBsamhita(ch){const L0=ch.lagna,lg=S.bsl!=null&&S.bslJd===ch.jd?S.bsl:L0,hi=S.lang==='hi',P=ch.planets,tr=transitAt(ch,julianNow(),true);
  const opt=[...Array(12).keys()].map(i=>`<option value="${i}"${i===lg?' selected':''}>${sn(i)}${i===L0?' — '+C('आपका लग्न','your lagna'):''}</option>`).join('');
  const rows=[...Array(9).keys()].map(i=>{const h=((P[i].sign-lg+12)%12)+1,t=(hi?BS_D.hi:BS_D.en)[lg][i][h-1];
-  return `<li><b>${pn(i)}</b> — ${C(h+'वाँ भाव',ord(h)+' house')} (${sn(P[i].sign)})<br>${t?t:`<span class="note">${C('ग्रंथ में यह फल नहीं दिया गया (या स्कैन में पढ़ा नहीं जा सका)।','The book gives no result here (or the scan could not be read).')}</span>`}</li>`;}).join('');
+  return `<li><b>${pn(i)}</b> — ${C(['पहला','दूसरा','तीसरा','चौथा','पाँचवाँ','छठा','सातवाँ','आठवाँ','नौवाँ','दसवाँ','ग्यारहवाँ','बारहवाँ'][h-1]+' भाव',ord(h)+' house')} (${sn(P[i].sign)})<br>${t?t:`<span class="note">${C('ग्रंथ में यह फल नहीं दिया गया (या स्कैन में पढ़ा नहीं जा सका)।','The book gives no result here (or the scan could not be read).')}</span>`}</li>`;}).join('');
  const now=tr.slice(0,9).map((x,i)=>`${pn(i)} ${sn(x.sign)}`).join(' · ');
  return `<div class="pagehead"><h2>📜 ${T('t_bsamhita')}</h2></div>`+
   sec(C('ग्रंथ और आपकी कुंडली','The book and your chart'),`<p class="note">${C('स्रोत: टी.एम. राव, “Bhrigu Samhita” (सागर पब्लिकेशन्स) — हर लग्न के लिए हर ग्रह का हर भाव में अलग फल। हिंदी अनुवाद ऐप के लिए किया गया है; अंग्रेज़ी पाठ स्कैन से निकालकर सुधारा गया है।','Source: T.M. Rao, “Bhrigu Samhita” (Sagar Publications) — a separate result for every planet in every house for each lagna. The Hindi is translated for the app; the English is taken from the scan and cleaned.')}</p>
@@ -12221,6 +12221,135 @@ D18.bsamhita=['Bhrigu Samhita: what the book says for each planet in each house,
 if(typeof RB_SKIP!=='undefined'&&!RB_SKIP.includes('bsamhita'))RB_SKIP.push('bsamhita');
 (function(){const g=NAV27.find(s=>s[0]==='more')[1].find(x=>x[0]==='g18_book');if(g&&!g[1].includes('bsamhita'))g[1].unshift('bsamhita');navReorg();})();
 document.addEventListener('change',e=>{if(e.target&&e.target.id==='bsl'){S.bsl=+e.target.value;S.bslJd=S.ch&&S.ch.jd;renderAll();}});
+
+// ===== v28.1: three documents the user shared — "Empty House Theory & Karaka" (M. Joshi), "Kundali Analysis" (Astro Pooja seminar),
+// and the Navtara sheet (V. Mantri). Each card says what the source claims and what the test on real events found
+// (research/docs2_analysis.md, research/navtara_analysis.md). Two watch-list rules are added to the prediction diary. =====
+const X3_EXL=[10,33,298,165,95,357,200],X3_POS=['marriage','children','career','property','vehicle','foreign','wealth','education'];
+const x3tara=(n,j)=>((n-j+27)%27)%9+1;
+const X3_HN=['पहला','दूसरा','तीसरा','चौथा','पाँचवाँ','छठा','सातवाँ','आठवाँ','नौवाँ','दसवाँ','ग्यारहवाँ','बारहवाँ'],X3_HO=['पहले','दूसरे','तीसरे','चौथे','पाँचवें','छठे','सातवें','आठवें','नौवें','दसवें','ग्यारहवें','बारहवें'];
+const x3hh=(h,obl)=>C((obl?X3_HO:X3_HN)[h-1]+' भाव',ord(h)+' house');
+const x3hit=(L,s,P,nodes)=>P[L].sign===s||((L<7||nodes)&&signAspects(L).some(a=>(P[L].sign+a-1)%12===s));
+function x3pure(ch,h,nodes){const s=(ch.lagna+h-1)%12;return ![...Array(9).keys()].some(L=>x3hit(L,s,ch.planets,nodes));}
+const x3test=(hi,en)=>`<p class="note">🔬 ${C('जाँच','Test')}: ${C(hi,en)}</p>`;
+
+// ---- 1. Empty (pure) houses and the karaka of each house (PDF) — on the "each house" page
+const X3_BH=[['शरीर, स्वयं','body, self'],['धन, वाणी, परिवार','wealth, speech, family'],['साहस, छोटे भाई-बहन','courage, younger siblings'],['सुख, माता, घर','comfort, mother, home'],['संतान, विद्या','children, learning'],['रोग, शत्रु, सेवा','illness, rivals, service'],
+ ['विवाह, साझेदारी','marriage, partnership'],['आयु, अचानक घटनाएँ','longevity, sudden events'],['भाग्य, धर्म','fortune, dharma'],['कर्म, पद','work, status'],['लाभ, इच्छापूर्ति','gains, wishes'],['व्यय, मोक्ष, नींद','expenses, liberation, sleep']];
+function x3Kar(ch){const fem=(ch.inp.gender||'m')==='f';return {1:[0],2:[4],3:[2],4:[1],5:[4],6:[2,6],7:[fem?4:5],8:[6],9:[4],10:[0,3,6],11:[4],12:[6]};}
+function emptyKarakaBlock(ch){const P=ch.planets,K=x3Kar(ch);
+ const strict=[...Array(12).keys()].map(i=>i+1).filter(h=>x3pure(ch,h,true)),loose=[...Array(12).keys()].map(i=>i+1).filter(h=>x3pure(ch,h,false)&&!strict.includes(h));
+ const pl=h=>{const L=lordOf(ch,h);return `<b>${x3hh(h)}</b> (${C(X3_BH[h-1][0],X3_BH[h-1][1])}) — ${C('स्वामी','lord')} ${pn(L)} ${C('अभी','in the')} ${x3hh(P[L].house,1)}${C(' में','')}, ${C('कारक','karaka')} ${K[h].map(pn).join('/')}`;};
+ let flag=0;const rows=[...Array(12).keys()].map(i=>{const h=i+1,s=(ch.lagna+i)%12;const st=K[h].map(k=>{const r=((P[k].sign-s+12)%12)+1;const v=r===1?'own':[6,8,12].includes(r)?'dus':'ok';return {k,r,v};});
+  const bad=st.some(x=>x.v!=='ok');if(bad)flag++;
+  const vt=x=>x.v==='own'?C('अपने ही भाव में — “कारको भाव नाशाय”: चीज़ मिलती है, सुख कम','in its own house — “karako bhava nashaya”: the thing comes, the joy is less'):x.v==='dus'?C('भाव से 6/8/12 — देरी, त्याग या सुख में कमी (ग्रंथ)','6/8/12 from the house — delay, sacrifice or less joy (the text)'):C('ठीक','fine');
+  return `<li class="${bad?'bad':''}"><b>${x3hh(h)}</b> <span class="note">(${C(X3_BH[i][0],X3_BH[i][1])})</span><br>${st.map(x=>`${C('कारक','karaka')} <b>${pn(x.k)}</b> ${C(`उस भाव से ${X3_HN[x.r-1]}`,`${ord(x.r)} from it`)} — ${vt(x)}`).join('<br>')}</li>`;}).join('');
+ return sec(`🏚️ ${C('खाली (शुद्ध) भाव और भाव-कारक की स्थिति','Empty (pure) houses and where each house’s karaka sits')}`,
+  `<p>${C('डॉ. महेशानंद जोशी (“Empty House Theory”): जिस भाव में न कोई ग्रह बैठा हो, न किसी ग्रह की दृष्टि हो, वह “शुद्ध” है — उसका फल केवल उसका स्वामी और कारक देते हैं, और लेखक के अनुसार उनकी दशा में साफ़ और मज़बूत।','Dr Maheshanand Joshi (“Empty House Theory”): a house with no planet in it and no planet aspecting it is “pure” — only its lord and karaka give its results, and in the author’s view clearly and strongly in their dashas.')}</p>
+   <ul class="fx vsfx">${strict.length?strict.map(h=>`<li class="pos">${pl(h)}</li>`).join(''):`<li>${C('आपकी कुंडली में कोई पूरी तरह शुद्ध भाव नहीं (राहु-केतु की दृष्टि गिनकर)।','No fully pure house in your chart (counting Rahu-Ketu’s aspects).')}</li>`}
+   ${loose.map(h=>`<li>${pl(h)} <span class="note">— ${C('केवल राहु/केतु की दृष्टि है; उसे न गिनें तो यह भी शुद्ध','only Rahu/Ketu aspect it; without them this is pure too')}</span></li>`).join('')}</ul>
+   <p>${C('कारक का नियम: कारक अपने ही भाव में हो, या उस भाव से 6/8/12 में हो, तो उस भाव की चीज़ मिलती है पर उसका सुख कम मिलता है। ध्यान दें — लग्न से नहीं, उसी भाव से गिनें।','Karaka rule: if a karaka sits in the very house it signifies, or 6/8/12 from that house, the thing comes but its enjoyment is less. Note — count from that house, not from the lagna.')}
+   ${C(`आपकी कुंडली में 12 में से <b>${flag}</b> भाव इस चेतावनी में आते हैं।`,`In your chart <b>${flag}</b> of 12 houses fall under this caution.`)}</p>
+   ${vsDet(C('हर भाव का कारक कहाँ है','Where each house’s karaka sits'),`<ul class="fx vsfx">${rows}</ul>`,false)}
+   ${x3test('40 लोगों पर शुद्ध भाव की घटनाएँ स्वामी/कारक की दशा में 13/27 बार आईं, संयोग से 12.9 — कोई अतिरिक्त शक्ति नहीं। औसत कुंडली में केवल 1–1.4 शुद्ध भाव बनते हैं। कारक 6/8/12 के लिए नमूना बहुत छोटा था (6 लोग)। लगभग आधे भाव किसी न किसी चेतावनी में आ जाते हैं, इसलिए इसे अकेले फल न मानें।','in 40 people, events of pure houses fell in their lord/karaka’s dasha 13/27 times, chance 12.9 — no extra power. A typical chart has only 1–1.4 pure houses. For karaka 6/8/12 the sample was too small (6 people). About half the houses fall under some caution, so do not read this alone.')}`);}
+
+// ---- 2. Planet states from the "Kundali Analysis" guide — on the Graha Kosh page
+const X3_AV=[['दीप्त','Deepta','उच्च — साहस, धन, विजय','exalted — courage, wealth, victory'],['स्वस्थ','Swastha','स्वराशि/मूलत्रिकोण — सुख-सुविधा, उन्नति','own/moolatrikona sign — comfort, rise'],['मुदित','Mudita','मित्र राशि — लाभ, मन की शांति','friend’s sign — gains, peace of mind'],
+ ['शांत','Shanta','शुभ ग्रह के नवांश में — शांति, सलाहकार','in a benefic’s navamsa — calm, advisor'],['शक्त','Shakta','वक्री — काम करने की क्षमता, यश','retrograde — capacity to act, fame'],['पीड़ित','Peedita','अस्त — रोग, असफल प्रयास','combust — illness, failed attempts'],
+ ['दीन','Deena','नीच — भय, शक्ति की कमी','debilitated — fear, low vitality'],['विकल','Vikala','पाप ग्रह के साथ — कमज़ोरी, ग़लत संगत','with a malefic — powerlessness, bad company'],['खल','Khala','ग्रह-युद्ध में हारा — तनाव, झगड़े','lost a planetary war — tension, quarrels']];
+function avasthaBlock(ch){const P=ch.planets,MAL=[0,2,6,7,8];
+ const war=i=>[2,3,4,5,6].some(j=>j!==i&&[2,3,4,5,6].includes(i)&&P[j].sign===P[i].sign&&Math.abs(P[j].deg-P[i].deg)<1&&P[i].deg>P[j].deg);
+ const rows=[...Array(9).keys()].map(i=>{const p=P[i],a=[];
+  if(i<7){if(p.dign==='exalted')a.push(0);if(p.dign==='own'||p.dign==='mt')a.push(1);if(p.dign==='friend')a.push(2);if([1,3,4,5].includes(SIGN_LORD[varga(p.lon,9)]))a.push(3);if(p.retro&&i>1)a.push(4);if(p.comb)a.push(5);if(p.dign==='debil')a.push(6);
+   if(MAL.some(j=>j!==i&&P[j].sign===p.sign))a.push(7);if(war(i))a.push(8);}
+  const goch=i<7&&['exalted','mt','own'].includes(p.dign)&&!p.comb&&![6,8,12].includes(p.house);
+  const nv=Math.floor((p.lon%30)/(10/3)),vish=([0,1,5,8].includes(p.sign)&&nv===0)||([2,4,6,10].includes(p.sign)&&nv===4)||([3,7,9,11].includes(p.sign)&&nv===8);
+  const dk=Math.floor((p.lon%30)/10),sarpa=(p.sign===3&&dk>=1)||(p.sign===7&&dk<=1)||(p.sign===11&&dk===2);
+  const good=a.some(x=>x<=4),bad=a.some(x=>x>=5)||vish||sarpa;
+  const av=i<7?a.map(x=>`${C(X3_AV[x][0],X3_AV[x][1])} <span class="note">(${C(X3_AV[x][2],X3_AV[x][3])})</span>`):[];
+  const sp=[goch?`✓ <b>${C('गोचरस्थ','gocharastha')}</b>`:'',vish?`⚠️ <b>${C('विष नवांश','vish navamsa')}</b>`:'',sarpa?`⚠️ <b>${C('सर्प द्रेष्काण','sarpa drekkana')}</b>`:''].filter(Boolean);
+  return {cls:bad&&!good?'bad':good&&!bad?'pos':'',c:[`<b>${pn(i)}</b>`,[...av,...sp].join('<br>')||(i<7?C('कोई विशेष नहीं (सम राशि)','none in particular (neutral sign)'):'—')]};});
+ const gl=[...Array(7).keys()].filter(i=>['exalted','mt','own'].includes(P[i].dign)&&!P[i].comb&&![6,8,12].includes(P[i].house));
+ return sec(`🌗 ${C('ग्रह-अवस्था (दीप्तादि), गोचरस्थ, विष नवांश, सर्प द्रेष्काण','Planet states (Deeptadi), gocharastha, vish navamsa, sarpa drekkana')}`,
+  `<p>${C('“Kundali Analysis” (अस्ट्रो पूजा) के अनुसार पहली पाँच अवस्थाएँ (दीप्त से शक्त) ग्रह को फल देने में आसानी देती हैं और आख़िरी चार (पीड़ित से खल) रुकावट। उच्च/स्वराशि का ग्रह जो अस्त न हो और 6/8/12 में न हो, “गोचरस्थ” है — वही अपना पूरा फल दिखाता है।','Per “Kundali Analysis” (Astro Pooja), the first five states (Deepta to Shakta) let a planet give its results easily and the last four (Peedita to Khala) obstruct it. An exalted/own-sign planet that is not combust and not in 6/8/12 is “gocharastha” — it shows its full results.')}
+   ${C('आपकी कुंडली में गोचरस्थ ग्रह','Gocharastha planets in your chart')}: <b>${gl.length?gl.map(pn).join(', '):C('कोई नहीं','none')}</b>.</p>
+   ${vsDet(C('हर ग्रह की अवस्था','Each planet’s state'),tbl([C('ग्रह','Planet'),C('अवस्था और विशेष स्थिति','State and special marks')],rows)+
+    `<p class="note">${C('विष नवांश: मेष, वृष, कन्या, धनु में पहला नवांश; मिथुन, सिंह, तुला, कुंभ में पाँचवाँ; कर्क, वृश्चिक, मकर, मीन में नौवाँ — ग्रंथ के अनुसार ऐसा ग्रह अपने कारकत्व और स्वामित्व का अच्छा फल नहीं देता। सर्प द्रेष्काण: कर्क का 2रा-3रा, वृश्चिक का 1ला-2रा, मीन का 3रा। ग्रह-युद्ध में “कम अंश वाला जीतता है” मार्गदर्शिका का नियम है; ग्रंथों में यह विवादित है।','Vish navamsa: 1st navamsa of Aries, Taurus, Virgo, Sagittarius; 5th of Gemini, Leo, Libra, Aquarius; 9th of Cancer, Scorpio, Capricorn, Pisces — per the text such a planet does not give good results of its significations and lordship. Sarpa drekkana: Cancer 2nd–3rd, Scorpio 1st–2nd, Pisces 3rd. “The lower degree wins” a planetary war is the guide’s rule; the classics disagree on it.')}</p>`,false)}
+   <p class="note">${C('ये स्थितियाँ वर्णन हैं — घटनाओं पर परखी नहीं गईं। ऐप में वर्गोत्तम, पुष्कर नवांश और मृत्यु भाग अलग से दिखाए जाते हैं।','These states are descriptive — not tested on events. Vargottama, Pushkara navamsa and mrityu bhaga are shown separately in the app.')}</p>`);}
+
+// ---- 3. Dasha cautions from the books, each with its test result — on the Vimshottari dasha page
+function dashaCautionBlock(ch){const P=ch.planets,mds=ch.dasha.mds,now=julianNow(),jn=P[1].nak,TN=L(TARA);
+ const strong=i=>['exalted','mt','own'].includes(P[i].dign)||varga(P[i].lon,9)===P[i].sign,yk=i=>{const h=housesRuled(ch,i);return h.some(x=>[4,7,10].includes(x))&&h.some(x=>[5,9].includes(x));};
+ const avr=i=>i<7&&((P[i].lon-X3_EXL[i]+360)%360)<180;
+ const rows=mds.map((m,i)=>({m,k:i+1})).filter(x=>x.m.start<ch.jd+100*365.25).map(({m,k})=>{const L=m.lord,tk=(k-1)%9,adv=(k===4&&L===6)||(k===5&&(L===7||L===2))||(k===6&&L===4),cur=now>=m.start&&now<m.end;
+  const f=[];if(TARA_Q[tk]<0)f.push(`${C('नवतारा','Navtara')}: ${TN[tk]} ${C('का स्वामी','lord')}`);if(adv)f.push(C('प्रतिकूल स्थान (मार्गदर्शिका)','adverse position (guide)'));if(avr(L))f.push(C('अवरोही','avarohi'));
+  return {cls:cur?'pos':'',c:[`${k}. <b>${pn(L)}</b>${cur?` <span class="note">(${C('अभी','now')})</span>`:''}`,`${fdate(Math.max(m.start,ch.jd))} – ${fdate(m.end)}`,`${TN[tk]}`,f.length?f.join('<br>'):'—']};});
+ const sv=strong(6)&&strong(5)&&(yk(6)||yk(5));let svp='';
+ if(sv){const pr=[];mds.forEach(m=>{if(m.lord===6||m.lord===5)m.ads.forEach(a=>{if((m.lord===6&&a.lord===5)||(m.lord===5&&a.lord===6))if(a.end>now&&a.start<ch.jd+100*365.25)pr.push(`${pn(m.lord)}–${pn(a.lord)} ${fdate(a.start)} – ${fdate(a.end)}`);});});svp=pr.slice(0,2).join('; ');}
+ const nx=mds.find(m=>m.start>now),d=dashaAt(ch,now),adT=d?x3tara(P[d.ad.lord].nak,jn):null;
+ return sec(`🔍 ${C('दशा पर ग्रंथों की चेतावनियाँ — और जाँच का नतीजा','Book warnings about dashas — and what the test found')}`,
+  `<ul class="fx vsfx">
+   <li><b>${C('नवतारा क्रम','Navtara order')}</b>: ${C('जन्म से 3री, 5वीं और 7वीं महादशा विपत, प्रत्यरि और वध (नैधन) तारा के स्वामियों की होती है — इन्हें कठिन माना जाता है।','the 3rd, 5th and 7th mahadashas from birth belong to the lords of the Vipat, Pratyari and Vadha (Naidhana) taras — they are held to be difficult.')}
+    ${x3test('उम्र मिलाकर बुरी घटनाएँ 52/88, संयोग से 44.6 (z +1.6) — हल्का इशारा; अच्छी घटनाएँ कम नहीं हुईं। पक्का नहीं।','age-matched, bad events 52/88 vs chance 44.6 (z +1.6) — a faint hint; good events were not fewer. Not established.')}</li>
+   <li><b>${C('प्रतिकूल स्थान','Adverse position')}</b> (“Kundali Analysis”): ${C('चौथी महादशा शनि की, पाँचवीं राहु/मंगल की, छठी गुरु की हो तो अच्छे स्वामित्व के बावजूद कठिन।','a 4th mahadasha of Saturn, 5th of Rahu/Mars or 6th of Jupiter is difficult despite good lordship.')} ${x3test('9/88, संयोग से 6.6 — संयोग के भीतर।','9/88 vs chance 6.6 — within chance.')}</li>
+   <li><b>${C('अवरोही दशा','Avarohi dasha')}</b>: ${C('उच्च बिंदु पार करके नीच की ओर जाता ग्रह — दुख।','a planet past its exaltation point, moving towards debilitation — sorrow.')} ${x3test('बुरी घटनाएँ 27/88, संयोग से 28.7 — कोई असर नहीं। लगभग आधे ग्रह अवरोही होते हैं।','bad events 27/88 vs chance 28.7 — no effect. About half the planets are avarohi.')}</li>
+   <li><b>${C('दशा छिद्र','Dasha chidra')}</b>: ${C('महादशा बदलने का समय उथल-पुथल वाला।','the change of mahadasha is turbulent.')} ${nx?`${C('आपका अगला बदलाव','Your next change')}: <b>${fdate(nx.start)}</b> (${pn(nx.lord)}).`:''} ${x3test('बुरी घटनाएँ ±6 महीने में 6/88, संयोग से 7.0 — कोई असर नहीं।','bad events within ±6 months 6/88 vs chance 7.0 — no effect.')}</li>
+   <li><b>${C('शनि–शुक्र अपवाद (उत्तरकालामृत)','Saturn–Venus exception (Uttarakalamrita)')}</b>: ${C('दोनों बलवान हों और एक योगकारक हो, तो इनकी आपसी अवधि कठिन।','if both are strong and one is a yogakaraka, their mutual periods are difficult.')}
+    ${sv?`<b>${C('आपकी कुंडली में लागू','Applies in your chart')}</b>${svp?`: ${svp}`:''}.`:C('आपकी कुंडली में लागू नहीं।','Does not apply in your chart.')} ${x3test('परखा नहीं जा सका; ग्रंथों में इसकी व्याख्या भी विवादित है।','could not be tested; its reading is also disputed in the texts.')}</li>
+   ${adT?`<li><b>${C('अभी की अंतर्दशा','Current antardasha')}</b>: ${pn(d.ad.lord)} — ${C('जन्म में','at birth in')} <b>${TN[adT-1]}</b> ${C('तारा','tara')}. ${x3test('अच्छी तारा वाली अंतर्दशा में अच्छी घटनाएँ 95/152, उम्र-मिलान संयोग 81.6 (z +2.2) — निगरानी सूची में; पर बुरी तारा में बुरी घटनाएँ उल्टे कम मिलीं (18/88 बनाम 23.8)।','good events in an antardasha whose lord sits in a good tara 95/152, age-matched chance 81.6 (z +2.2) — on the watch-list; but bad events in bad-tara antardashas were fewer, not more (18/88 vs 23.8).')}</li>`:''}</ul>
+   ${vsDet(C('आपकी महादशाएँ इन नियमों पर','Your mahadashas under these rules'),tbl([C('महादशा','Mahadasha'),C('कब','When'),C('नवतारा क्रम','Navtara order'),C('ग्रंथ की चेतावनी','Book warning')],rows),false)}
+   <p class="note">${C('इन चेतावनियों से घबराएँ नहीं — ऊपर लिखा है कि असली घटनाओं पर इनमें से कोई भी पक्का साबित नहीं हुआ।','Do not be alarmed by these warnings — as noted above, none of them was established on real events.')}</p>`);}
+
+// ---- 4. The Navtara sheet's transit rules, with your coming windows — on the Navtara page
+function navSheetBlock(ch){const jn=ch.planets[1].nak,now=julianNow(),TN=L(TARA);
+ const nk=(jd,k)=>Math.floor(norm(siderealAll(jd,SET.ayan)[k])/NAKLEN);
+ const RS=[['Sa',[7],'शनि नैधन (7) तारा में → पुरानी बीमारी, डर, नुकसान','Saturn in Naidhana (7) → chronic trouble, fear, loss','बुरी घटनाएँ 10/89, संयोग 9.7','bad events 10/89, chance 9.7','11%'],
+  ['Ra',[3],'राहु विपत (3) तारा में → दुर्घटना, बदनामी, चिंता','Rahu in Vipat (3) → accidents, scandal, anxiety','बुरी घटनाएँ 10/89, संयोग 9.8; दुर्घटना 1/11','bad events 10/89, chance 9.8; accidents 1/11','11%'],
+  ['Ju',[2,8],'गुरु संपत (2) या मित्र (8) तारा में → बढ़त और आशीर्वाद','Jupiter in Sampat (2) or Mitra (8) → growth and blessings','अच्छी घटनाएँ 40/157, संयोग 35.3','good events 40/157, chance 35.3','22%']];
+ const win=(k,tt)=>{const o=[];let st=null,last=null;for(let m=0;m<=120;m++){const j=now+m*30.4375,v=tt.includes(x3tara(nk(j,k),jn));if(v&&st===null)st=j;if(!v&&st!==null){o.push([st,j]);st=null;}last=j;}if(st!==null)o.push([st,null]);return o;};
+ const items=RS.map(([k,tt,hi,en,th,te,pct])=>{const i=PL.indexOf(k),t=x3tara(nk(now,k),jn),on=tt.includes(t),w=win(k,tt).slice(0,3);
+  return `<li class="${on?(k==='Ju'?'pos':'bad'):''}"><b>${on?'●':'○'}</b> ${C(hi,en)}<br><span class="note">${C('अभी','Now')}: ${pn(i)} ${C('की तारा','is in')} <b>${TN[t-1]}</b> · ${C('अगले 10 वर्ष','Next 10 years')}: ${w.length?w.map(([a,b])=>`${fdate(a).slice(3)}${b?' – '+fdate(b).slice(3):'+'}`).join(', '):C('कोई नहीं','none')} · ${C('हर किसी के जीवन के लगभग','true for about')} ${pct} ${C('समय सच','of anyone’s life')}</span>${x3test(th+' — संयोग जितना।',te+' — as chance.')}</li>`;}).join('');
+ const mt=x3tara(nk(now,'Mo'),jn);
+ return sec(`📋 ${C('नवतारा शीट (डॉ. विवेक मंत्री) के गोचर-नियम — आपके लिए','The Navtara sheet (Dr Vivek Mantri): transit rules — for you')}`,
+  `<ul class="fx vsfx">${items}
+   <li><b>${mt===1||mt===3||mt===7?'●':'○'}</b> ${C('चंद्र जन्म/विपत/नैधन तारा में → मन पर तनाव','Moon in Janma/Vipat/Naidhana → emotional stress')}<br><span class="note">${C('आज चंद्र','Today the Moon is in')} <b>${TN[mt-1]}</b> ${C('तारा में','')}</span>${x3test('बुरी घटना के दिन 28/83, संयोग 27.6 — संयोग जितना।','on the day of a bad event 28/83, chance 27.6 — as chance.')}</li></ul>
+   <p>${C('शीट के चिकित्सा-अर्थ: नैधन सक्रिय → ऑपरेशन/अस्पताल; जन्म → तनाव, कम रोग-प्रतिरोध; क्षेम/संपत → स्वास्थ्य-लाभ। जीवनसाथी का नक्षत्र आपसे मित्र/परम मित्र तारा में → तालमेल; विपत/नैधन में → कर्मिक चुनौतियाँ (मिलान का “तारा कूट” यही देखता है)।','The sheet’s medical meanings: Naidhana active → surgery/hospital; Janma → stress, low immunity; Kshema/Sampat → recovery. Partner’s nakshatra in your Mitra/Param Mitra tara → harmony; in Vipat/Naidhana → karmic challenges (the “tara koota” of matching checks exactly this).')}</p>
+   <p class="note">${C('चिकित्सा और मिलान वाले नियम परखे नहीं जा सके — हमारे डेटा में केवल 9 बीमारी की पक्की तारीखें और बहुत कम जोड़े थे। गोचर के चारों नियम संयोग पर रहे; इनसे डरें नहीं।','The medical and matching rules could not be tested — our data had only 9 exact illness dates and very few couples. All four transit rules were at chance; do not fear them.')}</p>`);}
+
+// ---- hook the cards into their pages
+if(NEWT.bhava12){const _b283=NEWT.bhava12;NEWT.bhava12=function(ch){const h=_b283(ch);let b='';try{b=emptyKarakaBlock(ch);}catch(e){console.error(e);}return ipInsert(h,b);};}
+if(NEWT.grahakosh){const _g283=NEWT.grahakosh;NEWT.grahakosh=function(ch){const h=_g283(ch);let b='';try{b=avasthaBlock(ch);}catch(e){console.error(e);}return ipInsert(h,b);};}
+if(NEWT.navtara){const _n283=NEWT.navtara;NEWT.navtara=function(ch){const h=_n283(ch);let b='';try{b=navSheetBlock(ch);}catch(e){console.error(e);}return h+b;};}
+{const _d283=renderDasha;renderDasha=function(ch){const h=_d283(ch);if(S.dsys&&S.dsys!=='vim')return h;let b='';try{b=dashaCautionBlock(ch);}catch(e){console.error(e);}return h+b;};}
+
+// ---- research page: rules from these three documents
+SH_ROWS.push(
+ ['मंगल गोचर 7वें भाव या 7वें स्वामी पर — विवाह (दोनों सेट सही दिशा में; निगरानी)','Mars transit on the 7th house or 7th lord — marriage (right way in both sets; watch-list)',43,63,34.3],
+ ['खाली (शुद्ध) भाव — घटना उसके स्वामी/कारक की दशा में','Empty (pure) house — event in its lord/karaka’s dasha',13,27,12.9],
+ ['दशा छिद्र — बुरी घटना महादशा बदलने के ±6 महीने में','Dasha chidra — bad event within ±6 months of a mahadasha change',6,88,7.0],
+ ['प्रतिकूल महादशा स्थान (4था शनि/5वाँ राहु-मंगल/6ठा गुरु)','Adverse mahadasha position (4th Saturn/5th Rahu-Mars/6th Jupiter)',9,88,6.6],
+ ['अवरोही महादशा — बुरी घटना','Avarohi mahadasha — bad events',27,88,28.7],
+ ['संतान: शनि 5/9 भाव या स्वामी पर (77% महीनों में सच)','Children: Saturn on the 5th/9th house or lord (true in 77% of months)',40,50,38.4],
+ ['विवाह: दशा 7वें भाव से जुड़ी (89% महीनों में सच)','Marriage: dasha linked to the 7th (true in 89% of months)',56,63,56.1],
+ ['नवतारा: शनि नैधन तारा — बुरी घटना','Navtara: Saturn in Naidhana — bad events',10,89,9.7],
+ ['नवतारा: राहु विपत तारा — बुरी घटना','Navtara: Rahu in Vipat — bad events',10,89,9.8],
+ ['नवतारा: गुरु संपत/मित्र तारा — अच्छी घटना','Navtara: Jupiter in Sampat/Mitra — good events',40,157,35.3],
+ ['नवतारा: चंद्र जन्म/विपत/नैधन — बुरी घटना का दिन','Navtara: Moon in Janma/Vipat/Naidhana — day of a bad event',28,83,27.6],
+ ['नवतारा: अंतर्दशा स्वामी अच्छी तारा में — अच्छी घटना (उम्र-मिलान; निगरानी)','Navtara: antardasha lord in a good tara — good events (age-matched; watch-list)',95,152,81.6],
+ ['नवतारा: अंतर्दशा स्वामी बुरी तारा में — बुरी घटना (उम्र-मिलान)','Navtara: antardasha lord in a bad tara — bad events (age-matched)',18,88,23.8],
+ ['नवतारा: जन्म से 3री/5वीं/7वीं महादशा — बुरी घटना (उम्र-मिलान)','Navtara: 3rd/5th/7th mahadasha from birth — bad events (age-matched)',52,88,44.6]);
+{const _s283=NEWT.shodh;NEWT.shodh=function(ch){return _s283(ch)+sec(`📄 ${C('आपके भेजे दस्तावेज़ों से सीख','Lessons from the documents you sent')}`,`<ul class="fx vsfx">
+ <li>${C('“Kundali Analysis” की लंबी योग-सूचियाँ किसी को अलग नहीं करतीं: तलाक का कोई न कोई योग तलाक वाले 6/6 लोगों में मिला — और बिना तलाक वाले 34/34 में भी। दोबारा विवाह के योग बार-विवाहित 15/16 और एक बार विवाहित 21/24 में। “अविवाह योग” 4 विवाहित लोगों में।','The long yoga lists of “Kundali Analysis” separate no one: some divorce yoga was present in 6/6 divorced people — and in 34/34 who never divorced. Remarriage yogas in 15/16 people who remarried and in 21/24 married once. The “no-marriage yoga” in 4 married people.')}</li>
+ <li>${C('उसी मार्गदर्शिका का के.एन. राव वाला उदाहरण दिए गए जन्म-विवरण से मेल नहीं खाता (तुला लग्न बनता है; मार्गदर्शिका “लग्नेश शनि” लिखती है)।','The same guide’s K.N. Rao example does not match the birth data it gives (it makes Libra lagna; the guide says “lagna lord Saturn”).')}</li>
+ <li>${C('उम्र का धोखा: जन्म से 3री/5वीं/7वीं महादशा वाला नियम पहले z +2.5 दिखा; उम्र मिलाने पर +1.6 रह गया। दशा-क्रम उम्र के साथ चलता है और बुरी घटनाएँ भी कुछ उम्रों में ज़्यादा होती हैं — इसलिए ऐसे नियम हमेशा उम्र मिलाकर परखे जाते हैं।','The age trap: the 3rd/5th/7th mahadasha rule first looked z +2.5; matched for age it fell to +1.6. The dasha order moves with age and bad events also cluster at certain ages — so such rules are always tested age-matched.')}</li>
+ <li>${C('दो नियम निगरानी में हैं और डायरी में जोड़े गए हैं: विवाह पर मंगल का 7वें/7वें स्वामी पर गोचर, और अच्छी तारा वाली अंतर्दशा में अच्छी घटनाएँ।','Two rules are on the watch-list and added to the diary: Mars transiting the 7th/7th lord at marriage, and good events in antardashas of lords in good taras.')}</li></ul>`);};}
+
+// ---- prediction diary: the two watch-list rules become methods, so new events grade them
+Object.assign(DY_M,{mars:['मंगल गोचर 7वें/7वें स्वामी पर (विवाह, निगरानी)','Mars transit on 7th/7th lord (marriage, watch-list)'],tara:['अंतर्दशा स्वामी की तारा (अच्छी घटनाएँ, निगरानी)','Antardasha lord’s tara (good events, watch-list)']});
+{const _dy283=dyScores;dyScores=function(ch,k,jd,wt,pre){const o=_dy283(ch,k,jd,wt,pre);try{const P=ch.planets;
+ if(k==='marriage'){const tr=pre?pre.tr:transitAt(ch,jd,true),m=tr[2].sign,L7=lordOf(ch,7);o.mars=[(ch.lagna+6)%12,P[L7].sign].filter(s=>m===s||signAspects(2).some(a=>(m+a-1)%12===s)).length;}
+ if(X3_POS.includes(k)){const d=pre?pre.d:dashaAt(ch,jd);if(d){const t=x3tara(P[d.ad.lord].nak,P[1].nak);o.tara=[2,4,6,8,9].includes(t)?1:t===1?0.5:0;}}}catch(e){}return o;};}
+{const _ds283=dySnap;dySnap=function(ch){const s=_ds283(ch);s.v='28.1';return s;};}
 
 </script>
 <nav id="bnav" aria-label="Main"></nav>
