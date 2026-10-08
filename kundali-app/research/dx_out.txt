@@ -1,0 +1,121 @@
+
+=== ALL
+Dasha chidra: ghatna MD badalne ke ±6 mahine mein                        6/88  chance   7.0 ( 8%) z -0.39
+Pratikool MD sthan: 4tha Shani / 5va Rahu-Mangal / 6tha Guru             9/88  chance   6.6 ( 8%) z +1.15
+Avrohi MD swami (uchch se neech ki or)                                  27/88  chance  28.7 (33%) z -0.41
+Avrohi AD swami                                                         33/88  chance  35.9 (41%) z -0.67
+MD-AD swami 1/7 (Ma-Mo, Sa-Ju, Ma-Ju chhodkar)                           8/88  chance   6.7 ( 8%) z +0.51
+AD swami naisargik paap (Su/Ma/Sa/Ra/Ke)                                45/88  chance  41.3 (47%) z +0.79
+Durghatna: MD/AD swami paap jo doosre paap se 6/8 (shadashtak)           9/23  chance   7.5 (33%) z +0.77
+(tulna) bhara bhaav: ghatna us bhaav ke swami/karak ki MD/AD mein       93/212 chance  93.8 (44%) z -0.12
+(control) achhi ghatna MD badalne ke ±6 mahine mein                      7/152 chance  11.7 ( 8%) z -1.42
+(control) achhi ghatna avrohi MD mein                                   39/152 chance  47.5 (31%) z -1.66
+Vivah dasha: MD ya AD swami 7th/7L/Rahu/karak se juda                   56/63  chance  56.1 (89%) z -0.03
+Vivah dasha: AD swami 7th/7L/Rahu/karak se juda                         39/63  chance  42.0 (67%) z -0.84
+Vivah gochar: Mangal 7th ya 7L par                                      43/63  chance  34.3 (54%) z +2.23
+Santaan gochar: Shani 5/9 bhaav ya 5L/9L par (drishti/gochar)           40/50  chance  38.4 (77%) z +0.56
+Santaan gochar: Guru 5/9 bhaav ya 5L/9L par                             34/50  chance  34.6 (69%) z -0.21
+Santaan gochar: Shani AUR Guru dono                                     26/50  chance  27.0 (54%) z -0.31
+Khali (shuddh) bhaav: ghatna us bhaav ke swami/karak ki MD/AD mein      13/27  chance  12.9 (48%) z +0.06
+Santaan gochar: Mangal 5/9/5L/9L par (sirf mahila)                      10/13  chance  10.3 (79%) z -0.21
+
+=== ROHIT
+accident 2008-10-20    ✗ Dasha chidra: ghatna MD badalne ke ±6 mahine mein  (aapki zindagi ke 6% mahine)
+accident 2008-10-20    ✗ Pratikool MD sthan: 4tha Shani / 5va Rahu-Mangal / 6tha Guru  (aapki zindagi ke 0% mahine)
+accident 2008-10-20    ✗ Avrohi MD swami (uchch se neech ki or)  (aapki zindagi ke 44% mahine)
+accident 2008-10-20    ✓ Avrohi AD swami  (aapki zindagi ke 69% mahine)
+accident 2008-10-20    ✗ MD-AD swami 1/7 (Ma-Mo, Sa-Ju, Ma-Ju chhodkar)  (aapki zindagi ke 7% mahine)
+accident 2008-10-20    ✗ AD swami naisargik paap (Su/Ma/Sa/Ra/Ke)  (aapki zindagi ke 45% mahine)
+accident 2008-10-20    ✗ Durghatna: MD/AD swami paap jo doosre paap se 6/8 (shadashtak)  (aapki zindagi ke 39% mahine)
+accident 2008-10-20    ✗ (tulna) bhara bhaav: ghatna us bhaav ke swami/karak ki MD/AD mein  (aapki zindagi ke 34% mahine)
+accident 2009-10-10    ✗ Dasha chidra: ghatna MD badalne ke ±6 mahine mein  (aapki zindagi ke 6% mahine)
+accident 2009-10-10    ✗ Pratikool MD sthan: 4tha Shani / 5va Rahu-Mangal / 6tha Guru  (aapki zindagi ke 0% mahine)
+accident 2009-10-10    ✗ Avrohi MD swami (uchch se neech ki or)  (aapki zindagi ke 44% mahine)
+accident 2009-10-10    ✓ Avrohi AD swami  (aapki zindagi ke 69% mahine)
+accident 2009-10-10    ✗ MD-AD swami 1/7 (Ma-Mo, Sa-Ju, Ma-Ju chhodkar)  (aapki zindagi ke 7% mahine)
+accident 2009-10-10    ✗ AD swami naisargik paap (Su/Ma/Sa/Ra/Ke)  (aapki zindagi ke 45% mahine)
+accident 2009-10-10    ✗ Durghatna: MD/AD swami paap jo doosre paap se 6/8 (shadashtak)  (aapki zindagi ke 39% mahine)
+accident 2009-10-10    ✗ (tulna) bhara bhaav: ghatna us bhaav ke swami/karak ki MD/AD mein  (aapki zindagi ke 34% mahine)
+studybreak 2015-06-01  ✗ Dasha chidra: ghatna MD badalne ke ±6 mahine mein  (aapki zindagi ke 5% mahine)
+studybreak 2015-06-01  ✗ Pratikool MD sthan: 4tha Shani / 5va Rahu-Mangal / 6tha Guru  (aapki zindagi ke 0% mahine)
+studybreak 2015-06-01  ✗ Avrohi MD swami (uchch se neech ki or)  (aapki zindagi ke 30% mahine)
+studybreak 2015-06-01  ✓ Avrohi AD swami  (aapki zindagi ke 80% mahine)
+studybreak 2015-06-01  ✗ MD-AD swami 1/7 (Ma-Mo, Sa-Ju, Ma-Ju chhodkar)  (aapki zindagi ke 5% mahine)
+studybreak 2015-06-01  ✓ AD swami naisargik paap (Su/Ma/Sa/Ra/Ke)  (aapki zindagi ke 42% mahine)
+studybreak 2015-06-01  ✗ (tulna) bhara bhaav: ghatna us bhaav ke swami/karak ki MD/AD mein  (aapki zindagi ke 35% mahine)
+marriage 2016-04-28    ✗ (control) achhi ghatna MD badalne ke ±6 mahine mein  (aapki zindagi ke 6% mahine)
+marriage 2016-04-28    ✗ (control) achhi ghatna avrohi MD mein  (aapki zindagi ke 50% mahine)
+marriage 2016-04-28    ✓ Vivah dasha: MD ya AD swami 7th/7L/Rahu/karak se juda  (aapki zindagi ke 100% mahine)
+marriage 2016-04-28    ✗ Vivah dasha: AD swami 7th/7L/Rahu/karak se juda  (aapki zindagi ke 91% mahine)
+marriage 2016-04-28    ✗ Vivah gochar: Mangal 7th ya 7L par  (aapki zindagi ke 47% mahine)
+marriage 2016-04-28    ✗ (tulna) bhara bhaav: ghatna us bhaav ke swami/karak ki MD/AD mein  (aapki zindagi ke 26% mahine)
+career 2017-06-01      ✗ (control) achhi ghatna MD badalne ke ±6 mahine mein  (aapki zindagi ke 6% mahine)
+career 2017-06-01      ✗ (control) achhi ghatna avrohi MD mein  (aapki zindagi ke 45% mahine)
+career 2017-06-01      ✓ (tulna) bhara bhaav: ghatna us bhaav ke swami/karak ki MD/AD mein  (aapki zindagi ke 53% mahine)
+children 2017-10-23    ✗ (control) achhi ghatna MD badalne ke ±6 mahine mein  (aapki zindagi ke 6% mahine)
+children 2017-10-23    ✗ (control) achhi ghatna avrohi MD mein  (aapki zindagi ke 50% mahine)
+children 2017-10-23    ✗ Santaan gochar: Shani 5/9 bhaav ya 5L/9L par (drishti/gochar)  (aapki zindagi ke 74% mahine)
+children 2017-10-23    ✓ Santaan gochar: Guru 5/9 bhaav ya 5L/9L par  (aapki zindagi ke 51% mahine)
+children 2017-10-23    ✗ Santaan gochar: Shani AUR Guru dono  (aapki zindagi ke 38% mahine)
+children 2017-10-23    ✗ (tulna) bhara bhaav: ghatna us bhaav ke swami/karak ki MD/AD mein  (aapki zindagi ke 50% mahine)
+children 2022-07-24    ✗ (control) achhi ghatna MD badalne ke ±6 mahine mein  (aapki zindagi ke 6% mahine)
+children 2022-07-24    ✓ (control) achhi ghatna avrohi MD mein  (aapki zindagi ke 50% mahine)
+children 2022-07-24    ✓ Santaan gochar: Shani 5/9 bhaav ya 5L/9L par (drishti/gochar)  (aapki zindagi ke 74% mahine)
+children 2022-07-24    ✗ Santaan gochar: Guru 5/9 bhaav ya 5L/9L par  (aapki zindagi ke 51% mahine)
+children 2022-07-24    ✗ Santaan gochar: Shani AUR Guru dono  (aapki zindagi ke 38% mahine)
+children 2022-07-24    ✓ (tulna) bhara bhaav: ghatna us bhaav ke swami/karak ki MD/AD mein  (aapki zindagi ke 50% mahine)
+jobloss 2022-07-24     ✗ Dasha chidra: ghatna MD badalne ke ±6 mahine mein  (aapki zindagi ke 6% mahine)
+jobloss 2022-07-24     ✗ Pratikool MD sthan: 4tha Shani / 5va Rahu-Mangal / 6tha Guru  (aapki zindagi ke 0% mahine)
+jobloss 2022-07-24     ✓ Avrohi MD swami (uchch se neech ki or)  (aapki zindagi ke 50% mahine)
+jobloss 2022-07-24     ✓ Avrohi AD swami  (aapki zindagi ke 68% mahine)
+jobloss 2022-07-24     ✗ MD-AD swami 1/7 (Ma-Mo, Sa-Ju, Ma-Ju chhodkar)  (aapki zindagi ke 13% mahine)
+jobloss 2022-07-24     ✓ AD swami naisargik paap (Su/Ma/Sa/Ra/Ke)  (aapki zindagi ke 41% mahine)
+jobloss 2022-07-24     ✓ (tulna) bhara bhaav: ghatna us bhaav ke swami/karak ki MD/AD mein  (aapki zindagi ke 48% mahine)
+accident 2020-11-14    ✗ Dasha chidra: ghatna MD badalne ke ±6 mahine mein  (aapki zindagi ke 6% mahine)
+accident 2020-11-14    ✗ Pratikool MD sthan: 4tha Shani / 5va Rahu-Mangal / 6tha Guru  (aapki zindagi ke 0% mahine)
+accident 2020-11-14    ✓ Avrohi MD swami (uchch se neech ki or)  (aapki zindagi ke 44% mahine)
+accident 2020-11-14    ✓ Avrohi AD swami  (aapki zindagi ke 69% mahine)
+accident 2020-11-14    ✗ MD-AD swami 1/7 (Ma-Mo, Sa-Ju, Ma-Ju chhodkar)  (aapki zindagi ke 7% mahine)
+accident 2020-11-14    ✗ AD swami naisargik paap (Su/Ma/Sa/Ra/Ke)  (aapki zindagi ke 45% mahine)
+accident 2020-11-14    ✗ Durghatna: MD/AD swami paap jo doosre paap se 6/8 (shadashtak)  (aapki zindagi ke 39% mahine)
+accident 2020-11-14    ✗ (tulna) bhara bhaav: ghatna us bhaav ke swami/karak ki MD/AD mein  (aapki zindagi ke 34% mahine)
+finloss 2025-09-15     ✗ Dasha chidra: ghatna MD badalne ke ±6 mahine mein  (aapki zindagi ke 6% mahine)
+finloss 2025-09-15     ✗ Pratikool MD sthan: 4tha Shani / 5va Rahu-Mangal / 6tha Guru  (aapki zindagi ke 0% mahine)
+finloss 2025-09-15     ✓ Avrohi MD swami (uchch se neech ki or)  (aapki zindagi ke 50% mahine)
+finloss 2025-09-15     ✗ Avrohi AD swami  (aapki zindagi ke 68% mahine)
+finloss 2025-09-15     ✓ MD-AD swami 1/7 (Ma-Mo, Sa-Ju, Ma-Ju chhodkar)  (aapki zindagi ke 13% mahine)
+finloss 2025-09-15     ✓ AD swami naisargik paap (Su/Ma/Sa/Ra/Ke)  (aapki zindagi ke 41% mahine)
+finloss 2025-09-15     ✗ Khali (shuddh) bhaav: ghatna us bhaav ke swami/karak ki MD/AD mein  (aapki zindagi ke 32% mahine)
+
+=== STATIC (timed charts)
+k7 own n 3 avg first-marriage age 25.5 avg first-child age 28.5 divorce 1 multi-marr 1
+k7 dus n 6 avg first-marriage age 30.7 avg first-child age 30.5 divorce 0 multi-marr 2
+k7 ok n 31 avg first-marriage age 27.6 avg first-child age 30.3 divorce 5 multi-marr 13
+k5 own n 4 avg first-marriage age 28.0 avg first-child age 27.3 divorce 1 multi-marr 3
+k5 dus n 5 avg first-marriage age 32.4 avg first-child age 31.2 divorce 1 multi-marr 2
+k5 ok n 31 avg first-marriage age 27.1 avg first-child age 30.4 divorce 4 multi-marr 11
+satDelay 0 n 10 avg first-marriage age 29.1
+satDelay 1 n 11 avg first-marriage age 26.5
+satDelay 2 n 14 avg first-marriage age 28.9
+satDelay 3 n 5 avg first-marriage age 25.5
+pure houses per chart (no nodes asp): 3 1 0 2 2 3 1 2 1 0 1 1 1 1 0 3 0 0 1 1 1 1 3 2 2 4 2 2 1 1 1 1 2 2 0 3 1 2 2 1  | with node asp: 2 0 0 2 1 2 0 2 1 0 0 0 1 1 0 1 0 0 1 0 0 1 2 1 0 1 2 2 1 1 1 1 0 2 0 3 0 2 1 1
+
+=== SPHUTA among parents
+{
+  'm delay-but-yes': 12,
+  'f delay-but-yes': 3,
+  'm assured': 8,
+  'm delayed/denied': 4,
+  'f assured': 2,
+  'f delayed/denied': 1
+} banjar-sign parents 11/30
+[
+  {
+    n: 'Rohit (aap)',
+    g: 'm',
+    v: 'delay-but-yes',
+    kids: 2,
+    banjar: false
+  }
+]
+ERR []

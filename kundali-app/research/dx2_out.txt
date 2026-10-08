@@ -1,0 +1,296 @@
+BAHUVIVAH yogas: charts with >=1 yoga — multi-married 15/16 | married once 21/24
+  avg number of yogas: multi 2.25 once 2.46
+{
+  '7L 11th mein dual rashi / 7L-11L sambandh': 12,
+  '7th mein 2+ grah ya 7L se 3+ grah jude': 22,
+  '2nd mein 2+ grah ya 2L se 3+ grah jude': 25,
+  '7-9-11 bhaav/swami sambandh': 6,
+  '7L ya Shukra dual rashi mein (D1 ya D9)': 24,
+  'Lagna, lagnesh, 7th, 7L, Shukra sab dual': 1,
+  'Shukra-Mangal sambandh D1 aur D9 dono mein': 4,
+  'Shukra-Chandra yuti lagna/7th mein': 1
+}
+DIVORCE yogas: >=1 yoga — divorced 6/6 | not divorced 34/34  avg 2.33 2.21
+{
+  '7th lagna se, 7th Chandra se, Shukra teeno peedit': 23,
+  'Alagav-karak (Su/Ra/Sa/12L) 7th par': 27,
+  '8th (lagna ya Chandra se) par 3+ grah ka prabhav': 29,
+  'Paap 2nd aur 7th dono mein': 6,
+  'Rahu-Mangal yuti ya Rahu+vakri Guru': 3,
+  'Paap 6, 7, 8 teeno mein': 1
+}
+UNMARRIED (nirbeej) yoga among MARRIED people: 4/40
+[
+ {
+  "n": "Rohit (aap)",
+  "lagna": 6,
+  "asc": 183.40789152720868,
+  "pl": [
+   "Su 6:6.58 H1",
+   "Mo 1:25.38 H8",
+   "Ma 3:16.65 H10",
+   "Me 6:0.51 H1 R",
+   "Ju 6:26.02 H1",
+   "Ve 6:21.90 H1 R",
+   "Sa 10:12.12 H5 R",
+   "Ra 6:21.63 H1 R",
+   "Ke 0:21.63 H7 R"
+  ],
+  "pure_all9": [
+   6,
+   12
+  ],
+  "pure_no_nodes": [
+   3,
+   6,
+   12
+  ],
+  "kar": "1:Su@1(own-bhava) 2:Ju@12(6/8/12) 3:Ma@8(6/8/12) 4:Mo@5 5:Ju@9 6:Ma@5,6:Sa@12(6/8/12) 7:Ve@7 8:Sa@10 9:Ju@5 10:Su@4,10:Me@4,10:Sa@8(6/8/12) 11:Ju@3 12:Sa@6(6/8/12)",
+  "md": "1.Ma 27-09-1993 | 2.Ra 27-09-2000 | 3.Ju 27-09-2018 | 4.Sa 27-09-2034 | 5.Me 27-09-2053 | 6.Ke 27-09-2070 | 7.Ve 27-09-2077 | 8.Su 26-09-2097 | 9.Mo 28-09-2103 | 10.Ma 27-09-2113 | 11.Ra 27-09-2120 | 12.Ju 27-09-2138 | 13.Sa 27-09-2154 | 14.Me 27-09-2173 | 15.Ke 27-09-2190 | 16.Ve 27-09-2197 | 17.Su 28-09-2217 | 18.Mo 28-09-2223",
+  "avr": [
+   "Su",
+   "Mo",
+   "Ma",
+   "Me",
+   "Ju",
+   "Sa"
+  ],
+  "lordRel": "100010000000",
+  "score": "85,0,20,20,85,20,20,20,20,0,20,20",
+  "strong": 2,
+  "vish": [],
+  "sarpa": [
+   "Ma"
+  ],
+  "gochara": [
+   "Ve",
+   "Sa"
+  ],
+  "bahu": [
+   "7L 11th mein dual rashi / 7L-11L sambandh",
+   "7th mein 2+ grah ya 7L se 3+ grah jude",
+   "2nd mein 2+ grah ya 2L se 3+ grah jude",
+   "7-9-11 bhaav/swami sambandh"
+  ],
+  "div": [
+   "7th lagna se, 7th Chandra se, Shukra teeno peedit",
+   "Alagav-karak (Su/Ra/Sa/12L) 7th par"
+  ],
+  "un": []
+ },
+ {
+  "n": "KN Rao (docx)",
+  "lagna": 6,
+  "asc": 190.17173978882897,
+  "pl": [
+   "Su 5:24.86 H12",
+   "Mo 6:2.24 H1",
+   "Ma 6:24.01 H1",
+   "Me 5:20.02 H12",
+   "Ju 3:24.71 H10",
+   "Ve 6:3.86 H1",
+   "Sa 8:24.08 H3",
+   "Ra 11:11.67 H6 R",
+   "Ke 5:11.67 H12 R"
+  ],
+  "pure_all9": [
+   11
+  ],
+  "pure_no_nodes": [
+   11
+  ],
+  "kar": "1:Su@12(6/8/12) 2:Ju@9 3:Ma@11 4:Mo@10 5:Ju@6(6/8/12) 6:Ma@8(6/8/12),6:Sa@10 7:Ve@7 8:Sa@8(6/8/12) 9:Ju@2 10:Su@3,10:Me@3,10:Sa@6(6/8/12) 11:Ju@12(6/8/12) 12:Sa@4",
+  "md": "1.Ma 06-02-1927 | 2.Ra 06-02-1934 | 3.Ju 06-02-1952 | 4.Sa 06-02-1968 | 5.Me 06-02-1987 | 6.Ke 06-02-2004 | 7.Ve 05-02-2011 | 8.Su 05-02-2031 | 9.Mo 05-02-2037 | 10.Ma 05-02-2047 | 11.Ra 05-02-2054 | 12.Ju 05-02-2072 | 13.Sa 05-02-2088 | 14.Me 06-02-2107 | 15.Ke 06-02-2124 | 16.Ve 06-02-2131 | 17.Su 05-02-2151 | 18.Mo 05-02-2157",
+  "avr": [
+   "Su",
+   "Mo",
+   "Me",
+   "Ju",
+   "Sa"
+  ],
+  "lordRel": "100011100001",
+  "score": "85,20,20,20,65,85,85,20,20,20,35,85",
+  "strong": 5,
+  "vish": [],
+  "sarpa": [
+   "Ju"
+  ],
+  "gochara": [
+   "Ju",
+   "Ve"
+  ],
+  "bahu": [
+   "Shukra-Chandra yuti lagna/7th mein",
+   "Shukra-Mangal sambandh D1 aur D9 dono mein"
+  ],
+  "div": [
+   "7th lagna se, 7th Chandra se, Shukra teeno peedit"
+  ],
+  "un": []
+ },
+ {
+  "n": "Mehsana f 3 vivah (docx)",
+  "lagna": 6,
+  "asc": 204.84126702897038,
+  "pl": [
+   "Su 1:28.03 H8",
+   "Mo 7:13.74 H2",
+   "Ma 6:18.43 H1 R",
+   "Me 1:15.54 H8",
+   "Ju 8:16.56 H3 R",
+   "Ve 1:27.08 H8",
+   "Sa 6:16.81 H1 R",
+   "Ra 1:12.24 H8 R",
+   "Ke 7:12.24 H2 R"
+  ],
+  "pure_all9": [
+   5
+  ],
+  "pure_no_nodes": [
+   5,
+   6,
+   12
+  ],
+  "kar": "1:Su@8(6/8/12) 2:Ju@2 3:Ma@11 4:Mo@11 5:Ju@11 6:Ma@8(6/8/12),6:Sa@8(6/8/12) 7:Ju@9 8:Sa@6(6/8/12) 9:Ju@7 10:Su@11,10:Me@11,10:Sa@4 11:Ju@5 12:Sa@2",
+  "md": "1.Sa 12-08-1969 | 2.Me 12-08-1988 | 3.Ke 12-08-2005 | 4.Ve 12-08-2012 | 5.Su 12-08-2032 | 6.Mo 12-08-2038 | 7.Ma 11-08-2048 | 8.Ra 12-08-2055 | 9.Ju 11-08-2073 | 10.Sa 11-08-2089 | 11.Me 12-08-2108 | 12.Ke 12-08-2125 | 13.Ve 12-08-2132 | 14.Su 12-08-2152 | 15.Mo 12-08-2158 | 16.Ma 11-08-2168 | 17.Ra 12-08-2175 | 18.Ju 12-08-2193",
+  "avr": [
+   "Su",
+   "Ju",
+   "Ve"
+  ],
+  "lordRel": "001000110000",
+  "score": "20,20,85,0,0,20,85,85,20,20,20,20",
+  "strong": 3,
+  "vish": [],
+  "sarpa": [
+   "Mo",
+   "Ke"
+  ],
+  "gochara": [
+   "Ju",
+   "Sa"
+  ],
+  "bahu": [
+   "7L 11th mein dual rashi / 7L-11L sambandh",
+   "7L ya Shukra dual rashi mein (D1 ya D9)",
+   "7th mein 2+ grah ya 7L se 3+ grah jude",
+   "2nd mein 2+ grah ya 2L se 3+ grah jude",
+   "Shukra-Mangal sambandh D1 aur D9 dono mein",
+   "7-9-11 bhaav/swami sambandh"
+  ],
+  "div": [
+   "8th (lagna ya Chandra se) par 3+ grah ka prabhav",
+   "7th lagna se, 7th Chandra se, Shukra teeno peedit",
+   "Alagav-karak (Su/Ra/Sa/12L) 7th par"
+  ],
+  "un": []
+ },
+ {
+  "n": "Ambala f avivahit (docx)",
+  "lagna": 11,
+  "asc": 332.5843140488663,
+  "pl": [
+   "Su 4:4.16 H6",
+   "Mo 2:3.42 H4",
+   "Ma 5:4.15 H7",
+   "Me 5:0.77 H7",
+   "Ju 1:6.21 H3",
+   "Ve 4:21.55 H6",
+   "Sa 3:15.83 H5",
+   "Ra 6:13.42 H8 R",
+   "Ke 0:13.42 H2 R"
+  ],
+  "pure_all9": [],
+  "pure_no_nodes": [],
+  "kar": "1:Su@6(6/8/12) 2:Ju@2 3:Ma@5 4:Mo@1(own-bhava) 5:Ju@11 6:Ma@2,6:Sa@12(6/8/12) 7:Ju@9 8:Sa@10 9:Ju@7 10:Su@9,10:Me@10,10:Sa@8(6/8/12) 11:Ju@5 12:Sa@6(6/8/12)",
+  "md": "1.Ma 05-05-1971 | 2.Ra 05-05-1978 | 3.Ju 04-05-1996 | 4.Sa 04-05-2012 | 5.Me 05-05-2031 | 6.Ke 04-05-2048 | 7.Ve 04-05-2055 | 8.Su 04-05-2075 | 9.Mo 04-05-2081 | 10.Ma 04-05-2091 | 11.Ra 04-05-2098 | 12.Ju 04-05-2116 | 13.Sa 04-05-2132 | 14.Me 05-05-2151 | 15.Ke 04-05-2168 | 16.Ve 04-05-2175 | 17.Su 04-05-2195 | 18.Mo 05-05-2201",
+  "avr": [
+   "Su",
+   "Mo",
+   "Ve"
+  ],
+  "lordRel": "010001100010",
+  "score": "20,85,20,20,15,85,85,20,20,20,85,20",
+  "strong": 4,
+  "vish": [
+   "Me",
+   "Ra"
+  ],
+  "sarpa": [
+   "Sa"
+  ],
+  "gochara": [
+   "Me"
+  ],
+  "bahu": [
+   "7L 11th mein dual rashi / 7L-11L sambandh",
+   "7L ya Shukra dual rashi mein (D1 ya D9)",
+   "7th mein 2+ grah ya 7L se 3+ grah jude",
+   "2nd mein 2+ grah ya 2L se 3+ grah jude",
+   "7-9-11 bhaav/swami sambandh"
+  ],
+  "div": [
+   "Paap 2nd aur 7th dono mein",
+   "Paap 6, 7, 8 teeno mein",
+   "7th lagna se, 7th Chandra se, Shukra teeno peedit",
+   "Alagav-karak (Su/Ra/Sa/12L) 7th par"
+  ],
+  "un": [
+   "Lagnesh, 7L, Shukra teeno nirbeej rashi (2,5,6,8) mein"
+  ]
+ },
+ {
+  "n": "Mumbai m alagav (docx)",
+  "lagna": 7,
+  "asc": 237.61935541652758,
+  "pl": [
+   "Su 6:6.89 H12",
+   "Mo 9:19.14 H3",
+   "Ma 6:3.74 H12",
+   "Me 6:9.96 H12 R",
+   "Ju 10:14.66 H4 R",
+   "Ve 6:3.50 H12",
+   "Sa 2:25.34 H8",
+   "Ra 7:18.73 H1 R",
+   "Ke 1:18.73 H7 R"
+  ],
+  "pure_all9": [],
+  "pure_no_nodes": [
+   11
+  ],
+  "kar": "1:Su@12(6/8/12) 2:Ju@3 3:Ma@10 4:Mo@12(6/8/12) 5:Ju@12(6/8/12) 6:Ma@7,6:Sa@3 7:Ve@6(6/8/12) 8:Sa@1(own-bhava) 9:Ju@8(6/8/12) 10:Su@3,10:Me@3,10:Sa@11 11:Ju@6(6/8/12) 12:Sa@9",
+  "md": "1.Mo 16-12-1967 | 2.Ma 16-12-1977 | 3.Ra 15-12-1984 | 4.Ju 16-12-2002 | 5.Sa 16-12-2018 | 6.Me 15-12-2037 | 7.Ke 15-12-2054 | 8.Ve 15-12-2061 | 9.Su 15-12-2081 | 10.Mo 15-12-2087 | 11.Ma 15-12-2097 | 12.Ra 15-12-2104 | 13.Ju 16-12-2122 | 14.Sa 16-12-2138 | 15.Me 15-12-2157 | 16.Ke 15-12-2174 | 17.Ve 15-12-2181 | 18.Su 16-12-2201",
+  "avr": [
+   "Su",
+   "Me"
+  ],
+  "lordRel": "000001001001",
+  "score": "20,20,20,20,20,85,20,20,65,20,20,85",
+  "strong": 3,
+  "vish": [
+   "Ju"
+  ],
+  "sarpa": [
+   "Ra"
+  ],
+  "gochara": [],
+  "bahu": [
+   "7L 11th mein dual rashi / 7L-11L sambandh",
+   "7th mein 2+ grah ya 7L se 3+ grah jude",
+   "2nd mein 2+ grah ya 2L se 3+ grah jude",
+   "Shukra-Mangal sambandh D1 aur D9 dono mein"
+  ],
+  "div": [
+   "7th lagna se, 7th Chandra se, Shukra teeno peedit",
+   "Alagav-karak (Su/Ra/Sa/12L) 7th par"
+  ],
+  "un": []
+ }
+]
+[
+  { d: '2002-06-17', mars7: false, md: 'Me', ad: 'Ju' },
+  { d: '2007-01-18', mars7: false, md: 'Ke', ad: 'Ve' },
+  { d: '2009-06-29', mars7: true, md: 'Ke', ad: 'Ra' },
+  { d: '2008-12-03 alagav', md: 'Ju', ad: 'Me', L12: 'Ve' }
+]
+ERR []
