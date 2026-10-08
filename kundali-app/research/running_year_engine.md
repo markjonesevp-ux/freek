@@ -69,3 +69,28 @@ Engine ko unke bataaye anubhav ke hisaab se badla nahi gaya.
 - Shukra–Rahu ki yuti 0.3° ki hai.
 - Malavya yoga ban raha hai.
 - Varsh-lagna Kanya hai, jo janm-kundali ka 12th bhaav hai; varshesh Shukra hai.
+
+## Bhaav ka rang karakatva par (Rohit ke feedback ke baad)
+Rohit ne varsh 32 ke baare mein bataya:
+- paise ki bachat nahi hui, aur sukh-vilasita se door rahe
+- share market mein nuksaan hua
+- naukri achhi chali
+- man ki shanti nahi rahi
+- nayi business partnership hui
+- sehat mein dikkatein rahi
+
+Isse do classical siddhant joDe gaye. Ye flag `col` ke peeche hain.
+1. 6/8/12 shasak bhaav ki peeda ye cheezein le leti hain:
+   - uske swami ke karakatva (Shukra: dhan, sukh, jeevansathi)
+   - us bhaav mein baithe grah ka karakatva (Chandra: man)
+   - swami ke saath baithe grahon ka karakatva
+   Achhe bhaav ka rang inhi par shubh padta hai. Bhaav mein baitha grah agar uchch/swarashi ho, to apne bhaavon ko sambhaale rakhta hai (Chandra uchch → 10th).
+2. Rahu agar swami ke 5° ke andar ho → satta/share/bhram se haani ka yog.
+
+Saath hi: swami jis bhaav ko dekhta hai, wahan ghatna ya nayi shuruaat sambhav (Shukra → 7th: saajhedaari).
+
+**40 logon par jaanch:**
+- Sab kone + rang: 65/240, jabki sanyog se 68.5 aate (aadha A z +1.48, aadha B −2.13).
+- Bina rang: 68 vs 69.5.
+
+Yaani yeh niyam bhi sanyog jaise hi rahe. Rohit ka apna varsh is jaanch ka saboot nahi ho sakta, kyunki niyam usi se prerit hain. Unki asli jaanch aage ke varsh aur diary hain.
