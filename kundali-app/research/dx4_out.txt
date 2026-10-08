@@ -1,0 +1,90 @@
+{ people: 41, timed: 40, certain: 1 }
+Gochar Shani Naidhana (7) tara mein — buri ghatna               10/89  chance   9.7 (11%) z +0.11
+Gochar Shani kisi buri tara (3/5/7) mein — buri ghatna          30/89  chance  29.7 (33%) z +0.06
+Gochar Rahu Vipat (3) tara mein — durghatna                      1/11  chance   1.2 (11%) z -0.19
+Gochar Rahu Vipat (3) tara mein — koi bhi buri ghatna           10/89  chance   9.8 (11%) z +0.06
+AD swami janm mein buri tara (3/5/7) — buri ghatna              18/88  chance  23.3 (27%) z -1.37
+MD swami janm mein buri tara (3/5/7) — buri ghatna              23/88  chance  24.1 (27%) z -0.31
+MD buri tara ka swami (janm se 3ri/5vi/7vi MD) — buri ghatna    52/88  chance  40.9 (46%) z +2.48
+Chandra Janma/Vipat/Naidhana (1/3/7) — buri ghatna ka din       28/83  chance  27.6 (33%) z +0.10
+Gochar Guru Sampat/Mitra (2/8) mein — achhi ghatna              40/157 chance  35.3 (22%) z +0.90
+Gochar Guru kisi achhi tara (2/4/6/8/9) mein — achhi ghatna     91/157 chance  88.6 (56%) z +0.39
+Chandra achhi tara (2/4/6/8/9) — achhi ghatna ka din            91/155 chance  86.0 (55%) z +0.81
+AD swami janm mein achhi tara (2/4/6/8/9) — achhi ghatna        95/152 chance  83.7 (55%) z +1.98
+Gochar Shani Naidhana — sirf rog/mrityu/dhan/naukri              8/69  chance   7.5 (11%) z +0.21
+Chandra Naidhana (7) — rog/aspatal ka din                        2/9   chance   1.0 (11%) z +1.10
+
+=== ROHIT
+janma nak 4 now { sat: 5, rahu: 1, jup: 5 } natal Su:1 Mo:1 Ma:4 Me:1 Ju:3 Ve:3 Sa:2 Ra:3 Ke:7 
+MDs 1.Ma(tara 4) 2.Ra(tara 3) 3.Ju(tara 3) 4.Sa(tara 2) 5.Me(tara 1) 6.Ke(tara 7) 
+Sat Naidhana [
+  '09-07-2028 → 07-11-2028',
+  '09-03-2029 → 09-07-2029',
+  '08-12-2029 → 09-04-2030'
+] 
+Rahu Vipat [
+  '09-06-2031 → 07-02-2032',
+  '08-09-2037 → 09-05-2038',
+  '08-11-2043 → 09-07-2044'
+]
+accident 2008-10-20≈   ✓ Gochar Shani Naidhana (7) tara mein — buri ghatna  (11%)
+accident 2008-10-20≈   ✓ Gochar Shani kisi buri tara (3/5/7) mein — buri ghatna  (36%)
+accident 2008-10-20≈   ✗ Gochar Rahu Vipat (3) tara mein — durghatna  (11%)
+accident 2008-10-20≈   ✗ Gochar Rahu Vipat (3) tara mein — koi bhi buri ghatna  (11%)
+accident 2008-10-20≈   ✗ AD swami janm mein buri tara (3/5/7) — buri ghatna  (48%)
+accident 2008-10-20≈   ✓ MD swami janm mein buri tara (3/5/7) — buri ghatna  (81%)
+accident 2008-10-20≈   ✗ MD buri tara ka swami (janm se 3ri/5vi/7vi MD) — buri ghatna  (25%)
+accident 2009-10-10≈   ✗ Gochar Shani Naidhana (7) tara mein — buri ghatna  (11%)
+accident 2009-10-10≈   ✗ Gochar Shani kisi buri tara (3/5/7) mein — buri ghatna  (36%)
+accident 2009-10-10≈   ✗ Gochar Rahu Vipat (3) tara mein — durghatna  (11%)
+accident 2009-10-10≈   ✗ Gochar Rahu Vipat (3) tara mein — koi bhi buri ghatna  (11%)
+accident 2009-10-10≈   ✗ AD swami janm mein buri tara (3/5/7) — buri ghatna  (48%)
+accident 2009-10-10≈   ✓ MD swami janm mein buri tara (3/5/7) — buri ghatna  (81%)
+accident 2009-10-10≈   ✗ MD buri tara ka swami (janm se 3ri/5vi/7vi MD) — buri ghatna  (25%)
+studybreak 2015-06-01  ✗ Gochar Shani Naidhana (7) tara mein — buri ghatna  (12%)
+studybreak 2015-06-01  ✗ Gochar Shani kisi buri tara (3/5/7) mein — buri ghatna  (34%)
+studybreak 2015-06-01  ✗ Gochar Rahu Vipat (3) tara mein — koi bhi buri ghatna  (10%)
+studybreak 2015-06-01  ✓ Chandra Janma/Vipat/Naidhana (1/3/7) — buri ghatna ka din  (34%)
+studybreak 2015-06-01  ✗ AD swami janm mein buri tara (3/5/7) — buri ghatna  (36%)
+studybreak 2015-06-01  ✓ MD swami janm mein buri tara (3/5/7) — buri ghatna  (100%)
+studybreak 2015-06-01  ✗ MD buri tara ka swami (janm se 3ri/5vi/7vi MD) — buri ghatna  (30%)
+marriage 2016-04-28    ✗ Gochar Guru Sampat/Mitra (2/8) mein — achhi ghatna  (16%)
+marriage 2016-04-28    ✗ Gochar Guru kisi achhi tara (2/4/6/8/9) mein — achhi ghatna  (47%)
+marriage 2016-04-28    ✗ Chandra achhi tara (2/4/6/8/9) — achhi ghatna ka din  (55%)
+marriage 2016-04-28    ✗ AD swami janm mein achhi tara (2/4/6/8/9) — achhi ghatna  (22%)
+career 2017-06-01      ✗ Gochar Guru Sampat/Mitra (2/8) mein — achhi ghatna  (16%)
+career 2017-06-01      ✓ Gochar Guru kisi achhi tara (2/4/6/8/9) mein — achhi ghatna  (47%)
+career 2017-06-01      ✗ Chandra achhi tara (2/4/6/8/9) — achhi ghatna ka din  (56%)
+career 2017-06-01      ✗ AD swami janm mein achhi tara (2/4/6/8/9) — achhi ghatna  (20%)
+children 2017-10-23    ✓ Gochar Guru Sampat/Mitra (2/8) mein — achhi ghatna  (16%)
+children 2017-10-23    ✓ Gochar Guru kisi achhi tara (2/4/6/8/9) mein — achhi ghatna  (47%)
+children 2017-10-23    ✓ Chandra achhi tara (2/4/6/8/9) — achhi ghatna ka din  (57%)
+children 2017-10-23    ✓ AD swami janm mein achhi tara (2/4/6/8/9) — achhi ghatna  (22%)
+children 2022-07-24    ✗ Gochar Guru Sampat/Mitra (2/8) mein — achhi ghatna  (16%)
+children 2022-07-24    ✓ Gochar Guru kisi achhi tara (2/4/6/8/9) mein — achhi ghatna  (47%)
+children 2022-07-24    ✓ Chandra achhi tara (2/4/6/8/9) — achhi ghatna ka din  (56%)
+children 2022-07-24    ✓ AD swami janm mein achhi tara (2/4/6/8/9) — achhi ghatna  (22%)
+jobloss 2022-07-24     ✗ Gochar Shani Naidhana (7) tara mein — buri ghatna  (8%)
+jobloss 2022-07-24     ✗ Gochar Shani Naidhana — sirf rog/mrityu/dhan/naukri  (8%)
+jobloss 2022-07-24     ✗ Gochar Shani kisi buri tara (3/5/7) mein — buri ghatna  (32%)
+jobloss 2022-07-24     ✗ Gochar Rahu Vipat (3) tara mein — koi bhi buri ghatna  (13%)
+jobloss 2022-07-24     ✗ Chandra Janma/Vipat/Naidhana (1/3/7) — buri ghatna ka din  (33%)
+jobloss 2022-07-24     ✗ AD swami janm mein buri tara (3/5/7) — buri ghatna  (46%)
+jobloss 2022-07-24     ✓ MD swami janm mein buri tara (3/5/7) — buri ghatna  (100%)
+jobloss 2022-07-24     ✓ MD buri tara ka swami (janm se 3ri/5vi/7vi MD) — buri ghatna  (50%)
+accident 2020-11-14    ✗ Gochar Shani Naidhana (7) tara mein — buri ghatna  (11%)
+accident 2020-11-14    ✗ Gochar Shani kisi buri tara (3/5/7) mein — buri ghatna  (36%)
+accident 2020-11-14    ✗ Gochar Rahu Vipat (3) tara mein — durghatna  (11%)
+accident 2020-11-14    ✗ Gochar Rahu Vipat (3) tara mein — koi bhi buri ghatna  (11%)
+accident 2020-11-14    ✗ Chandra Janma/Vipat/Naidhana (1/3/7) — buri ghatna ka din  (33%)
+accident 2020-11-14    ✓ AD swami janm mein buri tara (3/5/7) — buri ghatna  (48%)
+accident 2020-11-14    ✓ MD swami janm mein buri tara (3/5/7) — buri ghatna  (81%)
+accident 2020-11-14    ✓ MD buri tara ka swami (janm se 3ri/5vi/7vi MD) — buri ghatna  (25%)
+finloss 2025-09-15≈    ✗ Gochar Shani Naidhana (7) tara mein — buri ghatna  (8%)
+finloss 2025-09-15≈    ✗ Gochar Shani Naidhana — sirf rog/mrityu/dhan/naukri  (8%)
+finloss 2025-09-15≈    ✗ Gochar Shani kisi buri tara (3/5/7) mein — buri ghatna  (32%)
+finloss 2025-09-15≈    ✓ Gochar Rahu Vipat (3) tara mein — koi bhi buri ghatna  (13%)
+finloss 2025-09-15≈    ✓ AD swami janm mein buri tara (3/5/7) — buri ghatna  (46%)
+finloss 2025-09-15≈    ✓ MD swami janm mein buri tara (3/5/7) — buri ghatna  (100%)
+finloss 2025-09-15≈    ✓ MD buri tara ka swami (janm se 3ri/5vi/7vi MD) — buri ghatna  (50%)
+ERR []
