@@ -1,0 +1,16 @@
+Time-robust event-timing test (Oct 2026)
+Data: 38 people, 335 dated events (11 exact birth time, 9 approximate, 18 date only).
+Method: Moon-based + lagna-based dasha relevance (Vimshottari MD/AD/PD, Yogini MD/AD), AD-from-MD placement,
+Jupiter/Saturn/double/node/Mars/Sun transits, sade sati, dasha x transit products; features averaged over the
+birth-time uncertainty (exact: 1 sample, approx: +/-90 min in 7 samples, date only: 12 samples across the day).
+Score = weighted sum, separate weights for positive and negative events; percentile of the event month among all
+months of the person's life in that event type's age window (50 = chance, top-quarter = 25% by chance).
+
+                       mean pct  top-quarter   exact  approx  unknown  user's chart
+astro, fitted on all      60.3   39.1%          60.6   56.7    62.8     52.8   (in-sample, optimistic)
+random fake months, fit   59.4-61.7                                            (same fit on shuffled dates = overfitting level)
+age only (LOO)            58.9   34.9%          60.6   61.7    55.5     64.3
+astro only (LOO)          49.3   23.6%          46.0   48.4    52.4     34.4
+astro + age (LOO)         59.6   34.6%          60.6   60.8    57.9     58.8
+LOO = leave one person out: weights learned without that person, then tested on that person.
+Every single astro feature alone: 47-55 (SE of the mean about 1.6), i.e. within chance.
