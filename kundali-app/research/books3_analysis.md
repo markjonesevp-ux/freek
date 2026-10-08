@@ -170,3 +170,25 @@ Inke janm-samay astrology databases (Astro-Databank, Gauquelin) se liye gaye hai
 - `marset2.json` — dobara jaanch ke 20 log.
 - `dobset.json` — 38 log, nidhan ki ghatnaon mein sambandh (pita/mata/…) ke saath.
 - `rules_out.json`, `rules_out2.json` — nateeje.
+
+## 6. Samay par chalne wale niyam + aapki kundli (dusra daur)
+
+Yeh niyam lagna, bhaav, dasha aur KP par chalte hain. Inhe 40 aise logon par parkha gaya jinka janm-samay pata hai: 11 pakke samay wale, 9 andaze wale, aur set B ke 20 log. Isme 239 niyam-jaanchein aur KP engine ki 187 jaanchein shamil hain. Pura output `rules2.txt` aur `kprun_out.json` mein hai.
+
+| Niyam | Laga | Sanyog se |
+|---|---|---|
+| App ka KP engine (aapke alawa sab), top-25% | 46/187 | 46.8 |
+| Dohra gochar ghatna-bhaav/swami par | 76/239 | 73.3 |
+| Guru gochar ghatna-bhaav/swami par | 132/239 | 134.4 |
+| Shani gochar ghatna-bhaav/swami par | 137/239 | 128.3 |
+| Dasha (MD/AD) ka ghatna-bhaav se sambandh | 178/239 | 175.6 (73% mahine) |
+| Antardasha swami = bhaav-swami ya usme baitha | 54/239 | 47.2 |
+| KN Rao P3 / P5 / P7 / P8 (63 vivah) | 22 / 13 / 37 / 28 | 20.8 / 10.8 / 31.7 / 28.9 |
+| Sade sati/dhaiya mein buri ghatna | 25/87 | 35.1 (**ulta: kam**) |
+
+Aapki kundli par KP engine ka ausat:
+
+| Janm-samay | Lagna | KP ausat |
+|---|---|---|
+| 05:55 ±30 min | Tula | 72–78 |
+| 05:25 se pehle | Kanya | 52–65 |
