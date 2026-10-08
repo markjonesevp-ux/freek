@@ -42,3 +42,30 @@ Har baat ke saath yeh bhi likha hai ki vah 12 mein se kitne varshon mein aati ha
 **Sehat ka bhed:** nasein/man, sir, chehra/gala; pitt pradhan.
 
 Engine ko unke bataaye anubhav ke hisaab se badla nahi gaya.
+
+## v28.3: har kone se, aur kaun-sa kona madad karta hai
+`sy_exp.js`, `sy_exp2.js` — har kona alag chalu karke parkha. Upyogkarta ko do aadhe hisson mein baanta gaya (ek-chhodkar ek). Koi sudhaar tab maana jaata jab dono hisson mein tike.
+
+| Kona | Sahi | Sanyog se | Aadha A | Aadha B |
+|---|---|---|---|---|
+| Sirf shasak bhaav + swami | 54/240 | 60.4 | +0.45 | −1.86 |
+| + shubh/paap swabhav | 60 | 62.5 | +0.97 | −1.54 |
+| + karakatva | 57 | 64.6 | −0.18 | −1.46 |
+| + navamsha | 51 | 60.8 | +0.06 | −2.20 |
+| + nakshatra-swami | 49 | 58.9 | −0.12 | −2.08 |
+| + Chandra lagna se | 63 | 62.7 | +1.03 | −0.93 |
+| + varsh-lagna | 52 | 64.4 | −0.18 | −2.52 |
+| + antardasha | 48 | 59.4 | −0.04 | −2.49 |
+| Sab kone saath | 68 | 69.5 | +1.47 | −1.77 |
+| Sab + umr ka padav (±6 varsh ki khidki) | 74 | 76.8 | +0.49 | −1.10 |
+
+**Nateeja:** koi bhi kona dono hisson mein sanyog se upar nahi gaya.
+
+**App mein:** "sab kone" chalu hain. Yeh kisi se bura nahi hai, aur Shukra jaise shubh grah ka swabhav aur karakatva (dhan, sukh, vilasita) ab hisaab mein aata hai. Page par saaf likha hai ki yeh pakki bhavishyavani nahi hai.
+
+**Rohit ke varsh 32 mein naye kone kya dikhate hain:**
+- Shukra Vishakha nakshatra mein hai, jiska swami Guru (3, 6) hai.
+- Navamsha mein Shukra 6th bhaav mein hai, Rahu ke saath.
+- Shukra–Rahu ki yuti 0.3° ki hai.
+- Malavya yoga ban raha hai.
+- Varsh-lagna Kanya hai, jo janm-kundali ka 12th bhaav hai; varshesh Shukra hai.
