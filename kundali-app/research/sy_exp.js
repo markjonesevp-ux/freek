@@ -5,7 +5,7 @@ const {chromium}=require('/opt/node22/lib/node_modules/playwright');const fs=req
 await p.goto('file://'+path.resolve('index.html'));await p.waitForTimeout(400);
 const A=JSON.parse(fs.readFileSync('cm/dobset.json','utf8')),B=JSON.parse(fs.readFileSync('cm/marset2.json','utf8'));
 const data=[...A.filter(x=>x.tq!=='unknown'),...B];
-const V={all:{nat:1,kar:1,d9:1,nak:1,moon:1,vl:1,ad:1},allcol:{nat:1,kar:1,d9:1,nak:1,moon:1,vl:1,ad:1,col:1},basecol:{col:1},karcol:{nat:1,kar:1,col:1}};
+const V={allcol:{nat:1,kar:1,d9:1,nak:1,moon:1,vl:1,ad:1,col:1},allcolnodes:{nat:1,kar:1,d9:1,nak:1,moon:1,vl:1,ad:1,col:1,nodes:1}};
 const out=await p.evaluate(({data,V})=>{S.lang='en';const R={};
  for(const [vn,opt] of Object.entries(V)){const acc={all:[0,0,0,0],h0:[0,0,0,0],h1:[0,0,0,0],ar:[0,0,0,0]};
   data.forEach((X,pi)=>{const ch=buildChart({...X.inp,gender:X.g,noEnrich:true});

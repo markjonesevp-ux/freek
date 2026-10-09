@@ -1,0 +1,19 @@
+both    15/196 vs 13.9 z 0.32
+kp      62/196 vs 49.8 z 2.06
+eng     54/196 vs 52.3 z 0.30
+bothH0  9/99 vs 7.3 z 0.70
+bothH1  6/97 vs 6.6 z -0.27
+accident 2008-10-20 ry14 both:false kp:false eng:true
+accident 2009-10-10 ry15 both:true kp:true eng:true
+studybreak 2015-06-01 ry21 both:false kp:true eng:false
+marriage 2016-04-28 ry22 both:false kp:true eng:false
+career 2017-06-01 ry23 both:false kp:true eng:false
+children 2017-10-23 ry23 both:false kp:true eng:false
+children 2022-07-24 ry28 both:false kp:false eng:true
+jobloss 2022-07-24 ry28 both:false kp:false eng:false
+accident 2020-11-14 ry27 both:false kp:false eng:true
+finloss 2025-09-15 ry31 both:false kp:false eng:false
+property 2023-11-07 ry30 both:false kp:true eng:false
+vehicle 2023-11-11 ry30 both:false kp:false eng:false
+property 2025-01-15 ry31 both:true kp:true eng:true
+ERR []

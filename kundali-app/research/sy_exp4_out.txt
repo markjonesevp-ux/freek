@@ -1,0 +1,4 @@
+variant       ALL (top4+tone)            half A                     half B                     top4 only
+allcol        66/243 vs 69.8 z -0.57     40/121 vs 33.5 z  1.39     26/122 vs 36.3 z -2.13     78/243 vs 80.2 z -0.31
+allcolnodes   62/243 vs 65.6 z -0.57     41/121 vs 33.5 z  1.69     21/122 vs 32.2 z -2.50     72/243 vs 78.3 z -0.95
+ERR []
